@@ -8,7 +8,7 @@ export default function Source(props) {
           className={`rounded-full shadow-md shadow-black h-12 justify-center items-center px-4 mr-2 text-lg flex ${
             props.filter.source == s ? "bg-gray-200 text-black" : "bg-zinc-700"
           }`}
-          id={`source-${i}`}
+          key={`source-${i}`}
           onClick={() => {
             props.setFilter({ ...props.filter, source: s });
           }}
