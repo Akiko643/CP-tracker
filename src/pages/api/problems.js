@@ -12,18 +12,18 @@ const handler = async (req, res) => {
         await connectMongo();
         if (req.method === "GET") {
             const problems = await getProblems();
-            res.status(200).json({ size: problems.length, problems });
+            return res.status(200).json({ size: problems.length, problems });
         }
 
         if (req.method === "POST") {
             const { url } = req.body;
             const problem = await addProblem(url);
-            res.status(200).json({ problem });
+            return res.status(200).json({ problem });
         }
 
         if (req.method === "DELETE") {
             const response = await deleteAll();
-            res.status(200).json(response);
+            return res.status(200).json(response);
         }
     } catch (err) {
         handleError(err, res);
