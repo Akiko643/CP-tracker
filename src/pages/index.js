@@ -5,6 +5,9 @@ import Filter from "../../components/filter";
 import Popup from "../../components/popup";
 import Search from "../../components/search";
 import Source from "../../components/source";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:4000");
 
 export default function Home() {
     const status_color = {
@@ -43,6 +46,14 @@ export default function Home() {
         console.log(search);
         setFilter({ ...filter, search: search });
     };
+
+    useEffect(() => {
+        socket.on("collection_updated", () => {
+            fetch("/api/getDataFromMongoDB")
+                .then((res) => res.json())
+                .then((data) => setData(data));
+        });
+    }, []);
 
     return (
         <>

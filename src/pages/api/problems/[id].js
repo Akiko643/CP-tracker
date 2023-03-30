@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { deleteOne, getProblem } from "@lib/mongo/problem/problem.js";
 import connectMongo from "@lib/mongo";
+import { handleError } from "@lib/utils/error";
 
 const handler = async (req, res) => {
     try {
@@ -16,7 +17,7 @@ const handler = async (req, res) => {
             return res.status(200).json({ response });
         }
     } catch (err) {
-        res.send(err);
+        handleError(err, res);
     }
 };
 
