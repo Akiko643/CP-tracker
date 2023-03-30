@@ -6,7 +6,9 @@ export default function Source(props) {
       {props.data.source.map((s, i) => (
         <div
           className={`rounded-full shadow-md shadow-black h-12 justify-center items-center px-4 mr-2 text-lg flex ${
-            props.filter.source == s ? "bg-gray-200 text-black" : "bg-zinc-700"
+            props.filter.source.name == s.name
+              ? "bg-gray-200 text-black"
+              : "bg-zinc-700"
           }`}
           key={`source-${i}`}
           onClick={() => {
@@ -14,13 +16,13 @@ export default function Source(props) {
           }}
         >
           <Image
-            src={`/logo/${s}.png`}
+            src={`/logo/${s.name}.png`}
             height={16}
             width={16}
             className="object-contain mr-2"
             alt={`${s} logo`}
           />
-          {s}
+          {s.name}
         </div>
       ))}
     </div>
