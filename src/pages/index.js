@@ -5,6 +5,8 @@ import Filter from "../../components/filter";
 import Popup from "../../components/popup";
 import Search from "../../components/search";
 import Source from "../../components/source";
+import io from "socket.io-client";
+let socket;
 
 export default function Home() {
     const status_color = {
@@ -42,6 +44,19 @@ export default function Home() {
         e.preventDefault();
         console.log(search);
         setFilter({ ...filter, search: search });
+    };
+
+    useEffect(() => {
+        socketInitializer();
+    }, []);
+
+    const socketInitializer = async () => {
+        await fetch("/api/socket");
+        socket = io();
+
+        socket.on("connect", () => {
+            console.log("connected");
+        });
     };
 
     return (
