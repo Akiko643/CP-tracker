@@ -1,9 +1,11 @@
 import Search from "./search";
 import { useState, useEffect } from "react";
+import Loading from "./loading";
+import Problem from "./problem";
 
 export default function Popup() {
   const [keypress, setKeypress] = useState({});
-  const [popup, setPopup] = useState(false);
+  const [popup, setPopup] = useState("off");
 
   useEffect(() => {
     document.addEventListener("keydown", keydown, true);
@@ -14,9 +16,9 @@ export default function Popup() {
     keypress[e.key] = 1;
     setKeypress(keypress);
     if (e.key == " " && keypress["Control"]) {
-      setPopup(true);
+      setPopup("search");
     }
-    if (e.key == "Escape") setPopup(false);
+    if (e.key == "Escape") setPopup("off");
     // console.log("down", e.key);
   };
 
@@ -43,16 +45,19 @@ export default function Popup() {
       redirect: "follow",
     };
 
+    setPopup("loading");
     fetch("api/problems", requestOptions)
       .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((result) => {
+        setPopup("off");
+      })
       .catch((error) => console.log("error", error));
   };
 
   return (
     <section
       className={`w-full h-full absolute top-0 left-0 backdrop-blur-sm ${
-        !popup ? "hidden" : ""
+        popup == "off" ? "hidden" : ""
       }`}
     >
       <div
@@ -67,7 +72,19 @@ export default function Popup() {
             e.stopPropagation();
           }}
         >
-          <Search search_function={submit} placeholder="Link" focus={true} />
+          {
+            {
+              search: (
+                <Search
+                  search_function={submit}
+                  placeholder="Link"
+                  focus={true}
+                />
+              ),
+              loading: <Loading />,
+              problem: <Problem />,
+            }[popup]
+          }
         </div>
       </div>
     </section>

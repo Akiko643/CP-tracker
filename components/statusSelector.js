@@ -35,7 +35,6 @@ export default function StatusSelector({ p, setStatus }) {
               }`}
               key={`status-${i}`}
               onMouseDown={() => {
-                console.log("test");
                 setStatus(p, s);
               }}
             >

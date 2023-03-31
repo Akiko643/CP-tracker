@@ -12,6 +12,7 @@ export default function ProblemList({ filter, setFilter }) {
     ],
     problems: [],
   });
+
   const setStatus = (p, status) => {
     for (let i = 0; i < data.problems.length; i++) {
       if (data.problems[i] == p) {
@@ -20,6 +21,25 @@ export default function ProblemList({ filter, setFilter }) {
     }
 
     setData(data);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      status: status,
+      notes: "Ez",
+    });
+
+    var requestOptions = {
+      method: "PATCH",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`http://localhost:3000/api/problems/${p._id}`, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   };
   useEffect(() => {
     var requestOptions = {
@@ -32,7 +52,10 @@ export default function ProblemList({ filter, setFilter }) {
       .then((result) => {
         setData({ ...data, problems: JSON.parse(result).problems });
       })
-      .catch((error) => alert(error));
+      .catch((error) => {
+        console.log("Error!");
+        alert(error);
+      });
   }, []);
   return (
     <div className="w-full">

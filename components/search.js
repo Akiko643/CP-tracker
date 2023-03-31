@@ -1,24 +1,24 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export default function Search(props) {
+export default function Search({ focus, placeholder, search_function }) {
   const [search, setSearch] = useState("");
 
   return (
     <form
       onSubmit={(e) => {
-        props.search_function(e, search);
+        search_function(e, search);
       }}
       className="w-full h-full bg-zinc-700 rounded-xl px-6 shadow-md shadow-black flex items-center"
     >
       <div className="flex-1">
         <input
           ref={(input) => {
-            props.focus && input && input.focus();
+            focus && input && input.focus();
           }}
           type="text"
           className="appearance-none w-full h-full bg-zinc-700 focus:outline-0 placeholder:text-zinc-400"
-          placeholder={props.placeholder}
+          placeholder={placeholder}
           value={search}
           onChange={(v) => {
             setSearch(v.target.value);
