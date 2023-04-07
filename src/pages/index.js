@@ -7,6 +7,7 @@ import ProblemList from "../../components/problemList";
 import Search from "../../components/search";
 import Source from "../../components/source";
 import io from "socket.io-client";
+import { UserProvider } from "@/providers/User.provider";
 let socket;
 
 export default function Home() {
@@ -21,21 +22,8 @@ export default function Home() {
         setFilter({ ...filter, search: search });
     };
 
-    useEffect(() => {
-        socketInitializer();
-    }, []);
-
-    const socketInitializer = async () => {
-        await fetch("/api/socket");
-        socket = io();
-
-        socket.on("connect", () => {
-            console.log("connected");
-        });
-    };
-
     return (
-        <>
+        <UserProvider>
             <Head>
                 <title>CP Trainer</title>
                 <meta
@@ -66,6 +54,6 @@ export default function Home() {
                     </div>
                 </section>
             </main>
-        </>
+        </UserProvider>
     );
 }
