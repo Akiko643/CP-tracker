@@ -2,10 +2,11 @@ import Search from "./search";
 import { useState, useEffect } from "react";
 import Loading from "./loading";
 import Problem from "./problem";
+import { useUser } from "@/providers/User.provider";
 
 export default function Popup() {
   const [keypress, setKeypress] = useState({});
-  const [popup, setPopup] = useState("off");
+  const { popup, setPopup, data, setData } = useUser();
 
   useEffect(() => {
     document.addEventListener("keydown", keydown, true);
@@ -16,16 +17,14 @@ export default function Popup() {
     keypress[e.key] = 1;
     setKeypress(keypress);
     if (e.key == " " && keypress["Control"]) {
-      setPopup("search");
+      setPopup({ ...popup, type: "search" });
     }
-    if (e.key == "Escape") setPopup("off");
-    // console.log("down", e.key);
+    if (e.key == "Escape") setPopup({ ...popup, type: "off" });
   };
 
   const keyup = (e) => {
     keypress[e.key] = 0;
     setKeypress(keypress);
-    // console.log("up", e.key);
   };
 
   const submit = (e, val) => {
@@ -45,11 +44,19 @@ export default function Popup() {
       redirect: "follow",
     };
 
-    setPopup("loading");
+    setPopup({ ...popup, type: "loading" });
     fetch("api/problems", requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        setPopup("off");
+        console.log(result);
+        let res = JSON.parse(result);
+        if (res.problem) {
+          data.problems.push(res.problem);
+          setData(data);
+        } else {
+          alert(res.message);
+        }
+        setPopup({ ...popup, type: "off" });
       })
       .catch((error) => console.log("error", error));
   };
@@ -57,13 +64,13 @@ export default function Popup() {
   return (
     <section
       className={`w-full h-full absolute top-0 left-0 backdrop-blur-sm ${
-        popup == "off" ? "hidden" : ""
+        popup.type == "off" ? "hidden" : ""
       }`}
     >
       <div
         className="h-full w-full flex justify-center items-center"
         onClick={() => {
-          setPopup(false);
+          setPopup({ ...popup, type: "off" });
         }}
       >
         <div
@@ -83,7 +90,7 @@ export default function Popup() {
               ),
               loading: <Loading />,
               problem: <Problem />,
-            }[popup]
+            }[popup.type]
           }
         </div>
       </div>

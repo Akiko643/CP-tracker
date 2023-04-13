@@ -1,18 +1,20 @@
+import { useUser } from "@/providers/User.provider";
 import Image from "next/image";
 
-export default function Source(props) {
+export default function Source({ data }) {
+  const { filter, setFilter } = useUser();
   return (
     <div className="flex mb-8">
-      {props.data.source.map((s, i) => (
+      {data.source.map((s, i) => (
         <div
           className={`rounded-full shadow-md shadow-black h-12 justify-center items-center px-4 mr-2 text-lg flex ${
-            props.filter.source.name == s.name
+            filter.source.name == s.name
               ? "bg-gray-200 text-black"
               : "bg-zinc-700"
           }`}
           key={`source-${i}`}
           onClick={() => {
-            props.setFilter({ ...props.filter, source: s });
+            setFilter({ ...filter, source: s });
           }}
         >
           <Image

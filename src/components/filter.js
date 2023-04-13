@@ -1,9 +1,11 @@
+import { useUser } from "@/providers/User.provider";
 import { useState } from "react";
 
-export default function Filter(filter, setFilter) {
+export default function Filter() {
+  const { filter, setFilter } = useUser();
   const [form, setForm] = useState({});
 
-  const validator = async (input, type = "number") => {
+  const validator = (input, type = "number") => {
     let ans = "";
     for (let i of input) {
       if (type == "number") {
@@ -16,13 +18,18 @@ export default function Filter(filter, setFilter) {
     return ans;
   };
 
-  const changeState = async (input, key, type = null) => {
-    input = await validator(input, type);
+  const changeState = (input, key, type = null) => {
+    input = validator(input, type);
     setForm({ ...form, [key]: input });
   };
 
   return (
-    <form className="flex-1 bg-zinc-700 p-6 rounded-xl shadow-md shadow-black">
+    <form
+      className="flex-1 bg-zinc-700 p-6 rounded-xl shadow-md shadow-black"
+      onSubmit={() => {
+        setFilter({ ...filter, ...form });
+      }}
+    >
       <div>
         <div className="mb-2 text-zinc-400">Rating</div>
         <div className="flex justify-between">

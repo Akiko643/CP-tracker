@@ -1,7 +1,11 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export default function Search({ focus, placeholder, search_function }) {
+export default function Search({
+  focus = false,
+  placeholder,
+  search_function,
+}) {
   const [search, setSearch] = useState("");
 
   return (
