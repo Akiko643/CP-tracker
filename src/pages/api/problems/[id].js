@@ -22,8 +22,8 @@ const handler = async (req, res) => {
         }
 
         if (req.method === "PATCH") {
-            const { status, notes } = req.body;
-            const response = await updateOne(id, status, notes);
+            const { body } = req;
+            const response = await updateOne(id, body);
             return res.status(200).json({ response });
         }
     } catch (err) {
