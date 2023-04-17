@@ -1,5 +1,5 @@
 import connectMongo from "@lib/mongo";
-import { signUp } from "@lib/mongo/auth";
+import { signUp } from "@lib/auth";
 import { handleError } from "@lib/utils/error";
 
 const handler = async (req, res) => {
