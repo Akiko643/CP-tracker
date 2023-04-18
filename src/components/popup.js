@@ -6,7 +6,7 @@ import { useUser } from "@/providers/User.provider";
 
 export default function Popup() {
   const [keypress, setKeypress] = useState({});
-  const { popup, setPopup, data, setData } = useUser();
+  const { popup, setPopup, problems, setProblems } = useUser();
 
   useEffect(() => {
     document.addEventListener("keydown", keydown, true);
@@ -14,7 +14,7 @@ export default function Popup() {
   }, []);
 
   const keydown = (e) => {
-    keypress[e.key] = 1;
+    keypress[e.key] = true;
     setKeypress(keypress);
     if (e.key == " " && keypress["Control"]) {
       setPopup({ ...popup, type: "search" });
@@ -23,7 +23,7 @@ export default function Popup() {
   };
 
   const keyup = (e) => {
-    keypress[e.key] = 0;
+    keypress[e.key] = false;
     setKeypress(keypress);
   };
 
@@ -51,8 +51,7 @@ export default function Popup() {
         console.log(result);
         let res = JSON.parse(result);
         if (res.problem) {
-          data.problems.push(res.problem);
-          setData(data);
+          setProblems([...problems, res.problem]);
         } else {
           alert(res.message);
         }
@@ -63,36 +62,31 @@ export default function Popup() {
 
   return (
     <section
-      className={`w-full h-full absolute top-0 left-0 backdrop-blur-sm ${
+      className={`w-full h-full absolute top-0 left-0 backdrop-blur-sm z-50 ${
         popup.type == "off" ? "hidden" : ""
       }`}
     >
       <div
         className="h-full w-full flex justify-center items-center"
-        onClick={() => {
+        onMouseDown={() => {
           setPopup({ ...popup, type: "off" });
         }}
       >
-        <div
-          className="w-2/4 h-16"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
+        {
           {
-            {
-              search: (
+            search: (
+              <div className="w-1/2">
                 <Search
                   search_function={submit}
                   placeholder="Link"
                   focus={true}
                 />
-              ),
-              loading: <Loading />,
-              problem: <Problem />,
-            }[popup.type]
-          }
-        </div>
+              </div>
+            ),
+            loading: <Loading />,
+            problem: <Problem problem={popup.data} />,
+          }[popup.type]
+        }
       </div>
     </section>
   );

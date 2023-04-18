@@ -10,10 +10,13 @@ export default function Search({
 
   return (
     <form
+      onMouseDown={(e) => {
+        e.stopPropagation();
+      }}
       onSubmit={(e) => {
         search_function(e, search);
       }}
-      className="w-full h-full bg-zinc-700 rounded-xl px-6 shadow-md shadow-black flex items-center"
+      className="w-full h-16 bg-zinc-700 rounded-xl px-6 shadow-md shadow-black flex items-center"
     >
       <div className="flex-1">
         <input

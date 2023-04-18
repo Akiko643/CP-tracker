@@ -1,13 +1,13 @@
 import { useUser } from "@/providers/User.provider";
 import Image from "next/image";
 
-export default function Source({ data }) {
-  const { filter, setFilter } = useUser();
+export default function Source() {
+  const { filter, setFilter, source } = useUser();
   return (
-    <div className="flex mb-8">
-      {data.source.map((s, i) => (
+    <div className="flex flex-wrap mb-8">
+      {source.map((s, i) => (
         <div
-          className={`rounded-full shadow-md shadow-black h-12 justify-center items-center px-4 mr-2 text-lg flex ${
+          className={`rounded-full my-1 shadow-md shadow-black h-12 justify-center items-center px-4 mr-2 text-lg flex ${
             filter.source.name == s.name
               ? "bg-gray-200 text-black"
               : "bg-zinc-700"
