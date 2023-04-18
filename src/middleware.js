@@ -1,18 +1,22 @@
+import { verifyToken } from "@lib/auth";
 import { NextResponse } from "next/server";
 
 // This function can be marked `async` if using `await` inside
-export function middleware(request) {
-    let token = request.cookies.get("token");
-    request.cookies.set("token", "123");
+export function middleware(req) {
+    let token = req.cookies.get("user-token")?.value;
+    const verifiedToken = token && verifyToken(token);
+    if (req.nextUrl.pathname.startsWith("/login") && !verifiedToken) {
+        return;
+    }
 
-    console.log("token:", token);
-    // const response = NextResponse.next();
-    request.cookies.set({ name: "bobo", value: "wtf" });
-    // const cookie = request.cookies.get("bobo");
-    // console.log(cookie);
+    if (req.nextUrl.pathname.startsWith("/login") && verifiedToken) {
+        return NextResponse.redirect(new URL("/"), req.url);
+    }
+
+    if (!verifiedToken) {
+        return NextResponse.redirect(new URL("/login"), req.url);
+    }
 }
-
-// See "Matching Paths" below to learn more
 export const config = {
     matcher: "/api/:path*",
 };
