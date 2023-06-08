@@ -1,22 +1,35 @@
-import { verifyToken } from "@lib/auth";
+import { verifyToken } from "@lib/authSession";
 import { NextResponse } from "next/server";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(req) {
-    let token = req.cookies.get("user-token")?.value;
-    const verifiedToken = token && verifyToken(token);
-    if (req.nextUrl.pathname.startsWith("/login") && !verifiedToken) {
+const isCommonPage = (pathname) => {
+    if (pathname.startsWith("/login") || pathname.startsWith("/signUp")) {
+        return 1;
+    }
+    return 0;
+};
+
+export async function middleware(req) {
+    const { pathname } = req.nextUrl;
+    // console.log("pathname", pathname);
+
+    let token = req.cookies.get("token")?.value;
+    const verifiedToken = token && (await verifyToken(token));
+
+    if (pathname.startsWith("/api")) {
         return;
     }
-
-    if (req.nextUrl.pathname.startsWith("/login") && verifiedToken) {
-        return NextResponse.redirect(new URL("/"), req.url);
+    if (isCommonPage(pathname) && !verifiedToken) {
+        return;
+    }
+    if (isCommonPage(pathname) && verifiedToken) {
+        return NextResponse.redirect(new URL("/", req.url));
     }
 
     if (!verifiedToken) {
-        return NextResponse.redirect(new URL("/login"), req.url);
+        return NextResponse.redirect(new URL("/login", req.url));
     }
 }
+
 export const config = {
-    matcher: "/api/:path*",
+    matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
