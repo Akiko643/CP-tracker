@@ -5,7 +5,7 @@ import {
   getProblem,
   getProblems,
   updateProblem,
-} from "../problems.js";
+} from "../controllers/problems.js";
 
 const router = Router();
 

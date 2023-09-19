@@ -1,4 +1,4 @@
-import ProblemService from "../../services/problems.js";
+import ProblemService from "../services/problems.js";
 
 export const getProblems = async (req, res) => {
   // return all problems
