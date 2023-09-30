@@ -1,18 +1,18 @@
-// import { Problem } from "./problem.schema";
-// import { getData } from "@lib/utils/urlHandler";
+import { Problem } from "../schemas/problem.schema.js";
+import { getData } from "../utils/problemData.js";
 
-const getProblems = async () => {
-  // const res = await Problem.find();
+const findProblems = async () => {
+  const res = await Problem.find();
 
-  return "res";
+  return res;
 };
 
-const getProblem = async (_id) => {
+const findProblem = async (_id) => {
   const res = await Problem.findOne({ _id });
   return res;
 };
 
-const addProblem = async (url) => {
+const createProblem = async (url) => {
   const problem = await getData(url);
   const res = await Problem.create(problem);
   return res;
@@ -31,9 +31,9 @@ const updateProblem = async (_id, body) => {
 };
 
 export default {
-  getProblems,
-  getProblem,
-  addProblem,
+  findProblems,
+  findProblem,
+  createProblem,
   deleteProblem,
   updateProblem,
 };

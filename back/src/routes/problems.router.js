@@ -1,17 +1,17 @@
 import { Router } from "express";
 import {
-  addProblem,
+  createProblem,
   deleteProblem,
-  getProblem,
-  getProblems,
+  findProblem,
+  findProblems,
   updateProblem,
-} from "../controllers/problems.js";
+} from "../controllers/problems.controller.js";
 
 const router = Router();
 
-router.get("/", getProblems);
-router.get("/:id", getProblem);
-router.post("/add", addProblem);
+router.get("/", findProblems);
+router.get("/:id", findProblem);
+router.post("/add", createProblem);
 router.delete("/:id", deleteProblem);
 router.patch("/:id", updateProblem);
 

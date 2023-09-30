@@ -1,8 +1,11 @@
 import { Router } from "express";
-import Problem from "./problems.js";
+import ProblemRouter from "./problems.router.js";
+import AuthRouter from "./auth.router.js";
 
 const router = Router();
 
-router.use("/problems", Problem);
+// TODO add authorization middleware
+router.use("/problems", ProblemRouter);
+router.use(AuthRouter);
 
 export default router;
