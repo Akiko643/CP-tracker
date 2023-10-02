@@ -1,32 +1,37 @@
 import { Problem } from "../schemas/problem.schema.js";
 import { getData } from "../utils/problemData.js";
 
-const findProblems = async () => {
-  const res = await Problem.find();
-
+const findProblems = async ({ userId }) => {
+  const res = await Problem.find({ userId });
   return res;
 };
 
-const findProblem = async (_id) => {
-  const res = await Problem.findOne({ _id });
+const findProblem = async ({ userId, problemId }) => {
+  const res = await Problem.findOne({ _id: problemId, userId });
+  if (!res) {
+    throw new Error("User don't have the problem");
+  }
   return res;
 };
 
-const createProblem = async (url) => {
+const createProblem = async ({ userId, url }) => {
   const problem = await getData(url);
-  const res = await Problem.create(problem);
+  const res = await Problem.create({ ...problem, userId });
   return res;
 };
 
-const deleteProblem = async (_id) => {
-  const res = await Problem.deleteOne({ _id });
+const deleteProblem = async ({ userId, problemId }) => {
+  const res = await Problem.deleteOne({ userId, problemId });
   return res;
 };
 
-const updateProblem = async (_id, body) => {
-  const res = await Problem.findOneAndUpdate({ _id }, body, {
+const updateProblem = async ({ userId, problemId, body }) => {
+  const res = await Problem.findOneAndUpdate({ userId, _id: problemId }, body, {
     new: true,
   });
+  if (!res) {
+    throw new Error("User don't have the problem");
+  }
   return res;
 };
 

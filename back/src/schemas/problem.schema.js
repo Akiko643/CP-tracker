@@ -5,7 +5,10 @@ const ProblemSchema = new mongoose.Schema(
     url: {
       type: String,
       required: true,
-      unique: true,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
     },
     title: {
       type: String,
@@ -23,9 +26,13 @@ const ProblemSchema = new mongoose.Schema(
       type: String,
       default: "N/A",
     },
-    metaCognition: {
-      type: String,
+    spentTime: {
+      type: Number,
+      default: 0,
     },
+    startDate: Date,
+    solvedDate: Date,
+    metaCognition: String,
     takeaways: String,
     analysis: String,
     tags: {
