@@ -21,12 +21,12 @@ const createProblem = async ({ userId, url }) => {
 };
 
 const deleteProblem = async ({ userId, problemId }) => {
-  const res = await Problem.deleteOne({ userId, problemId });
+  const res = await Problem.deleteOne({ _id: problemId, userId });
   return res;
 };
 
 const updateProblem = async ({ userId, problemId, body }) => {
-  const res = await Problem.findOneAndUpdate({ userId, _id: problemId }, body, {
+  const res = await Problem.findOneAndUpdate({ _id: problemId, userId }, body, {
     new: true,
   });
   if (!res) {
