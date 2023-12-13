@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function Signup() {
   const [username, setUsername] = useState('');
@@ -18,6 +19,7 @@ export default function Signup() {
     });
     if (response.status === 200) {
       // account succesffully created
+      
       redirect('/signin');
     } else {
       console.log(response);

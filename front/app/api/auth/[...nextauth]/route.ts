@@ -1,7 +1,8 @@
-import NextAuth, { Account, Profile, User } from "next-auth";
+import NextAuth, { Account, Profile, Session, TokenSet, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { EmailConfig } from "next-auth/providers/email";
+import { JWT } from "next-auth/jwt";
 
 const handler = NextAuth({
   providers: [
@@ -51,15 +52,20 @@ const handler = NextAuth({
     async redirect({ url, baseUrl }) {
       return baseUrl
     },
-    async session({ session, user, token }) {
-      return session
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      if (isNewUser) {
-        // signup the user
+    // jwt callback is called before session
+    async jwt({ token, user, account, profile }) {
+      // Persist the OAuth access_token and or the user id to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token
       }
       return token
-    }
+    },
+    async session({ session, token, user }: { session: Session, token: JWT, user: User}) {
+      session.accessToken = token.accessToken;
+      // TODO: update user accessToken / add to user database if not signed up before
+      // session.user.email / session.accessToken (send to backend)
+      return session;
+    },
   },
   pages: {
     signIn: '/signin',
@@ -68,7 +74,7 @@ const handler = NextAuth({
     // verifyRequest: '/auth/verify-request', // (used for check email message)
     // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST }
