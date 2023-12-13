@@ -1,6 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { Account, Profile, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { EmailConfig } from "next-auth/providers/email";
 
 const handler = NextAuth({
   providers: [
@@ -43,6 +44,23 @@ const handler = NextAuth({
     }),
     // ...add more providers here
   ],
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl
+    },
+    async session({ session, user, token }) {
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (isNewUser) {
+        // signup the user
+      }
+      return token
+    }
+  },
   pages: {
     signIn: '/signin',
     // signOut: '/signout',
