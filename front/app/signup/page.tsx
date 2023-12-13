@@ -13,7 +13,7 @@ export default function Signup() {
     setLoading(true);
     event.preventDefault();
     const response = await fetch('http://localhost:4000/signup', {
-      body: JSON.stringify({username, password}),
+      body: JSON.stringify({ username, password }),
       headers: {'Content-Type': 'application/json'},
       method: 'POST'
     });

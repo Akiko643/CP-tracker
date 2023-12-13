@@ -4,7 +4,6 @@ import { signOut, useSession } from "next-auth/react";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
-
   if (status === "authenticated") {
     return (
       <div>

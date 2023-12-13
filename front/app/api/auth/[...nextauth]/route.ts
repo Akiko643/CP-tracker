@@ -47,6 +47,7 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+      // TODO: fetch request to get JWT TOKEN
       return true
     },
     async redirect({ url, baseUrl }) {
