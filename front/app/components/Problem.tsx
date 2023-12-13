@@ -2,10 +2,76 @@ import { useEffect, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useStopwatch, useTime } from "react-timer-hook";
 
-const SearchBar = ({ title, tags }: { title: string; tags: string[] }) => {
+interface Problem {
+  id: string;
+  title: string;
+  tags: string[];
+}
+
+const SearchBar = ({
+  problem,
+  setProblem,
+}: {
+  problem: Problem;
+  setProblem: React.Dispatch<React.SetStateAction<Problem>>;
+}) => {
+  const problems: Problem[] = [
+    {
+      id: "1",
+      title: "A. Watermelon",
+      tags: ["brute force", "math", "*800"],
+    },
+    {
+      id: "2",
+      title: "G. Lights",
+      tags: [
+        "brute force",
+        "constructive",
+        "algorithms",
+        "dfs and similar",
+        "graphs",
+        "greedy",
+        "implementation",
+        "*2200",
+      ],
+    },
+  ];
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    // setProblem(e.target.value);
+    const newProblem: Problem | undefined = problems.find(
+      (problem: Problem) => problem.id == e.target.value
+    );
+    if (newProblem) setProblem(newProblem);
+  };
+
   return (
     <div>
-      <h2 className="text-center">{title}</h2>
+      <select
+        id="problemSelect"
+        className="w-96"
+        onChange={handleChange}
+        defaultValue={problem.id}
+      >
+        {problems.map((curProblem) => {
+          const { title, id } = curProblem;
+          return (
+            <option key={title} value={id}>
+              {title}
+            </option>
+          );
+        })}
+      </select>
+      {/* <div className="tags flex">
+        {problem.tags.map((tag: string) => {
+          return (
+            <div key={tag} className="tag mx-5">
+              {tag}
+            </div>
+          );
+        })}
+      </div> */}
+      {/* <h2 className="text-center">{title}</h2>
       <div className="tags flex">
         {tags.map((tag: string) => {
           return (
@@ -14,7 +80,7 @@ const SearchBar = ({ title, tags }: { title: string; tags: string[] }) => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -86,13 +152,16 @@ const Notes = () => {
 };
 
 const Problem = () => {
-  const title = "4A Watermelon";
-  const tags = ["brute force", "math", "*800"];
+  const [problem, setProblem] = useState<Problem>({
+    title: "bobo",
+    tags: ["brute force", "math", "*800"],
+    id: "2",
+  });
 
   return (
     <div className="h-screen w-screen flex px-40 justify-between">
       <div className="flex flex-col justify-center items-center space-y-16">
-        <SearchBar title={title} tags={tags} />
+        <SearchBar problem={problem} setProblem={setProblem} />
         <Clock />
       </div>
       <div className="flex flex-col justify-center items-center">
