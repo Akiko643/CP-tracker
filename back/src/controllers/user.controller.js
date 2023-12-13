@@ -10,8 +10,8 @@ export const createToken = (payload) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await UserService.findUser(email, password);
+    const { username, password } = req.body;
+    const user = await UserService.findUser(username, password);
     if (!user) {
       throw new Error("User not found");
     }
@@ -24,12 +24,8 @@ export const login = async (req, res) => {
 
 export const signUp = async (req, res) => {
   try {
-    const { email, password, passwordRepeat } = req.body;
-    if (password !== passwordRepeat) {
-      throw new Error("Password is not match with passwordRepeat.");
-    }
-
-    const user = await UserService.createUser(email, password);
+    const { username, password } = req.body;
+    const user = await UserService.createUser(username, password);
     const token = createToken(user);
     return res.send({ user, token });
   } catch (err) {
