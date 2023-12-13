@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useStopwatch, useTime } from "react-timer-hook";
 
 interface Problem {
@@ -8,70 +7,10 @@ interface Problem {
   tags: string[];
 }
 
-const SearchBar = ({
-  problem,
-  setProblem,
-}: {
-  problem: Problem;
-  setProblem: React.Dispatch<React.SetStateAction<Problem>>;
-}) => {
-  const problems: Problem[] = [
-    {
-      id: "1",
-      title: "A. Watermelon",
-      tags: ["brute force", "math", "*800"],
-    },
-    {
-      id: "2",
-      title: "G. Lights",
-      tags: [
-        "brute force",
-        "constructive",
-        "algorithms",
-        "dfs and similar",
-        "graphs",
-        "greedy",
-        "implementation",
-        "*2200",
-      ],
-    },
-  ];
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // setProblem(e.target.value);
-    const newProblem: Problem | undefined = problems.find(
-      (problem: Problem) => problem.id == e.target.value
-    );
-    if (newProblem) setProblem(newProblem);
-  };
-
+const SearchBar = ({ title, tags }: { title: string; tags: string[] }) => {
   return (
     <div>
-      <select
-        id="problemSelect"
-        className="w-96"
-        onChange={handleChange}
-        defaultValue={problem.id}
-      >
-        {problems.map((curProblem) => {
-          const { title, id } = curProblem;
-          return (
-            <option key={title} value={id}>
-              {title}
-            </option>
-          );
-        })}
-      </select>
-      {/* <div className="tags flex">
-        {problem.tags.map((tag: string) => {
-          return (
-            <div key={tag} className="tag mx-5">
-              {tag}
-            </div>
-          );
-        })}
-      </div> */}
-      {/* <h2 className="text-center">{title}</h2>
+      <h2 className="text-center">{title}</h2>
       <div className="tags flex">
         {tags.map((tag: string) => {
           return (
@@ -80,7 +19,7 @@ const SearchBar = ({
             </div>
           );
         })}
-      </div> */}
+      </div>
     </div>
   );
 };
@@ -153,15 +92,23 @@ const Notes = () => {
 
 const Problem = () => {
   const [problem, setProblem] = useState<Problem>({
-    title: "bobo",
+    title: "4A. Watermelon",
     tags: ["brute force", "math", "*800"],
     id: "2",
   });
 
+  const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setProblem((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <div className="h-screen w-screen flex px-40 justify-between">
       <div className="flex flex-col justify-center items-center space-y-16">
-        <SearchBar problem={problem} setProblem={setProblem} />
+        <SearchBar title={problem.title} tags={problem.tags} />
         <Clock />
       </div>
       <div className="flex flex-col justify-center items-center">
