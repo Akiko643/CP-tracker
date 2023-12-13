@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Source_Code_Pro } from "next/font/google";
-import { Fira_Code } from "next/font/google";
 import "./globals.css";
-import SessionProvider from "./components/SessionProvider";
-import { getServerSession } from "next-auth";
+import SessionProvider from "./components/sessionProvider";
+import { getSession } from "next-auth/react";
+import Navbar from "./components/navbar";
 
 const font = Source_Code_Pro({ subsets: ["latin"] });
 // const inter = Fira_Code({ subsets: ["latin"] });
@@ -18,11 +18,14 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getSession();
   return (
     <html lang="en">
       <SessionProvider session={session}>
-        <body className={font.className}>{children}</body>
+        <body className={font.className}>
+          <Navbar />
+          {children}
+        </body>
       </SessionProvider>
     </html>
   );
