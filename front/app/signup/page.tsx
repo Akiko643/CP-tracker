@@ -12,17 +12,17 @@ export default function Signup() {
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     setLoading(true);
     event.preventDefault();
-    const response = await fetch('http://localhost:4000/signup', {
+    const response = await fetch('http://localhost:5001/signup', {
+      method: 'POST',
       body: JSON.stringify({ username, password }),
       headers: {'Content-Type': 'application/json'},
-      method: 'POST'
+      credentials: 'include'
     });
     if (response.status === 200) {
-      // account succesffully created
       
-      redirect('/signin');
+      // account succesffully created
     } else {
-      console.log(response);
+      
     }
     setLoading(false);
   };

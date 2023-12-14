@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 
-export default function signin() {
+export default function Signin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,17 +13,7 @@ export default function signin() {
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     setLoading(true);
     event.preventDefault();
-    const response = await fetch('http://localhost:4000/api/signin', {
-      body: JSON.stringify({username, password}),
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST'
-    });
-    if (response.status === 200) {
-      // succesffully logged in
-      redirect('/');
-    } else {
-      console.log(response);
-    }
+    await signIn('credentials', {username, password, callbackUrl: '/'});
     setLoading(false);
   };
   

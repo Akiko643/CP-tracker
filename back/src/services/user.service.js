@@ -1,30 +1,70 @@
 import { User } from "../schemas/user.schema.js";
-import crypto from "crypto";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const hash = (password) => {
-  const passwordHash = crypto.createHash("sha256");
-  passwordHash.update(password);
-  return passwordHash.digest("hex");
+  const saltRounds = 10;
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const passwordHash = bcrypt.hashSync(password, salt);
+  return passwordHash;
 };
 
-const findUser = async (email, password) => {
-  const passwordHash = hash(password);
-  const user = await User.findOne({ email, passwordHash });
+export const generateToken = (payload) => {
+  const token = jwt.sign({ ...payload._doc }, process.env.JWT_PRIVATE_KEY, {
+    expiresIn: "1h",
+  });
+  return token;
+};
+
+const userFind = async ({ username, password }) => {
+  const user = await User.findOne({ username });
+  if (!user) {
+    return new Error("Username does not exist");
+  }
+  const isPassTrue = bcrypt.compareSync(password, user.passwordHash);
+  if (!isPassTrue) {
+    return new Error("Wrong password");
+  }
   return user;
 };
 
-const createUser = async (email, password) => {
+const userGoogle = async ({ username, password }) => {
+  const user = await User.findOne({ username });
+  if (user) { // user signed up before
+    return user;
+  }
+  return userCreate({ username, password });
+} 
+
+const userCreate = async ({ username, password }) => {
   const passwordHash = hash(password);
-  const user = await User.create({ email, passwordHash });
+  const isExist = await User.findOne({ username }).exec();
+  if (isExist !== null) {
+    return "Username already exists";
+  }
+  const user = await User.create({ username, passwordHash });
   return user;
 };
 
-const deleteAll = async () => {
-  await User.deleteMany({});
-};
+const userGenerateToken = async (name) => {
+  const userEmail = await User.findOne({ email: name }).exec();
+  if (userEmail) {
+    return generateToken(userEmail);
+  }
+  const userCredentials = await User.findOne({ username: name }).exec();
+  if (userCredentials) {
+    return generateToken(userCredentials);
+  }
+  return new Error("invalid email or username");
+}
+
+// const deleteAll = async () => {
+//   await User.deleteMany({});
+// };
 
 export default {
-  findUser,
-  createUser,
-  deleteAll,
+  userFind,
+  userCreate,
+  userGoogle,
+  userGenerateToken
 };

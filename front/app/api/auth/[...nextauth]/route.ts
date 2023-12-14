@@ -1,4 +1,5 @@
-import NextAuth, { Account, Profile, Session, TokenSet, User } from "next-auth";
+import NextAuth,  { Account, Profile, Session, TokenSet, User } from "next-auth";
+import { AdapterUser } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { EmailConfig } from "next-auth/providers/email";
@@ -18,19 +19,13 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid.
-        // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
-        const res = await fetch("/your/endpoint", {
+        const res = await fetch("http://localhost:5001/login", {
           method: 'POST',
           body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" }
+          headers: { "Content-Type": "application/json" },
+          credentials: 'include'
         })
-        const user = await res.json()
-  
+        const user = await res.json();
         // If no error and we have user data, return it
         if (res.ok && user) {
           return user
@@ -47,7 +42,6 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      // TODO: fetch request to get JWT TOKEN
       return true
     },
     async redirect({ url, baseUrl }) {
@@ -55,16 +49,37 @@ const handler = NextAuth({
     },
     // jwt callback is called before session
     async jwt({ token, user, account, profile }) {
-      // Persist the OAuth access_token and or the user id to the token right after signin
-      if (account) {
-        token.accessToken = account.access_token
+      if (user) {
+        if (!profile) { // used credentials to login
+          const res = await fetch("http://localhost:5001/generateToken", {
+            method: 'POST',
+            body: JSON.stringify({ name: user.username}),
+            headers: { "Content-Type": "application/json" },
+            credentials: 'include'
+          });
+          token.name = user.username;
+          token.accessToken = await res.json();
+        } else { // used google provider to login
+          const res = await fetch("http://localhost:5001/generateToken", {
+            method: 'POST',
+            body: JSON.stringify({ name: user.email}),
+            headers: { "Content-Type": "application/json" },
+            credentials: 'include'
+          })
+          token.accessToken = await res.json();
+        }
       }
-      return token
+      return token;
     },
-    async session({ session, token, user }: { session: Session, token: JWT, user: User}) {
-      session.accessToken = token.accessToken;
-      // TODO: update user accessToken / add to user database if not signed up before
-      // session.user.email / session.accessToken (send to backend)
+    async session({ session, token, user }) {
+      if (token.name !== undefined) { // logged in using credentials
+        session.accessToken = token.accessToken;
+        session.user.name = token.name;
+      }
+      if (!session.accessToken && token.accessToken) {
+        // setting an session accessToken when logged in using google
+        session.accessToken = token.accessToken;
+      }
       return session;
     },
   },
@@ -76,6 +91,10 @@ const handler = NextAuth({
     // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+    
+  },
 });
 
 export { handler as GET, handler as POST }
