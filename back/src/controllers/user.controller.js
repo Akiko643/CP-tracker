@@ -11,7 +11,7 @@ export const generateToken = (payload) => {
 export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await UserService.userFind({ username, password });
+    const user = await UserService.findUser({ username, password });
     const token = generateToken(user);
     return res.status(200).send({...user._doc, accessToken: token});
   } catch (err) {
@@ -22,7 +22,7 @@ export const login = async (req, res) => {
 export const signUp = async (req, res) => {
   try {
     const { username, password } = req.body;
-    let user = await UserService.userCreate({ username, password });
+    let user = await UserService.createUser({ username, password });
     const token = generateToken(user);
     return res.status(200).send({...user, accessToken: token});
   } catch (err) {

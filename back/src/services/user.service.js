@@ -8,23 +8,23 @@ const hash = (password) => {
   return passwordHash;
 };
 
-const userFind = async ({ username, password }) => {
+const findUser = async ({ username, password }) => {
   const user = await User.findOne({ username });
   if (!user) {
-    return new Error("Username does not exist");
+    throw new Error("Username does not exist");
   }
   const isPassTrue = bcrypt.compareSync(password, user.passwordHash);
   if (!isPassTrue) {
-    return new Error("Wrong password");
+    throw new Error("Wrong password");
   }
   return user;
 };
 
-const userCreate = async ({ username, password }) => {
+const createUser = async ({ username, password }) => {
   const passwordHash = hash(password);
   const isExist = await User.findOne({ username }).exec();
   if (isExist !== null) {
-    return "Username already exists";
+    throw new Error("Username already exists");
   }
   const user = await User.create({ username, passwordHash });
   return user;
@@ -35,6 +35,6 @@ const userCreate = async ({ username, password }) => {
 // };
 
 export default {
-  userFind,
-  userCreate,
+  findUser,
+  createUser,
 };
