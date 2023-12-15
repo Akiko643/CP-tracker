@@ -7,7 +7,7 @@ export default function Navbar() {
   if (status === "authenticated") {
     return (
       <div>
-        <p>Signed in as {session.user!.email}</p>
+        <p>Signed in as {session.user!.name}</p>
         <button onClick={() => signOut()}>Sign out</button>
       </div>
     )
