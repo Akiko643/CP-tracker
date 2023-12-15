@@ -30,7 +30,6 @@ export const createProblem = async (req, res) => {
   // attach user id to it
   try {
     const { user } = req;
-    console.log("user", user);
     const { url } = req.body;
     const response = await ProblemService.createProblem({
       userId: user._id,

@@ -1,30 +1,40 @@
 import { User } from "../schemas/user.schema.js";
-import crypto from "crypto";
+import bcrypt from "bcrypt";
 
 const hash = (password) => {
-  const passwordHash = crypto.createHash("sha256");
-  passwordHash.update(password);
-  return passwordHash.digest("hex");
+  const saltRounds = 10;
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const passwordHash = bcrypt.hashSync(password, salt);
+  return passwordHash;
 };
 
-const findUser = async (email, password) => {
-  const passwordHash = hash(password);
-  const user = await User.findOne({ email, passwordHash });
+const findUser = async ({ username, password }) => {
+  const user = await User.findOne({ username });
+  if (!user) {
+    throw new Error("Username does not exist");
+  }
+  const isPassTrue = bcrypt.compareSync(password, user.passwordHash);
+  if (!isPassTrue) {
+    throw new Error("Wrong password");
+  }
   return user;
 };
 
-const createUser = async (email, password) => {
+const createUser = async ({ username, password }) => {
   const passwordHash = hash(password);
-  const user = await User.create({ email, passwordHash });
+  const isExist = await User.findOne({ username }).exec();
+  if (isExist !== null) {
+    throw new Error("Username already exists");
+  }
+  const user = await User.create({ username, passwordHash });
   return user;
 };
 
-const deleteAll = async () => {
-  await User.deleteMany({});
-};
+// const deleteAll = async () => {
+//   await User.deleteMany({});
+// };
 
 export default {
   findUser,
   createUser,
-  deleteAll,
 };
