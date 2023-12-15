@@ -33,7 +33,6 @@ const codeforces = (url, dom) => {
 const cses = (url, dom) => {
   const document = dom.window.document;
   const title = document.getElementsByTagName("h1")[0].innerHTML;
-  console.log(title);
 
   const problem = {
     url,
