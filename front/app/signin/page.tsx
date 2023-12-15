@@ -3,8 +3,18 @@
 import { FormEvent, useState } from "react";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import { useSession, getSession } from "next-auth/react"
+import { redirect, useRouter } from "next/navigation";
 
 export default function Signin() {
+  // const { push } = useRouter();
+  const { data: session, status } = useSession();
+
+  if (status === "authenticated") {
+    // push('/'); // the part that is only after http://localhost:3000 
+    redirect('http://localhost:3000'); // entire url
+  }
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);

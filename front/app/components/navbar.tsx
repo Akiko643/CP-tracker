@@ -12,5 +12,10 @@ export default function Navbar() {
       </div>
     )
   }
-  return <a href="/signin">Sign in</a>
+  return (
+    <div>
+      <a href="/signin">Sign in</a>
+      <a href="/signup">Sign up</a>
+    </div>
+  )
 }

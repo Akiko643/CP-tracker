@@ -1,10 +1,19 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+
 
 export default function Signup() {
+  const { data: session, status } = useSession();
+  const { push } = useRouter();
+  if (status === "authenticated") {
+    // redirect('/');
+    push('/signin');
+  }
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,6 +29,8 @@ export default function Signup() {
     });
     if (response.status === 200) {
       // account succesffully created
+      // redirect('/signin');
+      push('/signin');
     } else {
       
     }
