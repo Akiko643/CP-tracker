@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
-  timeout: 1000,
+  timeout: 5000,
   // headers: { "X-Custom-Header": "foobar" },
 });
 
