@@ -1,19 +1,12 @@
-import NextAuth,  { Account, Profile, Session, TokenSet, User } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { EmailConfig } from "next-auth/providers/email";
-import { JWT } from "next-auth/jwt";
 
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: 'Credentials',
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" }
@@ -25,12 +18,12 @@ const handler = NextAuth({
           headers: { "Content-Type": "application/json" },
           credentials: 'include'
         })
+        // add accesstoken to the user
         const user = await res.json();
         // If no error and we have user data, return it
         if (res.ok && user) {
           return user
         }
-        // Return null if user data could not be retrieved
         return null
       }
     }),
@@ -42,31 +35,34 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      return true
+      return true;
     },
     async redirect({ url, baseUrl }) {
-      return baseUrl
+      return baseUrl;
     },
     // jwt callback is called before session
     async jwt({ token, user, account, profile }) {
       if (user) {
         if (!profile) { // used credentials to login
-          const res = await fetch("http://localhost:5001/generateToken", {
+          token.accessToken = user.accessToken;
+          token.name = user.username;
+        } else { // used google provider to login
+          let responseUser = await fetch("http://localhost:5001/login", {
             method: 'POST',
-            body: JSON.stringify({ name: user.username}),
+            body: JSON.stringify({ username: user.email, password: user.id }),
             headers: { "Content-Type": "application/json" },
             credentials: 'include'
           });
-          token.name = user.username;
-          token.accessToken = await res.json();
-        } else { // used google provider to login
-          const res = await fetch("http://localhost:5001/generateToken", {
-            method: 'POST',
-            body: JSON.stringify({ name: user.email}),
-            headers: { "Content-Type": "application/json" },
-            credentials: 'include'
-          })
-          token.accessToken = await res.json();
+          if (responseUser.status !== 200) { // first time signin using google
+              responseUser = await fetch("http://localhost:5001/signup", {
+              method: 'POST',
+              body: JSON.stringify({ username: user.email, password: user.id }),
+              headers: { "Content-Type": "application/json" },
+              credentials: 'include'
+            });
+          }
+          const googleUser = await responseUser.json();
+          token.accessToken = googleUser.accessToken;
         }
       }
       return token;
@@ -76,8 +72,7 @@ const handler = NextAuth({
         session.accessToken = token.accessToken;
         session.user.name = token.name;
       }
-      if (!session.accessToken && token.accessToken) {
-        // setting an session accessToken when logged in using google
+      if (!session.accessToken && token.accessToken) { // logged in using google
         session.accessToken = token.accessToken;
       }
       return session;
@@ -93,7 +88,6 @@ const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
-    
   },
 });
 

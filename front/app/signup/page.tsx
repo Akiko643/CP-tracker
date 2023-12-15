@@ -19,7 +19,6 @@ export default function Signup() {
       credentials: 'include'
     });
     if (response.status === 200) {
-      
       // account succesffully created
     } else {
       
