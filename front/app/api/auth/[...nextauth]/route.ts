@@ -9,7 +9,7 @@ const handler = NextAuth({
       name: 'Credentials',
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
         const res = await fetch("http://localhost:5001/login", {
@@ -22,14 +22,14 @@ const handler = NextAuth({
         const user = await res.json();
         // If no error and we have user data, return it
         if (res.ok && user) {
-          return user
+          return user;
         }
         return null
       }
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
     // ...add more providers here
   ],
@@ -79,7 +79,7 @@ const handler = NextAuth({
     },
   },
   pages: {
-    signIn: '/signin',
+    signIn: "/signin",
     // signOut: '/signout',
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // (used for check email message)
@@ -91,4 +91,4 @@ const handler = NextAuth({
   },
 });
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };
