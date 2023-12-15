@@ -1,8 +1,10 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import type { NextAuthOptions } from 'next-auth'
 
-const handler = NextAuth({
+
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -89,6 +91,8 @@ const handler = NextAuth({
   session: {
     strategy: 'jwt',
   },
-});
+};
+
+export const handler =  NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
