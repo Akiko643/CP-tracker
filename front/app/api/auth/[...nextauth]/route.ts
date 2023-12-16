@@ -1,31 +1,29 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { login, singUp } from "@/api";
 
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const res = await fetch("http://localhost:5001/login", {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: { "Content-Type": "application/json" },
-          credentials: 'include'
-        })
-        // add accesstoken to the user
-        const user = await res.json();
+        // type Record<"username" | "password", string> but has {username, password}
+        const res = await login(
+          credentials as { username: string; password: string }
+        );
+        const user = await res.data;
         // If no error and we have user data, return it
-        if (res.ok && user) {
+        if (res.status === 200 && user) {
           return user;
         }
-        return null
-      }
+        return null;
+      },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -43,36 +41,37 @@ const handler = NextAuth({
     // jwt callback is called before session
     async jwt({ token, user, account, profile }) {
       if (user) {
-        if (!profile) { // used credentials to login
+        if (!profile) {
+          // used credentials to login
           token.accessToken = user.accessToken;
           token.name = user.username;
-        } else { // used google provider to login
-          let responseUser = await fetch("http://localhost:5001/login", {
-            method: 'POST',
-            body: JSON.stringify({ username: user.email, password: user.id }),
-            headers: { "Content-Type": "application/json" },
-            credentials: 'include'
+        } else {
+          // used google provider to login
+          let responseUser = await login({
+            username: user.email as string,
+            password: user.id,
           });
-          if (responseUser.status !== 200) { // first time signin using google
-              responseUser = await fetch("http://localhost:5001/signup", {
-              method: 'POST',
-              body: JSON.stringify({ username: user.email, password: user.id }),
-              headers: { "Content-Type": "application/json" },
-              credentials: 'include'
+          if (responseUser.status !== 200) {
+            // first time signin using google
+            responseUser = await singUp({
+              username: user.email as string,
+              password: user.id,
             });
           }
-          const googleUser = await responseUser.json();
+          const googleUser = await responseUser.data;
           token.accessToken = googleUser.accessToken;
         }
       }
       return token;
     },
     async session({ session, token, user }) {
-      if (token.name !== undefined) { // logged in using credentials
+      if (token.name !== undefined) {
+        // logged in using credentials
         session.accessToken = token.accessToken;
         session.user.name = token.name;
       }
-      if (!session.accessToken && token.accessToken) { // logged in using google
+      if (!session.accessToken && token.accessToken) {
+        // logged in using google
         session.accessToken = token.accessToken;
       }
       return session;
@@ -87,7 +86,7 @@ const handler = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
 });
 
