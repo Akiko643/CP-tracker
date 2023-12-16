@@ -15,8 +15,8 @@ export const login = async ({
   username: string;
   password: string;
 }) => {
-  const user = await instance.post("/login", { username, password });
-  return user.data;
+  const response = await instance.post("/login", { username, password });
+  return response;
 };
 
 export const singUp = async ({
@@ -26,8 +26,8 @@ export const singUp = async ({
   username: string;
   password: string;
 }) => {
-  const user = await instance.post("/singup", { username, password });
-  return user.data;
+  const response = await instance.post("/singup", { username, password });
+  return response;
 };
 
 export const getProblems = async () => {};

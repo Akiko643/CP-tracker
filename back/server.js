@@ -5,13 +5,15 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 const app = express();
-const port = 5001;
+const port = 5000;
 
 // Use middleware that allows for access from other domains
-app.use(cors({
-  credentials: true,
-  origin: 'http://localhost:3000'
-}));
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+  })
+);
 // Use middleware that allows us to access the JSON body of requests
 app.use(express.json());
 
