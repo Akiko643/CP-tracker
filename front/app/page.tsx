@@ -1,11 +1,8 @@
-"use client";
-
-import { signOut } from "next-auth/react";
-import Image from "next/image";
 import Auth from "./components/Auth";
 import Problem from "./components/Problem";
+import { login } from "@/api";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="">
       <Auth>
