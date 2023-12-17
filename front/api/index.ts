@@ -19,7 +19,7 @@ export const login = async ({
   return response;
 };
 
-export const singUp = async ({
+export const signUp = async ({
   username,
   password,
 }: {

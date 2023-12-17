@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT;
 
 // Use middleware that allows for access from other domains
 app.use(
