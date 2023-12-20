@@ -1,9 +1,10 @@
+import type { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { login, singUp } from "@/api";
+import { login, signUp } from "@/api";
 
-const handler = NextAuth({
+export const OPTIONS: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -53,7 +54,7 @@ const handler = NextAuth({
           });
           if (responseUser.status !== 200) {
             // first time signin using google
-            responseUser = await singUp({
+            responseUser = await signUp({
               username: user.email as string,
               password: user.id,
             });
@@ -88,6 +89,8 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
-});
+};
+
+const handler = NextAuth(OPTIONS);
 
 export { handler as GET, handler as POST };

@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useStopwatch, useTime } from "react-timer-hook";
 
@@ -93,6 +94,7 @@ const Notes = () => {
 };
 
 const Problem = () => {
+  const { data: session } = useSession();
   const [problem, setProblem] = useState<Problem>({
     title: "4A. Watermelon",
     tags: ["brute force", "math", "*800"],

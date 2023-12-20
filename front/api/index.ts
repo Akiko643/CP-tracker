@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import axios from "axios";
 import { getSession } from "next-auth/react";
+import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
@@ -30,7 +31,16 @@ export const signUp = async ({
   return response;
 };
 
-export const getProblems = async () => {};
+export const getProblems = async () => {
+  const { accessToken } = await getServerSession(OPTIONS);
+  const token = "Bearer " + accessToken;
+  const { data } = await instance.get("/problems", {
+    headers: {
+      Authorization: token,
+    },
+  });
+  return data;
+};
 
 export const getProblem = async () => {};
 
