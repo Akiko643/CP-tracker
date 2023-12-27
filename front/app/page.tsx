@@ -1,10 +1,11 @@
 import Auth from "./components/Auth";
 import Problem from "./components/Problem";
-import { login } from "@/api";
+import ProblemList from "./components/ProblemList";
 
-export default async function Home() {
+export default function Home() {
   return (
     <main className="">
+      <ProblemList />
       <Auth>
         <Problem />
       </Auth>

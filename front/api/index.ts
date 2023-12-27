@@ -1,11 +1,10 @@
 import { getServerSession } from "next-auth";
 import axios from "axios";
-import { getSession } from "next-auth/react";
+import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
   timeout: 5000,
-  // headers: { "X-Custom-Header": "foobar" },
 });
 
 export const login = async ({
@@ -19,7 +18,7 @@ export const login = async ({
   return response;
 };
 
-export const singUp = async ({
+export const signUp = async ({
   username,
   password,
 }: {
@@ -30,7 +29,17 @@ export const singUp = async ({
   return response;
 };
 
-export const getProblems = async () => {};
+export const getProblems = async () => {
+  const session = await getServerSession(OPTIONS);
+  const { accessToken } = session;
+  const token = "Bearer " + accessToken;
+  const { data } = await instance.get("/problems", {
+    headers: {
+      Authorization: token,
+    },
+  });
+  return data;
+};
 
 export const getProblem = async () => {};
 

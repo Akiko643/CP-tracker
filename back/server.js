@@ -4,8 +4,10 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
+dotenv.config();
+
 const app = express();
-const port = 5000;
+const port = process.env.PORT;
 
 // Use middleware that allows for access from other domains
 app.use(
@@ -16,8 +18,6 @@ app.use(
 );
 // Use middleware that allows us to access the JSON body of requests
 app.use(express.json());
-
-dotenv.config();
 
 app.use("/", route);
 
