@@ -1,14 +1,17 @@
 import Image from "next/image";
-import ProblemList from "../components/problemList";
-import Groups from "../components/groups";
-import Sort from "../components/sort";
+import Auth from "./components/Auth";
+import ProblemList from "./components/problemList";
+import Groups from "./components/groups";
+import Sort from "./components/sort";
 
 export default function Home() {
   return (
     <div className="flex p-8">
-      <Groups />
-      <ProblemList></ProblemList>
-      <Sort />
+      <Auth>
+        <Groups />
+        <ProblemList />
+        <Sort />
+      </Auth>
     </div>
   );
 }
