@@ -12,7 +12,8 @@ export default function Signin() {
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     setLoading(true);
     event.preventDefault();
-    await signIn('credentials', {username, password, callbackUrl: '/'});
+    await signIn('credentials', {username, password, callbackUrl: '/', redirect: false});
+    // TODO: show error message to the client side
     setLoading(false);
   }
 

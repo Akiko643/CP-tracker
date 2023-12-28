@@ -3,21 +3,17 @@
 import { FormEvent, useState } from "react";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { signUp } from "@/api/index";
 
 export default function Signup() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
+  async function handleSignUp(event: FormEvent<HTMLFormElement>) {
     setLoading(true);
     event.preventDefault();
-    const response = await fetch('http://localhost:5001/signup', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      headers: {'Content-Type': 'application/json'},
-      credentials: 'include'
-    });
+    const response = await signUp({ username, password });
     if (response.status === 200) {
       // account succesffully created
     } else {
@@ -28,7 +24,7 @@ export default function Signup() {
   
   return (
     <div>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSignUp}>
         Username
         <input type="text" value={username} disabled={loading}
           onChange={e => setUsername(e.target.value)} 
