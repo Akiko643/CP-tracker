@@ -94,19 +94,10 @@ const Notes = () => {
 };
 
 const Problem = () => {
-  const { data: session } = useSession();
-  const [problem, setProblem] = useState<Problem>({
+  const problem = {
     title: "4A. Watermelon",
     tags: ["brute force", "math", "*800"],
     id: "2",
-  });
-
-  const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setProblem((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
   };
 
   return (
