@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 
 const instance = axios.create({
@@ -30,18 +30,56 @@ export const signUp = async ({
 };
 
 export const getProblems = async () => {
-  const session = await getServerSession(OPTIONS);
-  const { accessToken } = session;
-  const token = "Bearer " + accessToken;
-  const { data } = await instance.get("/problems", {
-    headers: {
-      Authorization: token,
-    },
-  });
-  return data;
+  try {
+    const session = await getServerSession(OPTIONS);
+    const { accessToken } = session as any;
+
+    if (!accessToken) return [];
+
+    const token = "Bearer " + accessToken;
+    const { data } = await instance.get("/problems", {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 401) {
+      return {
+        status: 401,
+      };
+    }
+
+    // write other error specific code.
+    return [];
+  }
 };
 
-export const getProblem = async () => {};
+export const getProblem = async (_id: string) => {
+  try {
+    const session = await getServerSession(OPTIONS);
+    const { accessToken } = session as any;
+
+    if (!accessToken) return [];
+
+    const token = "Bearer " + accessToken;
+    const { data } = await instance.get(`/problems/${_id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 401) {
+      return {
+        status: 401,
+      };
+    }
+
+    // write other error specific code.
+    return [];
+  }
+};
 
 export const postProblem = async () => {};
 
