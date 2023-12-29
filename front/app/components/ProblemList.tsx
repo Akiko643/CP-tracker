@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getProblems } from "@/api";
@@ -58,8 +58,8 @@ function StatusIndicator({ status }: { status: string }) {
 }
 
 export default async function ProblemList() {
-  const [diffSort, setDiffSort] = useState(0);
-  const [srcSort, setSrcSort] = useState(0);
+  // const [diffSort, setDiffSort] = useState(0);
+  // const [srcSort, setSrcSort] = useState(0);
 
   const data: any = await getProblems();
   if (data.status === 401) {
