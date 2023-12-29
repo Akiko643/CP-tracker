@@ -93,13 +93,7 @@ const Notes = () => {
   );
 };
 
-const Problem = () => {
-  const problem = {
-    title: "4A. Watermelon",
-    tags: ["brute force", "math", "*800"],
-    id: "2",
-  };
-
+const Problem = (problem: { title: string; tags: string[] }) => {
   return (
     <div className="h-screen w-screen flex px-40 justify-between">
       <div className="flex flex-col justify-center items-center space-y-16">
