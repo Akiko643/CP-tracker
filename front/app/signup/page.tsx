@@ -1,40 +1,31 @@
-"use client";
 
-import { FormEvent, useState } from "react";
-import { redirect } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { signUp } from "@/api/index";
 
-export default function Signup() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  async function handleSignUp(event: FormEvent<HTMLFormElement>) {
-    setLoading(true);
-    event.preventDefault();
-    const response = await signUp({ username, password });
-    if (response.status === 200) {
-      // account succesffully created
-    } else {
-      
+export default async function Signup() {
+  
+  async function handleSignUp(formData: FormData) {
+    'use server';
+    const data = {
+      username: formData.get('username') as string,
+      password: formData.get('password') as string
+    };
+    try {
+      const response = await signUp(data);
+    } catch(error) {
+      // TODO: display error message to the client
+      console.log(error);
     }
-    setLoading(false);
   };
   
   return (
-    <div>
-      <form onSubmit={handleSignUp}>
-        Username
-        <input type="text" value={username} disabled={loading}
-          onChange={e => setUsername(e.target.value)} 
-        />
-        Password
-        <input type="password" value={password} disabled={loading}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <button className="button-auth">Signup</button>
-      </form>
-    </div>
+    <form action={handleSignUp}>
+      Username
+      <input type="text" name="username" 
+      />
+      Password
+      <input type="password" name="password"
+      />
+      <button className="button-auth">Signup</button>
+    </form>
   )
 }
