@@ -65,7 +65,7 @@ export default function ProblemList() {
       status: "solved",
     },
     {
-      title: "5b. carrot farm",
+      title: "5b. carrot farm good",
       difficulty: "3100",
       source: "codeforces",
       status: "skipped",
