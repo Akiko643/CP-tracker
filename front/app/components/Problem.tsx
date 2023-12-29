@@ -93,12 +93,12 @@ const Notes = () => {
   );
 };
 
-const Problem = () => {
-  const problem = {
-    title: "4A. Watermelon",
-    tags: ["brute force", "math", "*800"],
-    id: "2",
-  };
+const Problem = (problem: { title: string; tags: string[] }) => {
+  // const problem = {
+  //   title: "4A. Watermelon",
+  //   tags: ["brute force", "math", "*800"],
+  //   id: "2",
+  // };
 
   return (
     <div className="h-screen w-screen flex px-40 justify-between">
