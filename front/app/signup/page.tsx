@@ -1,4 +1,5 @@
 import { signUp } from "@/api/index";
+import AuthForm from "../components/authentication/AuthForm";
 
 export default async function Signup() {
   async function handleSignUp(formData: FormData) {
@@ -16,21 +17,6 @@ export default async function Signup() {
   }
 
   return (
-    <form
-      action={handleSignUp}
-      className="flex flex-col justify-center items-center"
-    >
-      Username
-      <input type="text" name="username" className="w-3/12 bg-gray-100 mb-5" />
-      Password
-      <input
-        type="password"
-        name="password"
-        className="w-3/12 bg-gray-100 mb-5"
-      />
-      <button className="button-auth font-bold py-2 px-4 rounded bg-blue-500 text-white">
-        Signup
-      </button>
-    </form>
+    <AuthForm handleAuth={handleSignUp} buttonText={"Sign up"} />
   );
 }

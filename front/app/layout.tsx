@@ -23,8 +23,10 @@ export default async function RootLayout({
     <html lang="en">
       <SessionProvider session={session}>
         <body className={font.className}>
-          <Navbar />
-          {children}
+          <div className="flex flex-col bg-background-900 w-screen h-screen">
+            <Navbar />
+            {children}
+          </div>
         </body>
       </SessionProvider>
     </html>

@@ -35,6 +35,8 @@ const config: Config = {
       green: colors.green,
       yellow: colors.yellow,
       transparent: "transparent",
+      violet: colors.violet,
+      fuchsia: colors.fuchsia
     },
   },
   plugins: [],

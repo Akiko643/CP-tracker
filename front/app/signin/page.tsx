@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import AuthForm from "../components/authentication/AuthForm";
 
 export default function Signin() {
   async function handleLogin(formData: FormData) {
@@ -18,26 +19,7 @@ export default function Signin() {
 
   return (
     <div>
-      <form
-        action={handleLogin}
-        className="flex flex-col justify-center items-center"
-      >
-        Username
-        <input
-          type="text"
-          name="username"
-          className="w-3/12 bg-gray-100 mb-5"
-        />
-        Password
-        <input
-          type="password"
-          name="password"
-          className="w-3/12 bg-gray-100 mb-5"
-        />
-        <button className="font-bold py-2 px-4 rounded bg-blue-500 text-white hover:bg-blue-700">
-          Signin
-        </button>
-      </form>
+      <AuthForm handleAuth={handleLogin} buttonText={"Sign in"}/>
       <button
         type="button"
         onClick={() => signIn("google", { callbackUrl: "/" })}
