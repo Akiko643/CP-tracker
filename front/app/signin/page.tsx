@@ -1,39 +1,28 @@
 "use client";
-
-import { FormEvent, useState } from "react";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 
 export default function Signin() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
-    setLoading(true);
-    event.preventDefault();
-    await signIn('credentials', {username, password, callbackUrl: '/', redirect: false});
-    // TODO: show error message to the client side
-    setLoading(false);
+  async function handleLogin(formData: FormData) {
+    const data = {
+      username: formData.get('username') as string,
+      password: formData.get('password') as string
+    };
+    try {
+      const response = await signIn('credentials', data);
+    } catch(error) {
+      // TODO: display error message to the client
+      console.log(error);
+    }
   }
 
   return (
     <div>
-      <form onSubmit={handleLogin}>
+      <form action={handleLogin}>
         Username
-        <input
-          type="text"
-          value={username}
-          disabled={loading}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <input type="text" name="username" />
         Password
-        <input
-          type="password"
-          value={password}
-          disabled={loading}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <input type="password" name="password" />
         <button className="button-auth">Signin</button>
       </form>
       <button
