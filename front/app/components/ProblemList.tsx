@@ -18,7 +18,7 @@ function SortButton(props: Props) {
       }}
       className="flex items-center justify-between pr-4 h-full select-none"
     >
-      <h3>{name}</h3>
+      <h3 className="text-gray-500">{name}</h3>
       <div>
         <Image
           src="./Polygon 1.svg"
@@ -79,10 +79,10 @@ export default function ProblemList() {
 
   return (
     <section className="px-4 flex-1">
-      <h1 className="text-2xl mb-6">Recents</h1>
+      <h1 className="text-2xl mb-6 text-gray-300">Recents</h1>
       <div className="w-full flex mb-2">
         <div className="w-8"></div>
-        <div className="flex-1">Title</div>
+        <div className="flex-1 text-gray-500">Title</div>
         <div className="w-2/12">
           <SortButton
             name="Difficulty"
@@ -94,12 +94,12 @@ export default function ProblemList() {
           <SortButton name="Source" state={srcSort} setState={setSrcSort} />
         </div>
       </div>
-      <div className="h-0.5 w-full bg-teal-950"></div>
+      <div className="h-0.5 w-full bg-gray-500"></div>
       <div>
         {problems.map((problem, i) => {
           return (
             <div
-              className="w-full flex my-2 h-10 items-center bg-teal-950 rounded-md"
+              className="w-full flex my-2 h-10 items-center bg-primary-900 rounded-md text-gray-300"
               key={`problem-${i}`}
             >
               <div

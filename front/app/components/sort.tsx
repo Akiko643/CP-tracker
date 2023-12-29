@@ -27,8 +27,8 @@ function Status({
   let statuses = ["Solved", "Skipped", "Unsolved"];
 
   return (
-    <div className="w-48 p-4 bg-teal-950 rounded-md mb-2">
-      <h3>Status</h3>
+    <div className="w-48 p-4 bg-primary-900 rounded-md mb-2">
+      <h3 className="text-gray-300">Status</h3>
       <div className="pl-4">
         {statuses.map((status, index) => (
           <div
@@ -46,7 +46,7 @@ function Status({
             }}
           >
             <CheckBox state={sort.status.includes(status)} size={15} />
-            <p className="ml-1">{status}</p>
+            <p className="ml-1 text-gray-500">{status}</p>
           </div>
         ))}
       </div>
@@ -64,8 +64,8 @@ function Difficulty({
   let difficulties = ["Easy", "Medium", "Hard"];
 
   return (
-    <div className="w-48 p-4 bg-teal-950 rounded-md">
-      <h3>Difficulty</h3>
+    <div className="w-48 p-4 bg-primary-900 rounded-md">
+      <h3 className="text-gray-300">Difficulty</h3>
       <div className="pl-4">
         {difficulties.map((diff, index) => (
           <div
@@ -83,11 +83,11 @@ function Difficulty({
             }}
           >
             <CheckBox state={sort.difficulty.includes(diff)} size={15} />
-            <p className="ml-1">{diff}</p>
+            <p className="ml-1 text-gray-500">{diff}</p>
           </div>
         ))}
       </div>
-      <h3>Range</h3>
+      <h3 className="text-gray-300">Range</h3>
       <div className="flex pl-4">
         <input className="w-16 bg-transparent border border-gray-500 rounded-sm h-6"></input>
         <p>-</p>
