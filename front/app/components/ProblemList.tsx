@@ -1,6 +1,8 @@
-"use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { getProblems } from "@/api";
+import ReturnPage from "./ReturnPage";
 
 interface Props {
   name: string;
@@ -44,6 +46,7 @@ interface Problem {
   difficulty: string;
   source: string;
   status: string;
+  _id: string;
 }
 
 function StatusIndicator({ status }: { status: string }) {
@@ -54,23 +57,15 @@ function StatusIndicator({ status }: { status: string }) {
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default function ProblemList() {
+export default async function ProblemList() {
   const [diffSort, setDiffSort] = useState(0);
   const [srcSort, setSrcSort] = useState(0);
-  const [problems, setProblems] = useState([
-    {
-      title: "4a. watermelon",
-      difficulty: "1424",
-      source: "codeforces",
-      status: "solved",
-    },
-    {
-      title: "5b. carrot farm good",
-      difficulty: "3100",
-      source: "codeforces",
-      status: "skipped",
-    },
-  ]);
+
+  const data: any = await getProblems();
+  if (data.status === 401) {
+    return <ReturnPage />;
+  }
+
   function nextStatus(status: string) {
     if (status == "solved") return "skipped";
     if (status == "skipped") return "solving";
@@ -84,19 +79,19 @@ export default function ProblemList() {
         <div className="w-8"></div>
         <div className="flex-1 text-gray-500">Title</div>
         <div className="w-2/12">
-          <SortButton
+          {/* <SortButton
             name="Difficulty"
             state={diffSort}
             setState={setDiffSort}
-          />
+          /> */}
         </div>
         <div className="w-2/12">
-          <SortButton name="Source" state={srcSort} setState={setSrcSort} />
+          {/* <SortButton name="Source" state={srcSort} setState={setSrcSort} /> */}
         </div>
       </div>
       <div className="h-0.5 w-full bg-gray-500"></div>
       <div>
-        {problems.map((problem, i) => {
+        {data.map((problem: Problem, i: number) => {
           return (
             <div
               className="w-full flex my-2 h-10 items-center bg-primary-900 rounded-md text-gray-300"
@@ -104,20 +99,22 @@ export default function ProblemList() {
             >
               <div
                 className="w-8 flex justify-center h-full"
-                onClick={() => {
-                  setProblems([
-                    ...problems.slice(0, i),
-                    {
-                      ...problems[i],
-                      status: nextStatus(problem.status),
-                    },
-                    ...problems.slice(i + 1),
-                  ]);
-                }}
+                // onClick={() => {
+                //   setProblems([
+                //     ...problems.slice(0, i),
+                //     {
+                //       ...problems[i],
+                //       status: nextStatus(problem.status),
+                //     },
+                //     ...problems.slice(i + 1),
+                //   ]);
+                // }}
               >
                 <StatusIndicator status={problem.status} />
               </div>
-              <div className="flex-1">{problem.title}</div>
+              <div className="flex-1">
+                <Link href={`problems/${problem._id}`}>{problem.title}</Link>
+              </div>
               <div className="w-2/12">{problem.difficulty}</div>
               <div className="w-2/12">{problem.source}</div>
             </div>
