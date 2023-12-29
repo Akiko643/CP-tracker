@@ -26,7 +26,7 @@ export const signUp = async ({
   username: string;
   password: string;
 }) => {
-  const response = await instance.post("/singup", { username, password });
+  const response = await instance.post("/signup", { username, password });
   return response;
 };
 
