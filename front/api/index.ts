@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
-import { signOut } from "next-auth/react";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,

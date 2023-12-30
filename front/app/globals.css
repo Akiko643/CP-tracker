@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.navbarLink{
+    @apply py-1 px-4 mx-1;
+    @apply hover:bg-text-50 hover:rounded-2xl hover:text-background-900;
+}
+
+.authButton{
+    @apply border self-center rounded-md py-1 px-4 mx-1;
+    @apply hover:bg-text-50 hover:text-background-900;
+}
