@@ -10,12 +10,13 @@ export default async function Signup() {
     };
     try {
       const response = await signUp(data);
+      // TODO: after signed up redirect to signin page
     } catch (error) {
       // TODO: display error message to the client
       console.log(error);
     }
   }
-
+  // TODO: protect this route from the signed in user
   return (
     <div className="flex items-center justify-center h-full text-text-50">
       <div className="flex flex-col ">

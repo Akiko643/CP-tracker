@@ -12,7 +12,7 @@ export default function Navbar() {
           <Link href="/" className="navbarLink">Problems</Link>
           <Link href="/analytics" className="navbarLink">Analytics</Link>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end mr-2">
           <Link href="/profile" className="navbarLink">{session.user.name}</Link>
         </div>
       </nav>

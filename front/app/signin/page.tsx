@@ -1,9 +1,11 @@
 "use client";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import AuthForm from "../components/AuthForm";
+import { redirect } from "next/navigation";
 
 export default function Signin() {
+  const { data, status } = useSession();
   async function handleLogin(formData: FormData) {
     const data = {
       username: formData.get("username") as string,
@@ -17,6 +19,9 @@ export default function Signin() {
     }
   }
 
+  if (status === 'authenticated') {
+    return redirect('/');
+  }
   return (
     <div className="flex items-center justify-center h-full">
       <div className="flex flex-col text-text-50">

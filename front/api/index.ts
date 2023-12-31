@@ -25,7 +25,13 @@ export const signUp = async ({
   username: string;
   password: string;
 }) => {
-  const response = await instance.post("/signup", { username, password });
+  const response = await fetch("http://localhost:5000/signup", {
+    method: 'POST',
+    body: JSON.stringify({ username, password }),
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+  });
+  // const response = await instance.post("/signup", { username, password });
   return response;
 };
 
