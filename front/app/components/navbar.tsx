@@ -7,8 +7,8 @@ export default function Navbar() {
   const { data: session, status } = useSession();
   if (status === "authenticated") {
     return (
-      <nav className="flex text-text-50 mt-6 w-screen">
-        <div>
+      <nav className="flex justify-between text-text-50 mt-3 w-screen">
+        <div className="flex">
           <Link href="/" className="navbarLink">Problems</Link>
           <Link href="/analytics" className="navbarLink">Analytics</Link>
         </div>
@@ -19,7 +19,7 @@ export default function Navbar() {
     )
   } else {
     return (
-      <div className="flex justify-end text-text-50 mt-4">
+      <div className="flex justify-end text-text-50 mt-3">
         <Link href="/signin" className="navbarLink">Sign in</Link>
         <Link href="/signup" className="navbarLink">Sign up</Link>
       </div>
