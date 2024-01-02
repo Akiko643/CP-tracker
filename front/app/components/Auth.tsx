@@ -10,8 +10,6 @@ export default function Component({ children }: any) {
   if (!session) {
     return (
       <>
-        signed out <br />
-        <button onClick={() => signIn()}>singin</button>
       </>
     );
   }

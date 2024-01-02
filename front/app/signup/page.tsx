@@ -1,4 +1,8 @@
 import { signUp } from "@/api/index";
+import AuthForm from "../components/AuthForm";
+import { RedirectType, redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { OPTIONS } from "../api/auth/[...nextauth]/route";
 
 export default async function Signup() {
   async function handleSignUp(formData: FormData) {
@@ -7,30 +11,33 @@ export default async function Signup() {
       username: formData.get("username") as string,
       password: formData.get("password") as string,
     };
+    
+    let isSuccessful = false;
     try {
       const response = await signUp(data);
+      isSuccessful = true;
     } catch (error) {
-      // TODO: display error message to the client
       console.log(error);
+    }
+
+    if (isSuccessful) {
+      // TODO: display success message to the client
+      redirect('/signin', RedirectType.replace);
+    } else {
+      // TODO: display error message to the client
     }
   }
 
+  const session = await getServerSession(OPTIONS);
+  if (session) {
+    redirect('/');
+  }
   return (
-    <form
-      action={handleSignUp}
-      className="flex flex-col justify-center items-center"
-    >
-      Username
-      <input type="text" name="username" className="w-3/12 bg-gray-100 mb-5" />
-      Password
-      <input
-        type="password"
-        name="password"
-        className="w-3/12 bg-gray-100 mb-5"
-      />
-      <button className="button-auth font-bold py-2 px-4 rounded bg-blue-500 text-white">
-        Signup
-      </button>
-    </form>
+    <div className="flex items-center justify-center h-full text-text-50">
+      <div className="flex flex-col ">
+        <p className="text-2xl mb-6">Sign up</p>
+        <AuthForm handleAuth={handleSignUp} buttonText={"Sign up"} />
+      </div>
+    </div>
   );
 }
