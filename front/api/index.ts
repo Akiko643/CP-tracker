@@ -87,3 +87,12 @@ export const postProblem = async () => {};
 export const deleteProblem = async () => {};
 
 export const updateProblem = async () => {};
+
+export const createGroup = async () => {};
+export const getGroups = async () => {};
+export const updateGroup = async () => {}; // change name
+export const createProblemToGroup = async () => {};
+export const deleteProblemFromGroup = async () => {};
+export const shareGroup = async () => {}; // skip for now
+export const deleteGroup = async () => {};
+// CRUD -> CREATE / READ / UPDATE / DELETE
