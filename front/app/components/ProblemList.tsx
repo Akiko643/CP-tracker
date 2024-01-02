@@ -1,8 +1,11 @@
 // import { useState } from "react";
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { getProblems } from "@/api";
+import { getProblems, updateProblem } from "@/api";
 import ReturnPage from "./ReturnPage";
+import { useState } from "react";
+// import { SortButton } from "./SortButton";
 
 interface Props {
   name: string;
@@ -57,20 +60,30 @@ function StatusIndicator({ status }: { status: string }) {
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default async function ProblemList() {
-  // const [diffSort, setDiffSort] = useState(0);
-  // const [srcSort, setSrcSort] = useState(0);
-
-  const data: any = await getProblems();
-  if (data.status === 401) {
-    return <ReturnPage />;
-  }
-
+export default function ProblemList({ data }: any) {
+  const [diffSort, setDiffSort] = useState(0);
+  const [srcSort, setSrcSort] = useState(0);
+  const [problems, setProblems] = useState(data);
   function nextStatus(status: string) {
     if (status == "solved") return "skipped";
     if (status == "skipped") return "solving";
     return "solved";
   }
+
+  const updateStatus = async (i: number) => {
+    setProblems([
+      ...problems.slice(0, i),
+      {
+        ...problems[i],
+        status: nextStatus(problems[i].status),
+      },
+      ...problems.slice(i + 1),
+    ]);
+    await updateProblem({
+      ...problems[i],
+      status: nextStatus(problems[i].status),
+    });
+  };
 
   return (
     <section className="px-4 flex-1">
@@ -79,19 +92,19 @@ export default async function ProblemList() {
         <div className="w-8"></div>
         <div className="flex-1 text-gray-500">Title</div>
         <div className="w-2/12">
-          {/* <SortButton
+          <SortButton
             name="Difficulty"
             state={diffSort}
             setState={setDiffSort}
-          /> */}
+          />
         </div>
         <div className="w-2/12">
-          {/* <SortButton name="Source" state={srcSort} setState={setSrcSort} /> */}
+          <SortButton name="Source" state={srcSort} setState={setSrcSort} />
         </div>
       </div>
       <div className="h-0.5 w-full bg-gray-500"></div>
       <div>
-        {data.map((problem: Problem, i: number) => {
+        {problems.map((problem: Problem, i: number) => {
           return (
             <div
               className="w-full flex my-2 h-10 items-center bg-primary-900 rounded-md text-gray-300"
@@ -99,16 +112,7 @@ export default async function ProblemList() {
             >
               <div
                 className="w-8 flex justify-center h-full"
-                // onClick={() => {
-                //   setProblems([
-                //     ...problems.slice(0, i),
-                //     {
-                //       ...problems[i],
-                //       status: nextStatus(problem.status),
-                //     },
-                //     ...problems.slice(i + 1),
-                //   ]);
-                // }}
+                onClick={async () => updateStatus(i)}
               >
                 <StatusIndicator status={problem.status} />
               </div>

@@ -3,6 +3,14 @@ import { getServerSession } from "next-auth";
 import axios from "axios";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 
+interface Problem {
+  title: string;
+  difficulty: string;
+  source: string;
+  status: string;
+  _id: string;
+}
+
 const instance = axios.create({
   baseURL: process.env.API_URL,
   timeout: 5000,
@@ -64,7 +72,7 @@ export const getProblem = async (_id: string) => {
     if (!accessToken) return [];
 
     const token = "Bearer " + accessToken;
-    const { data } = await instance.get(`/problems/${_id}`, {
+    const { data } = await instance.patch(`/problems/${_id}`, {
       headers: {
         Authorization: token,
       },
@@ -86,4 +94,28 @@ export const postProblem = async () => {};
 
 export const deleteProblem = async () => {};
 
-export const updateProblem = async () => {};
+export const updateProblem = async (problem: Problem) => {
+  try {
+    const session = await getServerSession(OPTIONS);
+    const { accessToken } = session as any;
+
+    if (!accessToken) return [];
+
+    const token = "Bearer " + accessToken;
+    const { data } = await instance.patch(`/problems/${problem._id}`, problem, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 401) {
+      return {
+        status: 401,
+      };
+    }
+
+    // write other error specific code.
+    return [];
+  }
+};

@@ -11,7 +11,7 @@ export default async function Signup() {
       username: formData.get("username") as string,
       password: formData.get("password") as string,
     };
-    
+
     let isSuccessful = false;
     try {
       const response = await signUp(data);
@@ -22,7 +22,7 @@ export default async function Signup() {
 
     if (isSuccessful) {
       // TODO: display success message to the client
-      redirect('/signin', RedirectType.replace);
+      redirect("/signin", RedirectType.replace);
     } else {
       // TODO: display error message to the client
     }
@@ -30,7 +30,7 @@ export default async function Signup() {
 
   const session = await getServerSession(OPTIONS);
   if (session) {
-    redirect('/');
+    redirect("/");
   }
   return (
     <div className="flex items-center justify-center h-full text-text-50">

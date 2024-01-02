@@ -1,10 +1,12 @@
-
-export default function AuthForm({handleAuth, buttonText}: {handleAuth: ((formData: FormData) => void), buttonText: string}){
+export default function AuthForm({
+  handleAuth,
+  buttonText,
+}: {
+  handleAuth: (formData: FormData) => void;
+  buttonText: string;
+}) {
   return (
-    <form
-      action={handleAuth}
-      className="text-text-50 flex flex-col"
-    >
+    <form action={handleAuth} className="text-text-50 flex flex-col">
       <p className="mb-1">Username</p>
       <input
         type="text"
@@ -21,5 +23,5 @@ export default function AuthForm({handleAuth, buttonText}: {handleAuth: ((formDa
       />
       <button className="authButton">{buttonText}</button>
     </form>
-  )
+  );
 }

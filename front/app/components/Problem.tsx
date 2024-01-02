@@ -61,7 +61,7 @@ const Clock = () => {
         <span>{formatTime({ days, hours, minutes, seconds })}</span>
       </div>
       <button
-        className="border-solid border-4"
+        className="authButton"
         onClick={() => {
           play ? pause() : start();
           setPlay(!play);
@@ -77,7 +77,10 @@ const Note = ({ title }: { title: string }) => {
   return (
     <div className="">
       <h3>{title}</h3>
-      <textarea className="h-32 w-80" placeholder="take your note here..." />
+      <textarea
+        className="bg-text-50 text-background-900 h-32 w-80"
+        placeholder="take your note here..."
+      />
     </div>
   );
 };
@@ -95,7 +98,7 @@ const Notes = () => {
 
 const Problem = (problem: { title: string; tags: string[] }) => {
   return (
-    <div className="h-screen w-screen flex px-40 justify-between">
+    <div className="h-screen w-screen flex px-40 justify-between text-text-50">
       <div className="flex flex-col justify-center items-center space-y-16">
         <SearchBar title={problem.title} tags={problem.tags} />
         <Clock />
