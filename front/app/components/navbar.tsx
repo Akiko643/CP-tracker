@@ -11,7 +11,7 @@ export default function Navbar() {
   if (status === "authenticated") {
     return (
       <nav className="flex justify-between text-text-50 mt-3 w-screen">
-        <div className="flex">
+        <div className="flex ml-4">
           <Link href="/" className={`${pathname === '/' ? 'navbarLinkAt' : 'navbarLink'}`}>Problems</Link>
           <Link href="/analytics" className={`${pathname === '/analytics' ? 'navbarLinkAt' : 'navbarLink'}`}>Analytics</Link>
         </div>
