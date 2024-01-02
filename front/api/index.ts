@@ -1,3 +1,4 @@
+"use server";
 import { getServerSession } from "next-auth";
 import axios from "axios";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
@@ -25,13 +26,7 @@ export const signUp = async ({
   username: string;
   password: string;
 }) => {
-  const response = await fetch("http://localhost:5000/signup", {
-    method: 'POST',
-    body: JSON.stringify({ username, password }),
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-  });
-  // const response = await instance.post("/signup", { username, password });
+  const response = await instance.post("/signup", { username, password });
   return response;
 };
 

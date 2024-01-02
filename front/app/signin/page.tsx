@@ -13,6 +13,7 @@ export default function Signin() {
     };
     try {
       const response = await signIn("credentials", data);
+      redirect('/');
     } catch (error) {
       // TODO: display error message to the client
       console.log(error);
