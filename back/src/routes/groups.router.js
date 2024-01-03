@@ -4,7 +4,7 @@ import {
     deleteGroup,
     getGroups,
     updateGroup
-} from "../controllers/groups.controller";
+} from "../controllers/groups.controller.js";
 
 const router = Router();
 
