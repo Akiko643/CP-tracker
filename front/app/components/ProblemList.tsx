@@ -63,7 +63,7 @@ export default function ProblemList({ data }: { data: Problem[] }) {
     return "solved";
   }
 
-  const updateStatus = async (i: number) => {
+  const updateStatus = (i: number) => {
     setProblems([
       ...problems.slice(0, i),
       {
@@ -72,7 +72,7 @@ export default function ProblemList({ data }: { data: Problem[] }) {
       },
       ...problems.slice(i + 1),
     ]);
-    await updateProblem({
+    updateProblem({
       ...problems[i],
       status: nextStatus(problems[i].status),
     });
@@ -105,7 +105,7 @@ export default function ProblemList({ data }: { data: Problem[] }) {
             >
               <div
                 className="w-8 flex justify-center h-full"
-                onClick={async () => updateStatus(i)}
+                onClick={() => updateStatus(i)}
               >
                 <StatusIndicator status={problem.status} />
               </div>

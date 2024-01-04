@@ -5,6 +5,7 @@ import Groups from "./components/Groups";
 import Sort from "./components/Sort";
 import { getProblems } from "@/api";
 import ReturnPage from "./components/ReturnPage";
+import ProblemAdd from "./components/ProblemAdd";
 
 export default async function Home() {
   const data: any = await getProblems();
@@ -12,8 +13,9 @@ export default async function Home() {
     return <ReturnPage />;
   }
   return (
-    <div className="flex p-8 bg-background-900 w-screen h-screen">
+    <div className="flex bg-background-900 w-full h-full">
       <Auth>
+        <ProblemAdd />
         <Groups />
         <ProblemList data={data} />
         <Sort />

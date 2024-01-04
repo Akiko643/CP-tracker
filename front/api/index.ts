@@ -83,7 +83,36 @@ export const getProblem = async (_id: string) => {
   }
 };
 
-export const postProblem = async () => {};
+export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
+  try {
+    const session = await getServerSession(OPTIONS);
+    const { accessToken } = session as any;
+
+    if (!accessToken) return [];
+
+    const token = "Bearer " + accessToken;
+    const { data } = await instance.post(
+      `/problems/add`,
+      {
+        url: problemUrl,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    return data;
+  } catch (err) {
+    // TODO: maybe return err??
+    if (axios.isAxiosError(err) && err.response?.status === 401) {
+      return {
+        status: 401,
+      };
+    }
+    return [];
+  }
+};
 
 export const deleteProblem = async () => {};
 
