@@ -67,11 +67,13 @@ export const updateProblem = async (req, res) => {
       takeaways,
       analysis,
       tags,
+      spentTime,
       startDate,
       solvedDate,
     } = body;
 
     const updateBody = {
+      spentTime,
       status,
       metaCognition,
       takeaways,
