@@ -2,14 +2,7 @@
 import { getServerSession } from "next-auth";
 import axios from "axios";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
-
-interface Problem {
-  title: string;
-  difficulty: string;
-  source: string;
-  status: string;
-  _id: string;
-}
+import { Problem } from "@/types/types";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
@@ -72,7 +65,7 @@ export const getProblem = async (_id: string) => {
     if (!accessToken) return [];
 
     const token = "Bearer " + accessToken;
-    const { data } = await instance.patch(`/problems/${_id}`, {
+    const { data } = await instance.get(`/problems/${_id}`, {
       headers: {
         Authorization: token,
       },

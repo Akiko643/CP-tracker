@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getProblems, updateProblem } from "@/api";
 import ReturnPage from "./ReturnPage";
 import { useState } from "react";
+import { Problem } from "@/types/types";
 // import { SortButton } from "./SortButton";
 
 interface Props {
@@ -44,14 +45,6 @@ function SortButton(props: Props) {
   );
 }
 
-interface Problem {
-  title: string;
-  difficulty: string;
-  source: string;
-  status: string;
-  _id: string;
-}
-
 function StatusIndicator({ status }: { status: string }) {
   if (status == "solved")
     return <div className="w-2 bg-green-500 h-full"></div>;
@@ -60,7 +53,7 @@ function StatusIndicator({ status }: { status: string }) {
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default function ProblemList({ data }: any) {
+export default function ProblemList({ data }: { data: Problem[] }) {
   const [diffSort, setDiffSort] = useState(0);
   const [srcSort, setSrcSort] = useState(0);
   const [problems, setProblems] = useState(data);
