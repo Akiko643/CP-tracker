@@ -9,6 +9,9 @@ const GroupSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true
+    },
+    problemIds: {
+      type: [mongoose.Schema.Types.ObjectId]
     }
   },
   { timestamps: true}

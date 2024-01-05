@@ -47,7 +47,6 @@ export const deleteGroup = async (req, res) => {
   }
 };
 
-// adding & deleting problem from group
 export const createProblemToGroup = async (req, res) => {
   try {
     const { user } = req;
@@ -60,5 +59,12 @@ export const createProblemToGroup = async (req, res) => {
 };
 
 export const deleteProblemFromGroup = async (req, res) => {
-
+  try {
+    const { user } = req;
+    const { groupId, problemId } = req.params;
+    const response = await GroupsService.deleteProblemFromGroup({ userId: user._id, groupId, problemId });
+    return res.send(response);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
 };

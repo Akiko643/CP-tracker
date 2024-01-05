@@ -36,30 +36,34 @@ const deleteGroup = async ({ userId, groupId }) => {
 }
 
 const createProblemToGroup = async ({ userId, groupId, problemId }) => {
-  const doc = await Problem.findOne({ userId, _id: problemId });
-  if (!doc) {
-    throw new Error("Problem doesn't exist");
+  const doc = await Problem.findOne({ userId, _id: problemId, groupIds: groupId });
+  if (doc) {
+    throw new Error("Problem already added");
   }
-  const isProblemAdded = doc.groupIds.find(groupId);
-  if (isProblemAdded) {
-    throw new Error("Problem already added to the group");
-  }
-  doc.groupIds.push(groupId);
-  await doc.save();
+  await Problem.updateOne(
+    { _id: problemId },
+    { $addToSet: { groupIds: groupId } }
+  );
+  await Group.updateOne(
+    { _id: groupId },
+    { $addToSet: { problemIds: problemId } }
+  );
   return "Problem successfully added to the group";
 };
 
 const deleteProblemFromGroup = async ({ userId, groupId, problemId }) => {
-  const doc = await Problem.findOne({ userId, _id: problemId });
+  const doc = await Problem.findOne({ userId, _id: problemId, groupIds: groupId });
   if (!doc) {
-    throw new Error("Problem doesn't exist");
+    throw new Error("Problem is not in the group");
   }
-  const isProblemExist = doc.groupIds.find(groupId);
-  if (!isProblemExist) {
-    throw new Error("Group is not in the Problem");
-  }
-  doc.groupIds.pull(groupId);
-  await doc.save();
+  await Problem.updateOne(
+    { _id: problemId },
+    { $pull: { groupIds: groupId } }
+  );
+  await Group.updateOne(
+    { _id: groupId },
+    { $pull: { problemIds: problemId } }
+  );
   return "Problem successfully removed from the group";
 };
 
