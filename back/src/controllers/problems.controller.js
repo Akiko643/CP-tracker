@@ -1,3 +1,4 @@
+import { Problem } from "../schemas/problem.schema.js";
 import ProblemService from "../services/problems.service.js";
 
 export const findProblems = async (req, res) => {
