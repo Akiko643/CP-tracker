@@ -1,6 +1,6 @@
 "use server";
 import { getServerSession } from "next-auth";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 
 const instance = axios.create({

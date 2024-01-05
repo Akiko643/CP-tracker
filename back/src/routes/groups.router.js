@@ -10,11 +10,9 @@ const router = Router();
 
 router.post('/', createGroup);
 router.get('/', getGroups);
-router.put('/:id', updateGroup);
+router.patch('/', updateGroup);
 router.delete('/:id', deleteGroup);
-
-// TODO: add functions two these two routes
-router.post('/:groupId/:problemId', () => {});
-router.delete('/:groupId/:problemId', () => {});
+router.post('/problem', () => {}); // http://localhost:5000/groups/problem
+router.delete('/problem', () => {}); // http://localhost:5000/groups/problem
 
 export default router;
