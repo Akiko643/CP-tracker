@@ -35,12 +35,11 @@ const Clock = ({ problem }: { problem: Problem }) => {
     }
     return () => {
       clearInterval(intervalId);
-      // updateProblem(problem);
     };
   }, [play, time]);
+
   useEffect(() => {
     return () => {
-      // clearInterval(intervalId);
       updateProblem(problem);
     };
   }, []);
