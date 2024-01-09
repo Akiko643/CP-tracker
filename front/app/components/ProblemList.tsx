@@ -2,19 +2,15 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { getProblems, updateProblem } from "@/api";
-import ReturnPage from "./ReturnPage";
+import { updateProblem } from "@/api";
 import { useState } from "react";
 import { Problem } from "@/types/types";
-// import { SortButton } from "./SortButton";
 
-interface Props {
+function SortButton(props: {
   name: string;
   state: number;
   setState: Function;
-}
-
-function SortButton(props: Props) {
+}) {
   const { name, state, setState } = props;
 
   return (

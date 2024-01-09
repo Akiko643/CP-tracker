@@ -15,3 +15,7 @@ export interface Problem {
   analysis?: string;
   [index: string]: string | number | Date | number | string[] | undefined;
 }
+
+export interface Group {
+  name: string;
+}
