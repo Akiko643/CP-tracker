@@ -160,6 +160,7 @@ export const getGroups = async () => {
         Authorization: token,
       },
     });
+    console.log(data);
     return data;
   } catch(err) {
     if (axios.isAxiosError(err) && err.response?.status === 401) {

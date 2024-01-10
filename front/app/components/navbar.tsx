@@ -13,7 +13,7 @@ export default function Navbar() {
         <div className="flex ml-4">
           <Link href="/" className={`${pathname === '/' ? 'navbarLinkAt' : 'navbarLink'}`}>Problems</Link>
           <Link href="/analytics" className={`${pathname === '/analytics' ? 'navbarLinkAt' : 'navbarLink'}`}>Analytics</Link>
-          <Link href="/groups" className={`${pathname === '/analytics' ? 'navbarLinkAt' : 'navbarLink'}`}>Groups</Link>
+          <Link href="/groups" className={`${pathname === '/groups' ? 'navbarLinkAt' : 'navbarLink'}`}>Groups</Link>
         </div>
         <div className="flex justify-end mr-2">
           <Link href="/profile" className={`${pathname === '/profile' ? 'navbarLinkAt' : 'navbarLink'}`}>{session.user.name}</Link>
