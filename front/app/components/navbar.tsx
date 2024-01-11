@@ -16,16 +16,32 @@ export default function Navbar() {
           <Link href="/groups" className={`${pathname === '/groups' ? 'navbarLinkAt' : 'navbarLink'}`}>Groups</Link>
         </div>
         <div className="flex justify-end mr-2">
-          <Link href="/profile" className={`${pathname === '/profile' ? 'navbarLinkAt' : 'navbarLink'}`}>{session.user.name}</Link>
+          <Link
+            href="/profile"
+            className={`${
+              pathname === "/profile" ? "navbarLinkAt" : "navbarLink"
+            }`}
+          >
+            {session.user.name}
+          </Link>
         </div>
       </nav>
-    )
+    );
   }
   return (
     <div className="flex justify-end text-text-50 mt-3">
-      <Link href="/signin" className={`${pathname === '/signin' ? 'navbarLinkAt' : 'navbarLink'}`}>Sign in</Link>
-      <Link href="/signup" className={`${pathname === '/signup' ? 'navbarLinkAt' : 'navbarLink'}`}>Sign up</Link>
+      <Link
+        href="/signin"
+        className={`${pathname === "/signin" ? "navbarLinkAt" : "navbarLink"}`}
+      >
+        Sign in
+      </Link>
+      <Link
+        href="/signup"
+        className={`${pathname === "/signup" ? "navbarLinkAt" : "navbarLink"}`}
+      >
+        Sign up
+      </Link>
     </div>
-  )
-  
+  );
 }

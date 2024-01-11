@@ -1,4 +1,3 @@
-import { Problem } from "../schemas/problem.schema.js";
 import ProblemService from "../services/problems.service.js";
 
 export const findProblems = async (req, res) => {
@@ -68,11 +67,13 @@ export const updateProblem = async (req, res) => {
       takeaways,
       analysis,
       tags,
+      spentTime,
       startDate,
       solvedDate,
     } = body;
 
     const updateBody = {
+      spentTime,
       status,
       metaCognition,
       takeaways,

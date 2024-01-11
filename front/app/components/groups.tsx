@@ -1,9 +1,7 @@
-interface group {
-  name: string;
-}
+import { Group } from "@/types/types";
 
 export default function Groups() {
-  let groups: group[] = [{ name: "IOI" }, { name: "DP" }, { name: "1900+" }];
+  let groups: Group[] = [{ name: "IOI" }, { name: "DP" }, { name: "1900+" }];
 
   return (
     <section className="w-48 p-4 bg-primary-900 rounded-md self-start">

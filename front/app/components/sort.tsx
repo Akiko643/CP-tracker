@@ -2,11 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-interface Check {
-  state: boolean;
-  size: number;
-}
-function CheckBox({ state, size }: Check) {
+function CheckBox({ state, size }: { state: boolean; size: number }) {
   if (state)
     return (
       <Image src={"/checked.svg"} height={size} width={size} alt="checked" />
