@@ -20,16 +20,16 @@ export default function DoughnutCustom({
   totalProblemsNumber: number;
 }) {
   let data: ChartData<"doughnut"> = {
-    labels: ["Solved", "Skipped", "Solving", "Todo"],
+    labels: ["Solved", "Solving", "Todo", "Skipped"],
     datasets: [
       {
         label: "Problems",
         data: doughnutData,
         backgroundColor: [
           "#22c55e", // green
-          "#ef4444", // red
           "#eab308", // yellow
           "#3b82f6", // blue
+          "#ef4444", // red
         ],
         hoverOffset: 4,
       },
