@@ -24,6 +24,11 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      spacing: {
+        "100px": "100px",
+        "120px": "120px",
+        "118px": "118px",
+      },
     },
     colors: {
       background: {
