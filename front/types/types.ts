@@ -16,9 +16,14 @@ export interface Problem {
   [index: string]: string | number | Date | number | string[] | undefined;
 }
 
-
-interface Group {
-  groupName: string,
-  userId: string,
-  problemIds: string[]
+export interface Group {
+  _id: string;
+  groupName: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  solvedProblems: string[];
+  skippedProblems: string[];
+  solvingProblems: string[];
+  todoProblems: string[];
 }

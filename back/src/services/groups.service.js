@@ -2,7 +2,7 @@ import { Group } from "../schemas/group.schema.js";
 import { Problem } from "../schemas/problem.schema.js";
 
 const createGroup = async ({ userId, groupName }) => {
-  const isExist = await Group.findOne({ userId, groupName});
+  const isExist = await Group.findOne({ userId, groupName });
   if (isExist) {
     throw new Error("Group with a given name already created before");
   }
@@ -11,8 +11,39 @@ const createGroup = async ({ userId, groupName }) => {
 };
 
 const getGroups = async ({ userId }) => {
-  const res = await Group.find({ userId });
-  return res;
+  const groups = await Group.find({ userId });
+  const ret = await Promise.all(
+    groups.map(async (group) => {
+      const solvedProblems = await Problem.find({
+        userId,
+        status: "solved",
+        groupIds: group._id,
+      });
+      const skippedProblems = await Problem.find({
+        userId,
+        status: "skipped",
+        groupIds: group._id,
+      });
+      const solvingProblems = await Problem.find({
+        userId,
+        status: "solving",
+        groupIds: group._id,
+      });
+      const todoProblems = await Problem.find({
+        userId,
+        status: "Not Attempted",
+        groupIds: group._id,
+      });
+      return {
+        ...group._doc,
+        solvedProblems,
+        skippedProblems,
+        solvingProblems,
+        todoProblems,
+      };
+    })
+  );
+  return ret;
 };
 
 const updateGroup = async ({ userId, oldName, newName }) => {
@@ -33,10 +64,14 @@ const deleteGroup = async ({ userId, groupId }) => {
   }
   await Group.deleteOne({ _id: groupId, userId });
   return "Group successfully deleted";
-}
+};
 
 const createProblemToGroup = async ({ userId, groupId, problemId }) => {
-  const doc = await Problem.findOne({ userId, _id: problemId, groupIds: groupId });
+  const doc = await Problem.findOne({
+    userId,
+    _id: problemId,
+    groupIds: groupId,
+  });
   if (doc) {
     throw new Error("Problem already added");
   }
@@ -44,26 +79,19 @@ const createProblemToGroup = async ({ userId, groupId, problemId }) => {
     { _id: problemId },
     { $addToSet: { groupIds: groupId } }
   );
-  await Group.updateOne(
-    { _id: groupId },
-    { $addToSet: { problemIds: problemId } }
-  );
   return "Problem successfully added to the group";
 };
 
 const deleteProblemFromGroup = async ({ userId, groupId, problemId }) => {
-  const doc = await Problem.findOne({ userId, _id: problemId, groupIds: groupId });
+  const doc = await Problem.findOne({
+    userId,
+    _id: problemId,
+    groupIds: groupId,
+  });
   if (!doc) {
     throw new Error("Problem is not in the group");
   }
-  await Problem.updateOne(
-    { _id: problemId },
-    { $pull: { groupIds: groupId } }
-  );
-  await Group.updateOne(
-    { _id: groupId },
-    { $pull: { problemIds: problemId } }
-  );
+  await Problem.updateOne({ _id: problemId }, { $pull: { groupIds: groupId } });
   return "Problem successfully removed from the group";
 };
 

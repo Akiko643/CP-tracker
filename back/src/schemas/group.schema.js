@@ -4,17 +4,14 @@ const GroupSchema = new mongoose.Schema(
   {
     groupName: {
       type: String,
-      required: true
+      required: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true
+      required: true,
     },
-    problemIds: {
-      type: [mongoose.Schema.Types.ObjectId]
-    }
   },
-  { timestamps: true}
+  { timestamps: true }
 );
 
 export const Group = mongoose.model("groups", GroupSchema);

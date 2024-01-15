@@ -142,7 +142,7 @@ export const updateProblem = async (problem: Problem) => {
   }
 };
 
-export const createGroup = async ({ groupName }: {groupName: string}) => {
+export const createGroup = async ({ groupName }: { groupName: string }) => {
   try {
     const session = await getServerSession(OPTIONS);
     const { accessToken } = session as any;
@@ -151,13 +151,17 @@ export const createGroup = async ({ groupName }: {groupName: string}) => {
       return;
     }
     const token = "Bearer " + accessToken;
-    const { data } = await instance.post("/groups", {
-      groupName
-    }, {
-      headers: {
-        Authorization: token,
+    const { data } = await instance.post(
+      "/groups",
+      {
+        groupName,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
       }
-    });
+    );
     return data;
   } catch (err) {
     if (axios.isAxiosError(err) && err.response?.status === 401) {
@@ -185,9 +189,8 @@ export const getGroups = async () => {
         Authorization: token,
       },
     });
-    console.log(data);
     return data;
-  } catch(err) {
+  } catch (err) {
     if (axios.isAxiosError(err) && err.response?.status === 401) {
       return {
         status: 401,
@@ -198,8 +201,6 @@ export const getGroups = async () => {
     return [];
   }
 };
-
-
 
 export const updateGroup = async () => {}; // change name
 export const deleteGroup = async () => {};

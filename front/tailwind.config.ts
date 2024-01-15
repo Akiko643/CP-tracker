@@ -8,6 +8,16 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      // default breakpoints
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+      // custom breakpoints
+      "groups-md": "850px",
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -36,6 +46,7 @@ const config: Config = {
       yellow: colors.yellow,
       transparent: "transparent",
       white: colors.white,
+      blue: colors.blue,
     },
   },
   plugins: [],
