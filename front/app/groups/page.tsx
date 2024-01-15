@@ -10,8 +10,15 @@ import {
   faClipboard,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
+import { getServerSession } from "next-auth";
+import { OPTIONS } from "../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 export default async function Groups() {
+  const session = await getServerSession(OPTIONS);
+  if (!session) {
+    return redirect("/signin");
+  }
   // async function handleCreateGroup(formData: FormData) {
   //   const data = {
   //     groupName: formData.get("groupName") as string
@@ -128,7 +135,6 @@ export default async function Groups() {
       </div>
     );
   });
-  // TODO: redirect user if the user is not logged or session expired
   return (
     <div className="grid justify-items-center grid-cols-1 groups-md:grid-cols-2 xl:grid-cols-3 overflow-y-auto">
       {groupDiv}
