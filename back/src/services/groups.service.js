@@ -14,47 +14,39 @@ const getGroups = async ({ userId }) => {
   const groups = await Group.find({ userId });
   const ret = await Promise.all(
     groups.map(async (group) => {
-      const solvedProblems = await Problem.find({
+      const allProblems = await Problem.find({
         userId,
-        status: "solved",
-        groupIds: group._id,
-      });
-      const skippedProblems = await Problem.find({
-        userId,
-        status: "skipped",
-        groupIds: group._id,
-      });
-      const solvingProblems = await Problem.find({
-        userId,
-        status: "solving",
-        groupIds: group._id,
-      });
-      const todoProblems = await Problem.find({
-        userId,
-        status: "Not Attempted",
         groupIds: group._id,
       });
       return {
         ...group._doc,
-        solvedProblems,
-        skippedProblems,
-        solvingProblems,
-        todoProblems,
+        solvedProblems: allProblems.filter(
+          (problem) => problem.status === "solved"
+        ),
+        skippedProblems: allProblems.filter(
+          (problem) => problem.status === "skipped"
+        ),
+        solvingProblems: allProblems.filter(
+          (problem) => problem.status === "solving"
+        ),
+        todoProblems: allProblems.filter(
+          (problem) => problem.status === "Not Attempted"
+        ),
       };
     })
   );
   return ret;
 };
 
-const updateGroup = async ({ userId, id, newName }) => {
+const updateGroup = async ({ userId, id, name }) => {
   const isExist = await Group.findOne({ userId, _id: id });
   if (!isExist) {
     throw new Error("Group with a given oldName doesn't exist");
   }
   const filter = { userId, _id: id };
-  const update = { name: newName };
+  const update = { name };
   await Group.findOneAndUpdate(filter, update);
-  return await Group.findOne({ userId, name: newName });
+  return await Group.findOne({ userId, name });
 };
 
 const deleteGroup = async ({ userId, groupId }) => {

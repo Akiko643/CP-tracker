@@ -29,11 +29,11 @@ export const updateGroup = async (req, res) => {
   try {
     const { user } = req;
     const { id } = req.params;
-    const { newName } = req.body;
+    const { name } = req.body;
     const response = await GroupsService.updateGroup({
       userId: user._id,
       id,
-      newName,
+      name,
     });
     return res.send(response);
   } catch (err) {
