@@ -9,7 +9,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
   if (data.status === 401) {
     return <ReturnPage />;
   }
-  const { title, tags } = data as Problem;
 
   return <ProblemPage {...(data as Problem)} />;
 };
