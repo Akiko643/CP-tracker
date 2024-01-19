@@ -17,5 +17,13 @@ export interface Problem {
 }
 
 export interface Group {
+  _id: string;
   name: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  solvedProblems: string[];
+  skippedProblems: string[];
+  solvingProblems: string[];
+  todoProblems: string[];
 }

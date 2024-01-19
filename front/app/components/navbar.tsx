@@ -11,20 +11,9 @@ export default function Navbar() {
     return (
       <nav className="flex justify-between text-text-50 mt-3 w-screen">
         <div className="flex ml-4">
-          <Link
-            href="/"
-            className={`${pathname === "/" ? "navbarLinkAt" : "navbarLink"}`}
-          >
-            Problems
-          </Link>
-          <Link
-            href="/analytics"
-            className={`${
-              pathname === "/analytics" ? "navbarLinkAt" : "navbarLink"
-            }`}
-          >
-            Analytics
-          </Link>
+          <Link href="/" className={`${pathname === '/' ? 'navbarLinkAt' : 'navbarLink'}`}>Problems</Link>
+          <Link href="/analytics" className={`${pathname === '/analytics' ? 'navbarLinkAt' : 'navbarLink'}`}>Analytics</Link>
+          <Link href="/groups" className={`${pathname === '/groups' ? 'navbarLinkAt' : 'navbarLink'}`}>Groups</Link>
         </div>
         <div className="flex justify-end mr-2">
           <Link

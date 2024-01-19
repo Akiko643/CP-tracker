@@ -13,7 +13,7 @@ export default async function Home() {
     return <ReturnPage />;
   }
   return (
-    <div className="flex bg-background-900 w-full h-full">
+    <div className="flex bg-background-900 overflow-y-auto">
       <Auth>
         <ProblemAdd />
         <Groups />
