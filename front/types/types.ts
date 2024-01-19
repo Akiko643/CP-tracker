@@ -18,7 +18,7 @@ export interface Problem {
 
 export interface Group {
   _id: string;
-  groupName: string;
+  name: string;
   userId: string;
   createdAt: Date;
   updatedAt: Date;

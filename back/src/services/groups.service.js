@@ -1,12 +1,12 @@
 import { Group } from "../schemas/group.schema.js";
 import { Problem } from "../schemas/problem.schema.js";
 
-const createGroup = async ({ userId, groupName }) => {
-  const isExist = await Group.findOne({ userId, groupName });
+const createGroup = async ({ userId, name }) => {
+  const isExist = await Group.findOne({ userId, name });
   if (isExist) {
     throw new Error("Group with a given name already created before");
   }
-  const res = await Group.create({ userId, groupName });
+  const res = await Group.create({ userId, name });
   return res;
 };
 
@@ -46,15 +46,15 @@ const getGroups = async ({ userId }) => {
   return ret;
 };
 
-const updateGroup = async ({ userId, oldName, newName }) => {
-  const isExist = await Group.findOne({ userId, groupName: oldName });
+const updateGroup = async ({ userId, id, newName }) => {
+  const isExist = await Group.findOne({ userId, _id: id });
   if (!isExist) {
     throw new Error("Group with a given oldName doesn't exist");
   }
-  const filter = { userId, groupName: oldName };
-  const update = { groupName: newName };
-  await Group.findOneAndUpdate(filter, update); // returns before update
-  return await Group.findOne({ userId, groupName: newName });
+  const filter = { userId, _id: id };
+  const update = { name: newName };
+  await Group.findOneAndUpdate(filter, update);
+  return await Group.findOne({ userId, name: newName });
 };
 
 const deleteGroup = async ({ userId, groupId }) => {

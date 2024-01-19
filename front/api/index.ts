@@ -202,7 +202,7 @@ export const getGroups = async () => {
   }
 };
 
-export const updateGroup = async () => {}; // change name
+export const updateGroup = async () => {};
 export const deleteGroup = async () => {};
 
 export const createProblemToGroup = async () => {};

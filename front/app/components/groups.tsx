@@ -17,7 +17,7 @@ export default async function Groups() {
             key={group._id}
             href={`/groups/${group._id}`}
           >
-            {group.groupName}
+            {group.name}
           </Link>
         ))}
       </div>

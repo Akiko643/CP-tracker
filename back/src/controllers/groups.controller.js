@@ -3,11 +3,11 @@ import GroupsService from "../services/groups.service.js";
 export const createGroup = async (req, res) => {
   try {
     const { user } = req;
-    const { groupName} = req.body;
-    if (!groupName) throw new Error("invalid group name");
+    const { name } = req.body;
+    if (!name) throw new Error("invalid group name");
     const response = await GroupsService.createGroup({
       userId: user._id,
-      groupName
+      name,
     });
     return res.send(response);
   } catch (err) {
@@ -28,8 +28,13 @@ export const getGroups = async (req, res) => {
 export const updateGroup = async (req, res) => {
   try {
     const { user } = req;
-    const { oldName, newName } = req.body;
-    const response = await GroupsService.updateGroup({ userId: user._id, oldName, newName });
+    const { id } = req.params;
+    const { newName } = req.body;
+    const response = await GroupsService.updateGroup({
+      userId: user._id,
+      id,
+      newName,
+    });
     return res.send(response);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -40,7 +45,10 @@ export const deleteGroup = async (req, res) => {
   try {
     const { user } = req;
     const { id } = req.params;
-    const response = await GroupsService.deleteGroup({ userId: user._id, groupId: id });
+    const response = await GroupsService.deleteGroup({
+      userId: user._id,
+      groupId: id,
+    });
     return res.send(response);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -50,8 +58,13 @@ export const deleteGroup = async (req, res) => {
 export const createProblemToGroup = async (req, res) => {
   try {
     const { user } = req;
-    const { groupId, problemId } = req.body;
-    const response = await GroupsService.createProblemToGroup({ userId: user._id, groupId, problemId });
+    const { groupId } = req.params;
+    const { problemId } = req.body;
+    const response = await GroupsService.createProblemToGroup({
+      userId: user._id,
+      groupId,
+      problemId,
+    });
     return res.send(response);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -62,7 +75,11 @@ export const deleteProblemFromGroup = async (req, res) => {
   try {
     const { user } = req;
     const { groupId, problemId } = req.params;
-    const response = await GroupsService.deleteProblemFromGroup({ userId: user._id, groupId, problemId });
+    const response = await GroupsService.deleteProblemFromGroup({
+      userId: user._id,
+      groupId,
+      problemId,
+    });
     return res.send(response);
   } catch (err) {
     return res.status(400).json({ message: err.message });

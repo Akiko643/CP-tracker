@@ -50,7 +50,7 @@ export default async function Groups() {
         className="w-[26rem] hover:shadow-lg hover:shadow-indigo-500 rounded-lg border-text-50 border-solid border-2 text-text-50 p-2 pl-4 mb-6"
       >
         <Link href={`/groups/${group._id}`}>
-          <p className="text-3xl">{group.groupName}</p>
+          <p className="text-3xl">{group.name}</p>
           <div className="flex flex-row">
             <div className="">
               <div className="my-4">
