@@ -7,28 +7,54 @@ export default function Search() {
   const [solved, setSolved] = useState(false);
   const [todo, setTodo] = useState(false);
   const searchParams = useSearchParams();
-  const pathname = usePathname(); // current pathname
+  const pathname = usePathname(); // current pathname /groups/GROUPID
   const { replace } = useRouter();
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
-    if (todo) {
-      params.set("TODO", "true");
-    } else {
-      params.delete("TODO");
+    let statusArray: string[] = [];
+    if (params.get("status")) {
+      const statusString = decodeURIComponent(params.get("status")!);
+      statusArray = statusString.split(",");
     }
-    if (solved) {
-      params.set("SOLVED", "true");
-    } else {
-      params.delete("SOLVED");
+    if (todo && !statusArray.includes("TODO")) {
+      statusArray.push("TODO");
+    } else if (!todo && statusArray.includes("TODO")) {
+      statusArray = statusArray.filter((status) => {
+        status === "TODO";
+      });
     }
-    replace(`${pathname}?${params.toString()}`); // update URL
+    //
+    if (solved && !statusArray.includes("SOLVED")) {
+      statusArray.push("SOLVED");
+    } else if (!solved && statusArray.includes("SOLVED")) {
+      statusArray = statusArray.filter((status) => {
+        status === "SOLVED";
+      });
+    }
+
+    const statusString = statusArray.join(",");
+    const statusEncoded = encodeURIComponent(statusString);
+    if (statusEncoded.length > 0) {
+      replace(`${pathname}?status=${statusEncoded}`);
+    } else {
+      replace(`${pathname}`);
+    }
   }, [solved, todo]);
 
   useEffect(() => {
+    // initial loading -> setting initial values of todo and solved
     const params = new URLSearchParams(searchParams);
-    setSolved(params.get("SOLVED") === "true" || false);
-    setTodo(params.get("TODO") === "true" || false);
+    if (params.get("status")) {
+      const statusString = decodeURIComponent(params.get("status")!);
+      const statusArray = statusString.split(",");
+      if (statusArray.includes("TODO")) {
+        setTodo(true);
+      }
+      if (statusArray.includes("SOLVED")) {
+        setSolved(true);
+      }
+    }
   }, []);
 
   return (

@@ -1,8 +1,10 @@
 "use server";
-import { getServerSession } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 import axios, { AxiosError } from "axios";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 import { Problem } from "@/types/types";
+import { useSearchParams } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
@@ -31,15 +33,14 @@ export const signUp = async ({
   return response;
 };
 
-export const getProblems = async () => {
+export const getProblems = async ({ status }: { status: string }) => {
   try {
-    const session = await getServerSession(OPTIONS);
+    const session: Session | null = await getServerSession(OPTIONS);
     const { accessToken } = session as any;
-
-    if (!accessToken) return [];
+    if (!accessToken) return []; // TODO: redirect to signin page
 
     const token = "Bearer " + accessToken;
-    const { data } = await instance.get("/problems", {
+    const { data } = await instance.get(`/problems?status=${status}`, {
       headers: {
         Authorization: token,
       },
@@ -182,7 +183,6 @@ export const getGroups = async () => {
       // TODO: redirect to signin page with error message
       return [];
     }
-
     const token = "Bearer " + accessToken;
     const { data } = await instance.get("/groups", {
       headers: {
