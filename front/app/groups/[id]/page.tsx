@@ -21,11 +21,11 @@ export default async function Page({
   }
   let status: string = "";
   if (searchParams.status) status = searchParams.status;
-  const problems = await getProblems({ status });
+  const problems = await getProblems({ status, groupId: params.id });
   return (
     <div className="overflow-y-auto flex flex-row">
       <div className="w-10/12">
-        <ProblemList data={problems} />
+        <ProblemList data={problems} key={searchParams.status} />
       </div>
       <Search />
     </div>

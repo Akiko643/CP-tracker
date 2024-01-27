@@ -3,7 +3,6 @@ import { Session, getServerSession } from "next-auth";
 import axios, { AxiosError } from "axios";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 import { Problem } from "@/types/types";
-import { useSearchParams } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 const instance = axios.create({
@@ -33,18 +32,27 @@ export const signUp = async ({
   return response;
 };
 
-export const getProblems = async ({ status }: { status: string }) => {
+export const getProblems = async ({
+  status,
+  groupId,
+}: {
+  status: string;
+  groupId: string;
+}) => {
   try {
     const session: Session | null = await getServerSession(OPTIONS);
     const { accessToken } = session as any;
     if (!accessToken) return []; // TODO: redirect to signin page
-
     const token = "Bearer " + accessToken;
-    const { data } = await instance.get(`/problems?status=${status}`, {
-      headers: {
-        Authorization: token,
-      },
-    });
+
+    const { data } = await instance.get(
+      `/problems?groupId=${groupId}&status=${status}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
     return data;
   } catch (err) {
     if (axios.isAxiosError(err) && err.response?.status === 401) {

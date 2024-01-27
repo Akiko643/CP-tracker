@@ -73,18 +73,17 @@ export default function Search() {
     if (params.get("status")) {
       const statusString = decodeURIComponent(params.get("status")!);
       const statusArray = statusString.split(",");
-      if (statusArray.includes("Todo")) {
-        setTodo(true);
-      }
-      if (statusArray.includes("Solving")) {
-        setSolving(true);
-      }
-      if (statusArray.includes("Solved")) {
-        setSolved(true);
-      }
-      if (statusArray.includes("Skipped")) {
-        setSkipped(true);
-      }
+      if (statusArray.includes("Todo")) setTodo(true);
+      else setTodo(false);
+      //
+      if (statusArray.includes("Solving")) setSolving(true);
+      else setSolving(false);
+      //
+      if (statusArray.includes("Solved")) setSolved(true);
+      else setSolved(false);
+      //
+      if (statusArray.includes("Skipped")) setSkipped(true);
+      else setSkipped(false);
     }
   }, []);
 
