@@ -42,9 +42,9 @@ function SortButton(props: {
 }
 
 function StatusIndicator({ status }: { status: string }) {
-  if (status == "solved")
+  if (status == "Solved")
     return <div className="w-2 bg-green-500 h-full"></div>;
-  if (status == "skipped")
+  if (status == "Skipped")
     return <div className="w-2 bg-yellow-500 h-full"></div>;
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
@@ -54,9 +54,11 @@ export default function ProblemList({ data }: { data: Problem[] }) {
   const [srcSort, setSrcSort] = useState(0);
   const [problems, setProblems] = useState(data);
   function nextStatus(status: string) {
-    if (status == "solved") return "skipped";
-    if (status == "skipped") return "solving";
-    return "solved";
+    // Todo -> Solving -> Solved -> Skipped
+    if (status === "Todo") return "Solving";
+    if (status === "Solving") return "Solved";
+    if (status === "Solved") return "Skipped";
+    return "Solved";
   }
 
   const updateStatus = (i: number) => {

@@ -123,7 +123,6 @@ export const updateProblem = async (problem: Problem) => {
     const { accessToken } = session as any;
 
     if (!accessToken) return [];
-
     const token = "Bearer " + accessToken;
     const { data } = await instance.patch(`/problems/${problem._id}`, problem, {
       headers: {

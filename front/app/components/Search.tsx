@@ -10,6 +10,7 @@ export default function Search() {
   const pathname = usePathname(); // current pathname /groups/GROUPID
   const { replace } = useRouter();
 
+  // Problem status: TODO /
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
     let statusArray: string[] = [];
@@ -17,22 +18,16 @@ export default function Search() {
       const statusString = decodeURIComponent(params.get("status")!);
       statusArray = statusString.split(",");
     }
-    if (todo && !statusArray.includes("TODO")) {
-      statusArray.push("TODO");
-    } else if (!todo && statusArray.includes("TODO")) {
-      statusArray = statusArray.filter((status) => {
-        status === "TODO";
-      });
+    if (todo && !statusArray.includes("Todo")) {
+      statusArray.push("Todo");
+    } else if (!todo && statusArray.includes("Todo")) {
+      statusArray = statusArray.filter((status) => status !== "Todo");
     }
-    //
-    if (solved && !statusArray.includes("SOLVED")) {
-      statusArray.push("SOLVED");
-    } else if (!solved && statusArray.includes("SOLVED")) {
-      statusArray = statusArray.filter((status) => {
-        status === "SOLVED";
-      });
+    if (solved && !statusArray.includes("Solved")) {
+      statusArray.push("Solved");
+    } else if (!solved && statusArray.includes("Solved")) {
+      statusArray = statusArray.filter((status) => status !== "Solved");
     }
-
     const statusString = statusArray.join(",");
     const statusEncoded = encodeURIComponent(statusString);
     if (statusEncoded.length > 0) {
@@ -48,10 +43,10 @@ export default function Search() {
     if (params.get("status")) {
       const statusString = decodeURIComponent(params.get("status")!);
       const statusArray = statusString.split(",");
-      if (statusArray.includes("TODO")) {
+      if (statusArray.includes("Todo")) {
         setTodo(true);
       }
-      if (statusArray.includes("SOLVED")) {
+      if (statusArray.includes("Solved")) {
         setSolved(true);
       }
     }
