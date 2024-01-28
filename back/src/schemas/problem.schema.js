@@ -11,7 +11,7 @@ const ProblemSchema = new mongoose.Schema(
       required: true,
     },
     groupIds: {
-      type: [mongoose.Schema.Types.ObjectId]
+      type: [mongoose.Schema.Types.ObjectId],
     },
     title: {
       type: String,
@@ -23,7 +23,7 @@ const ProblemSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "Not Attempted",
+      default: "Todo", // "Solving", "Skipped", "Solved"
     },
     difficulty: {
       type: String,

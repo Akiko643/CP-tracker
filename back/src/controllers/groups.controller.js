@@ -25,6 +25,20 @@ export const getGroups = async (req, res) => {
   }
 };
 
+export const getGroup = async (req, res) => {
+  try {
+    const { user } = req;
+    const { id } = req.params;
+    const response = await GroupsService.getGroup({
+      userId: user._id,
+      id
+    });
+    return res.send(response);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
+
 export const updateGroup = async (req, res) => {
   try {
     const { user } = req;

@@ -1,8 +1,15 @@
 import { Problem } from "../schemas/problem.schema.js";
 import { getData } from "../utils/problemData.js";
 
-const findProblems = async ({ userId }) => {
-  const res = await Problem.find({ userId });
+const findProblems = async ({ userId, statusArray, groupId }) => {
+  let res = [];
+  if (groupId)
+    res = await Problem.find({
+      userId,
+      status: { $in: statusArray },
+      groupIds: groupId,
+    });
+  else res = await Problem.find({ userId, status: { $in: statusArray } });
   return res;
 };
 

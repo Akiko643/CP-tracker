@@ -13,6 +13,7 @@ import {
 import { getServerSession } from "next-auth";
 import { OPTIONS } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import GroupAdd from "../components/GroupAdd";
 
 export default async function Groups() {
   const session = await getServerSession(OPTIONS);
@@ -30,7 +31,6 @@ export default async function Groups() {
   //     console.log(error);
   //   }
   // }
-
   const groups: Group[] = await getGroups();
   const groupDiv = groups.map((group: Group) => {
     const totalProblemsNumber =
@@ -138,6 +138,7 @@ export default async function Groups() {
   return (
     <div className="grid justify-items-center grid-cols-1 groups-md:grid-cols-2 xl:grid-cols-3 overflow-y-auto">
       {groupDiv}
+      <GroupAdd />
     </div>
   );
 }

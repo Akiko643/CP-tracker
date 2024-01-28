@@ -20,22 +20,27 @@ const getGroups = async ({ userId }) => {
       });
       return {
         ...group._doc,
-        solvedProblems: allProblems.filter(
-          (problem) => problem.status === "solved"
-        ),
-        skippedProblems: allProblems.filter(
-          (problem) => problem.status === "skipped"
-        ),
-        solvingProblems: allProblems.filter(
-          (problem) => problem.status === "solving"
-        ),
-        todoProblems: allProblems.filter(
-          (problem) => problem.status === "Not Attempted"
-        ),
+        numTodoProblems: allProblems.filter(
+          (problem) => problem.status === "Todo"
+        ).length,
+        numSolvingProblems: allProblems.filter(
+          (problem) => problem.status === "Solving"
+        ).length,
+        numSolvedProblems: allProblems.filter(
+          (problem) => problem.status === "Solved"
+        ).length,
+        numSkippedProblems: allProblems.filter(
+          (problem) => problem.status === "Skipped"
+        ).length,
       };
     })
   );
   return ret;
+};
+
+const getGroup = async ({ userId, id }) => {
+  const group = await Group.find({ userId, _id: id });
+  return group;
 };
 
 const updateGroup = async ({ userId, id, name }) => {
@@ -90,6 +95,7 @@ const deleteProblemFromGroup = async ({ userId, groupId, problemId }) => {
 export default {
   createGroup,
   getGroups,
+  getGroup,
   updateGroup,
   deleteGroup,
   createProblemToGroup,

@@ -4,7 +4,19 @@ export const findProblems = async (req, res) => {
   // return my problems
   try {
     const { user } = req;
-    const response = await ProblemService.findProblems({ userId: user._id });
+    // problem statuses
+    const statusString = req.query.status;
+    let statusArray = statusString.split(",");
+    if (statusString.length === 0) {
+      statusArray = ["Todo", "Solving", "Skipped", "Solved"];
+    }
+    //
+    const groupId = req.query.groupId;
+    const response = await ProblemService.findProblems({
+      userId: user._id,
+      statusArray,
+      groupId,
+    });
     return res.send(response);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -81,19 +93,7 @@ export const updateProblem = async (req, res) => {
       tags,
     };
 
-    if (status === "Solved") {
-      if (!solvedDate)
-        throw new Error(`solvedDate is null while status is "Solved"`);
-
-      updateBody.solvedDate = solvedDate;
-    }
-
-    if (status === "Solving") {
-      if (!startDate)
-        throw new Error(`startDate is null while status is "Solving"`);
-
-      updateBody.startDate = startDate;
-    }
+    // TODO: fix problem status changes and put some restrictions
 
     const response = await ProblemService.updateProblem({
       userId: user._id,
