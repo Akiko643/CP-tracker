@@ -8,7 +8,7 @@ import ReturnPage from "./components/ReturnPage";
 import ProblemAdd from "./components/ProblemAdd";
 
 export default async function Home() {
-  const data: any = await getProblems({ status: "" });
+  const data: any = await getProblems({ status: "", groupId: "" });
   if (data.status === 401) {
     return <ReturnPage />;
   }

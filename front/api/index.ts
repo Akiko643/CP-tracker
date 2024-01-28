@@ -209,6 +209,33 @@ export const getGroups = async () => {
   }
 };
 
+export const getGroup = async ({ id }: { id: string }) => {
+  try {
+    const session = await getServerSession(OPTIONS);
+    const { accessToken } = session as any;
+    if (!accessToken) {
+      // TODO: redirect to signin page with error message
+      return [];
+    }
+    const token = "Bearer " + accessToken;
+    const { data } = await instance.get(`/groups/${id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 401) {
+      return {
+        status: 401,
+      };
+    }
+
+    // write other error specific code.
+    return [];
+  }
+};
+
 export const updateGroup = async () => {};
 export const deleteGroup = async () => {};
 

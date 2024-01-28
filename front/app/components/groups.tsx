@@ -1,9 +1,7 @@
 "use server";
 import { getGroups } from "@/api";
 import { Group } from "@/types/types";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
-import { OPTIONS } from "../api/auth/[...nextauth]/route";
 
 export default async function Groups() {
   const groups: Group[] = await getGroups();
