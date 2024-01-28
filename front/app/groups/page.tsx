@@ -34,15 +34,15 @@ export default async function Groups() {
   const groups: Group[] = await getGroups();
   const groupDiv = groups.map((group: Group) => {
     const totalProblemsNumber =
-      group.solvedProblems.length +
-      group.solvingProblems.length +
-      group.todoProblems.length +
-      group.skippedProblems.length;
+      group.numTodoProblems +
+      group.numSolvingProblems +
+      group.numSolvedProblems +
+      group.numSkippedProblems;
     const doughnutData: number[] = [
-      group.solvedProblems.length,
-      group.solvingProblems.length,
-      group.todoProblems.length,
-      group.skippedProblems.length,
+      group.numSolvedProblems,
+      group.numSolvingProblems,
+      group.numTodoProblems,
+      group.numSkippedProblems,
     ];
     return (
       <div
@@ -70,7 +70,7 @@ export default async function Groups() {
                 </div>
                 <div className="flex flex-col">
                   <p className="leading-5 text-medium">
-                    {group.solvedProblems.length} Solved
+                    {group.numSolvedProblems} Solved
                   </p>
                   <p className="leading-3 text-sm">Problems</p>
                 </div>
@@ -86,7 +86,7 @@ export default async function Groups() {
                 </div>
                 <div className="flex flex-col">
                   <p className="leading-5 text-medium">
-                    {group.solvingProblems.length} Solving
+                    {group.numSolvingProblems} Solving
                   </p>
                   <p className="leading-3 text-sm">Problems</p>
                 </div>
@@ -102,7 +102,7 @@ export default async function Groups() {
                 </div>
                 <div className="flex flex-col">
                   <p className="leading-5 text-medium">
-                    {group.todoProblems.length} Todo
+                    {group.numTodoProblems} Todo
                   </p>
                   <p className="leading-3 text-sm">Problems</p>
                 </div>
@@ -118,7 +118,7 @@ export default async function Groups() {
                 </div>
                 <div className="flex flex-col">
                   <p className="leading-5 text-medium">
-                    {group.skippedProblems.length} Skipped
+                    {group.numSkippedProblems} Skipped
                   </p>
                   <p className="leading-3 text-sm">Problems</p>
                 </div>

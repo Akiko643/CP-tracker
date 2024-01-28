@@ -22,8 +22,8 @@ export interface Group {
   userId: string;
   createdAt: Date;
   updatedAt: Date;
-  solvedProblems: string[];
-  skippedProblems: string[];
-  solvingProblems: string[];
-  todoProblems: string[];
+  numTodoProblems: number;
+  numSolvingProblems: number;
+  numSolvedProblems: number;
+  numSkippedProblems: number;
 }

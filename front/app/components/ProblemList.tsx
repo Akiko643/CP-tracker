@@ -77,7 +77,7 @@ export default function ProblemList({ data }: { data: Problem[] }) {
 
   return (
     <section className="px-4 flex-1">
-      <h1 className="text-2xl mb-6 text-gray-300">Recents</h1>
+      {/* <h1 className="text-2xl mb-6 text-gray-300">Recents</h1> */}
       <div className="w-full flex mb-2">
         <div className="w-8"></div>
         <div className="flex-1 text-gray-500">Title</div>
