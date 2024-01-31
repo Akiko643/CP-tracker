@@ -123,7 +123,29 @@ export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
   }
 };
 
-export const deleteProblem = async () => {};
+export const deleteProblem = async ({ problemId }: { problemId: string }) => {
+  try {
+    const session = await getServerSession(OPTIONS);
+    const { accessToken } = session as any;
+
+    if (!accessToken) return []; // TODO: signout user
+    const token = "Bearer " + accessToken;
+    const { data } = await instance.delete(`/problems/${problemId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return data;
+  } catch (err) {
+    // TODO: maybe return err??
+    if (axios.isAxiosError(err) && err.response?.status === 401) {
+      return {
+        status: 401,
+      };
+    }
+    return [];
+  }
+};
 
 export const updateProblem = async (problem: Problem) => {
   try {
