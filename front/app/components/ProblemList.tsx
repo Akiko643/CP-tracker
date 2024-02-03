@@ -52,7 +52,16 @@ function StatusIndicator({ status }: { status: string }) {
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default function ProblemList({ data }: { data: Problem[] }) {
+export default function ProblemList({
+  data,
+  groupname,
+  groupId,
+}: {
+  data: Problem[];
+  groupname: string;
+  groupId: string | undefined;
+}) {
+  console.log('groupname: ' + groupname);
   const [diffSort, setDiffSort] = useState(0);
   const [srcSort, setSrcSort] = useState(0);
   const [problems, setProblems] = useState(data);
@@ -81,7 +90,7 @@ export default function ProblemList({ data }: { data: Problem[] }) {
 
   return (
     <section className="px-4 flex-1">
-      {/* <h1 className="text-2xl mb-6 text-gray-300">Recents</h1> */}
+      <h1 className="text-2xl mb-6 text-gray-300">{groupname}</h1>
       <div className="w-full flex mb-2">
         <div className="w-8"></div>
         <div className="flex-1 text-gray-500">Title</div>

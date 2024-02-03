@@ -17,7 +17,7 @@ export default async function Home() {
       <Auth>
         <ProblemAdd />
         <Groups />
-        <ProblemList data={data} />
+        <ProblemList data={data} groupId={undefined} groupname="Recents" />
         <Sort />
       </Auth>
     </div>
