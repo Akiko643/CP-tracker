@@ -5,14 +5,17 @@ import { updateProblem, deleteProblem } from "@/api";
 import { useState } from "react";
 import { Problem } from "@/types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical, faTags } from "@fortawesome/free-solid-svg-icons";
 
-function SortButton({name, state, setState}: {
+function SortButton({
+  name,
+  state,
+  setState,
+}: {
   name: string;
   state: number;
   setState: Function;
 }) {
-
   return (
     <div
       onClick={() => {
@@ -108,12 +111,19 @@ export default function ProblemList({ data }: { data: Problem[] }) {
               >
                 <StatusIndicator status={problem.status} />
               </div>
+              {/* Problem title */}
               <div className="flex-1">
                 <Link href={`problems/${problem._id}`}>{problem.title}</Link>
               </div>
+              {/* Tags */}
+              <button className="px-3">
+                <FontAwesomeIcon className="h-5" color="white" icon={faTags} />
+              </button>
+              {/* Problem difficulty */}
               <div className="w-32 border-x border-dashed border-gray-300 mx-1 flex justify-center items-center">
                 {problem.difficulty}
               </div>
+              {/* Problem source */}
               <div className="w-40 border-r border-dashed border-gray-300 mr-1 flex justify-center items-center">
                 {problem.source}
               </div>
