@@ -1,11 +1,15 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { updateProblem, deleteProblem } from "@/api";
+import { updateProblem, deleteProblem, deleteProblemFromGroup } from "@/api";
 import { useState } from "react";
 import { Problem } from "@/types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical, faTags } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faTags,
+  faRobot,
+} from "@fortawesome/free-solid-svg-icons";
 
 function SortButton({
   name,
@@ -61,7 +65,6 @@ export default function ProblemList({
   groupname: string;
   groupId: string | undefined;
 }) {
-  console.log('groupname: ' + groupname);
   const [diffSort, setDiffSort] = useState(0);
   const [srcSort, setSrcSort] = useState(0);
   const [problems, setProblems] = useState(data);
@@ -146,7 +149,20 @@ export default function ProblemList({
                   color="white"
                   icon={faEllipsisVertical}
                 />
-                {showDelete && (
+                {showDelete && groupId && (
+                  <div
+                    className="hover:cursor-pointer px-2 text-red-500 bg-gray-100 hover:bg-gray-300 z-30 absolute -bottom-5 right-0 overflow-visible"
+                    onClick={() =>
+                      deleteProblemFromGroup({
+                        problemId: problem._id,
+                        groupId,
+                      })
+                    }
+                  >
+                    Remove from group
+                  </div>
+                )}
+                {showDelete && !groupId && (
                   <div
                     className="hover:cursor-pointer px-2 text-red-500 bg-gray-100 hover:bg-gray-300 z-30 absolute -bottom-5 right-0 overflow-visible"
                     onClick={() => deleteProblem({ problemId: problem._id })}
@@ -162,3 +178,6 @@ export default function ProblemList({
     </section>
   );
 }
+
+// #define MOD 1000000007
+// ans = (ans * 2) % MOD;
