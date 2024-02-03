@@ -7,35 +7,34 @@ import { Problem } from "@/types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
-function SortButton(props: {
+function SortButton({name, state, setState}: {
   name: string;
   state: number;
   setState: Function;
 }) {
-  const { name, state, setState } = props;
 
   return (
     <div
       onClick={() => {
-        props.setState(((props.state + 2) % 3) - 1);
+        setState(((state + 2) % 3) - 1);
       }}
       className="flex items-center justify-between pr-4 h-full select-none"
     >
       <h3 className="text-gray-500">{name}</h3>
       <div>
         <Image
-          src="./Polygon 1.svg"
+          src="/Polygon 1.svg"
           height={10}
           width={10}
           alt="Polygon up"
-          className={`mb-1 ${props.state > 0 && "invisible"}`}
+          className={`mb-1 ${state > 0 && "invisible"}`}
         />
         <Image
-          src="./Polygon 2.svg"
+          src="/Polygon 2.svg"
           height={10}
           width={10}
           alt="Polygon down"
-          className={`${props.state < 0 && "invisible"}`}
+          className={`${state < 0 && "invisible"}`}
         />
       </div>
     </div>
@@ -76,8 +75,6 @@ export default function ProblemList({ data }: { data: Problem[] }) {
       status: nextStatus(problems[i].status),
     });
   };
-
-  // const [showDelete, setShowDelete] = useState(false);
 
   return (
     <section className="px-4 flex-1">
