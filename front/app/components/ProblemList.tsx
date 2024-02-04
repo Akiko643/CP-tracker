@@ -52,7 +52,7 @@ function StatusIndicator({ status }: { status: string }) {
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default async function ProblemList({
+export default function ProblemList({
   data,
   groupname,
   groupId,
@@ -110,6 +110,7 @@ export default async function ProblemList({
       <div>
         {problems.map((problem: Problem, i: number) => {
           const [showDelete, setShowDelete] = useState(false);
+          const [showGroups, setShowGroups] = useState(false);
           return (
             <div
               key={`problem-${i}`}
@@ -126,8 +127,25 @@ export default async function ProblemList({
                 <Link href={`problems/${problem._id}`}>{problem.title}</Link>
               </div>
               {/* Tags */}
-              <button className="px-3">
+              <button
+                className="px-3 relative"
+                onClick={() => setShowGroups(true)}
+                onBlur={() => setShowGroups(false)}
+              >
                 <FontAwesomeIcon className="h-5" color="white" icon={faTags} />
+                {showGroups && (
+                  <div className="z-10 absolute w-40 top-5 right-0 bg-gray-100 text-left">
+                    {groups.map((group) => (
+                      <div
+                        key={group._id}
+                        className="hover:bg-gray-300 w-full flex flex-row pl-2"
+                      >
+                        <input type="checkbox" />
+                        <p className="pl-2 text-gray-500">{group.name}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </button>
               {/* Problem difficulty */}
               <div className="w-32 border-x border-dashed border-gray-300 mx-1 flex justify-center items-center">
@@ -137,6 +155,7 @@ export default async function ProblemList({
               <div className="w-40 border-r border-dashed border-gray-300 mr-1 flex justify-center items-center">
                 {problem.source}
               </div>
+              {/* Remove button */}
               <button
                 className="px-3"
                 onClick={() => setShowDelete(true)}
@@ -149,7 +168,7 @@ export default async function ProblemList({
                 />
                 {showDelete && groupId && (
                   <div
-                    className="hover:cursor-pointer px-2 text-red-500 bg-gray-100 hover:bg-gray-300 z-30 absolute -bottom-5 right-0 overflow-visible"
+                    className="hover:cursor-pointer hover:bg-gray-300 px-2 text-red-500 bg-gray-100 z-30 absolute -bottom-5 right-0 overflow-visible"
                     onClick={() =>
                       deleteProblemFromGroup({
                         problemId: problem._id,
@@ -162,7 +181,7 @@ export default async function ProblemList({
                 )}
                 {showDelete && !groupId && (
                   <div
-                    className="hover:cursor-pointer px-2 text-red-500 bg-gray-100 hover:bg-gray-300 z-30 absolute -bottom-5 right-0 overflow-visible"
+                    className="hover:cursor-pointer hover:bg-gray-300 px-2 text-red-500 bg-gray-100 z-30 absolute -bottom-5 right-0 overflow-visible"
                     onClick={() => deleteProblem({ problemId: problem._id })}
                   >
                     Remove

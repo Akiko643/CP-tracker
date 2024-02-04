@@ -39,7 +39,7 @@ const getGroups = async ({ userId }) => {
 };
 
 const getGroup = async ({ userId, id }) => {
-  const group = await Group.find({ userId, _id: id });
+  const group = await Group.findOne({ userId, _id: id });
   return group;
 };
 

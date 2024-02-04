@@ -31,7 +31,7 @@ export const getGroup = async (req, res) => {
     const { id } = req.params;
     const response = await GroupsService.getGroup({
       userId: user._id,
-      id
+      id,
     });
     return res.send(response);
   } catch (err) {
