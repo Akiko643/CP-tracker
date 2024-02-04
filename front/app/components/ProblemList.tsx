@@ -3,13 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { updateProblem, deleteProblem, deleteProblemFromGroup } from "@/api";
 import { useState } from "react";
-import { Problem } from "@/types/types";
+import { Problem, Group } from "@/types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsisVertical,
-  faTags,
-  faRobot,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical, faTags } from "@fortawesome/free-solid-svg-icons";
 
 function SortButton({
   name,
@@ -56,14 +52,16 @@ function StatusIndicator({ status }: { status: string }) {
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default function ProblemList({
+export default async function ProblemList({
   data,
   groupname,
   groupId,
+  groups,
 }: {
   data: Problem[];
   groupname: string;
   groupId: string | undefined;
+  groups: Group[];
 }) {
   const [diffSort, setDiffSort] = useState(0);
   const [srcSort, setSrcSort] = useState(0);

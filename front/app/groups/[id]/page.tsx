@@ -1,5 +1,5 @@
 "use server";
-import { getGroup, getProblems } from "@/api";
+import { getGroup, getGroups, getProblems } from "@/api";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 import ProblemList from "@/app/components/ProblemList";
 import Search from "@/app/components/Search";
@@ -24,10 +24,17 @@ export default async function Page({
   if (searchParams.status) status = searchParams.status;
   const problems: Problem[] = await getProblems({ status, groupId: params.id });
   const group: Group = await getGroup({ id: params.id });
+  const groups: Group[] = await getGroups();
   return (
     <div className="overflow-y-auto flex flex-row">
       <div className="w-10/12">
-        <ProblemList data={problems} key={searchParams.status} groupname={group.name} groupId={group._id} />
+        <ProblemList
+          groups={groups}
+          data={problems}
+          key={searchParams.status}
+          groupname={group.name}
+          groupId={group._id}
+        />
       </div>
       <Search />
     </div>
