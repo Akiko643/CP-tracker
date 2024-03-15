@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Problem, Group } from "@/types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faTags } from "@fortawesome/free-solid-svg-icons";
+import Search from "./StatusSearch";
 
 function SortButton({
   name,
@@ -54,57 +55,17 @@ function StatusIndicator({ status }: { status: string }) {
 
 export default function ProblemList({
   data,
-  groupname,
-  groupId,
-  groups,
 }: {
   data: Problem[];
-  groupname: string;
-  groupId: string | undefined;
-  groups: Group[];
 }) {
-  const [diffSort, setDiffSort] = useState(0);
-  const [srcSort, setSrcSort] = useState(0);
   const [problems, setProblems] = useState(data);
-  function nextStatus(status: string) {
-    // Todo -> Solving -> Solved -> Skipped
-    if (status === "Todo") return "Solving";
-    if (status === "Solving") return "Solved";
-    if (status === "Solved") return "Skipped";
-    return "Solved";
-  }
-
-  const updateStatus = (i: number) => {
-    setProblems([
-      ...problems.slice(0, i),
-      {
-        ...problems[i],
-        status: nextStatus(problems[i].status),
-      },
-      ...problems.slice(i + 1),
-    ]);
-    updateProblem({
-      ...problems[i],
-      status: nextStatus(problems[i].status),
-    });
-  };
 
   return (
     <section className="px-4 flex-1">
-      <h1 className="text-2xl mb-6 text-gray-300">{groupname}</h1>
+      <h1 className="text-2xl mb-6 text-gray-300">Recents</h1>
       <div className="w-full flex mb-2">
         <div className="w-8"></div>
         <div className="flex-1 text-gray-500">Title</div>
-        <div className="w-32 mr-2">
-          <SortButton
-            name="Difficulty"
-            state={diffSort}
-            setState={setDiffSort}
-          />
-        </div>
-        <div className="w-40 mr-2">
-          <SortButton name="Source" state={srcSort} setState={setSrcSort} />
-        </div>
       </div>
       <div className="h-0.5 w-full bg-gray-500"></div>
       <div>
@@ -118,7 +79,6 @@ export default function ProblemList({
             >
               <div
                 className="w-8 flex justify-center h-full"
-                onClick={() => updateStatus(i)}
               >
                 <StatusIndicator status={problem.status} />
               </div>
@@ -126,27 +86,6 @@ export default function ProblemList({
               <div className="flex-1">
                 <Link href={`problems/${problem._id}`}>{problem.title}</Link>
               </div>
-              {/* Tags */}
-              <button
-                className="px-3 relative"
-                onClick={() => setShowGroups(true)}
-                onBlur={() => setShowGroups(false)}
-              >
-                <FontAwesomeIcon className="h-5" color="white" icon={faTags} />
-                {showGroups && (
-                  <div className="z-10 absolute w-40 top-5 right-0 bg-gray-100 text-left">
-                    {groups.map((group) => (
-                      <div
-                        key={group._id}
-                        className="hover:bg-gray-300 w-full flex flex-row pl-2"
-                      >
-                        <input type="checkbox" />
-                        <p className="pl-2 text-gray-500">{group.name}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </button>
               {/* Problem difficulty */}
               <div className="w-32 border-x border-dashed border-gray-300 mx-1 flex justify-center items-center">
                 {problem.difficulty}
@@ -166,20 +105,7 @@ export default function ProblemList({
                   color="white"
                   icon={faEllipsisVertical}
                 />
-                {showDelete && groupId && (
-                  <div
-                    className="hover:cursor-pointer hover:bg-gray-300 px-2 text-red-500 bg-gray-100 z-30 absolute -bottom-5 right-0 overflow-visible"
-                    onClick={() =>
-                      deleteProblemFromGroup({
-                        problemId: problem._id,
-                        groupId,
-                      })
-                    }
-                  >
-                    Remove from group
-                  </div>
-                )}
-                {showDelete && !groupId && (
+                {showDelete && (
                   <div
                     className="hover:cursor-pointer hover:bg-gray-300 px-2 text-red-500 bg-gray-100 z-30 absolute -bottom-5 right-0 overflow-visible"
                     onClick={() => deleteProblem({ problemId: problem._id })}
@@ -195,6 +121,3 @@ export default function ProblemList({
     </section>
   );
 }
-
-// #define MOD 1000000007
-// ans = (ans * 2) % MOD;

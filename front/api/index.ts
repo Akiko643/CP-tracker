@@ -34,10 +34,8 @@ export const signUp = async ({
 
 export const getProblems = async ({
   status,
-  groupId,
 }: {
   status: string;
-  groupId: string;
 }) => {
   try {
     const session: Session | null = await getServerSession(OPTIONS);
@@ -46,7 +44,8 @@ export const getProblems = async ({
     const token = "Bearer " + accessToken;
 
     const { data } = await instance.get(
-      `/problems?groupId=${groupId}&status=${status}`,
+      `/problems?status=${status}`,
+      // `/problems?groupId=${groupId}&status=${status}`,
       {
         headers: {
           Authorization: token,

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
-function CheckBox({ state, size }: { state: boolean; size: number }) {
+export function CheckBox({ state, size }: { state: boolean; size: number }) {
   if (state) {
     return (
       <Image src={"/checked.svg"} height={size} width={size} alt="checked" />
@@ -15,7 +15,7 @@ function CheckBox({ state, size }: { state: boolean; size: number }) {
   );
 }
 
-export default function Search() {
+export default function StatusSearch() {
   const searchParams = useSearchParams();
   const pathname = usePathname(); // current pathname /groups/GROUPID
   const { replace } = useRouter();
@@ -41,9 +41,15 @@ export default function Search() {
     const statusString = statusArray.join(",");
     const statusEncoded = encodeURIComponent(statusString);
     if (statusEncoded.length > 0) {
-      replace(`${pathname}?status=${statusEncoded}`);
+      let newPathname = `${pathname}?status=${statusEncoded}`;
+      if (params.get("difficulty"))
+        newPathname += "&difficulty=" + params.get("difficulty");
+      replace(newPathname);
     } else {
-      replace(`${pathname}`);
+      let newPathname = `${pathname}`;
+      if (params.get("difficulty"))
+        newPathname += "?difficulty=" + params.get("difficulty");
+      replace(newPathname);
     }
   }, [status]);
 

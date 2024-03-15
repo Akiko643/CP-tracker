@@ -11,11 +11,9 @@ export const findProblems = async (req, res) => {
       statusArray = ["Todo", "Solving", "Skipped", "Solved"];
     }
     //
-    const groupId = req.query.groupId;
     const response = await ProblemService.findProblems({
       userId: user._id,
       statusArray,
-      groupId,
     });
     return res.send(response);
   } catch (err) {

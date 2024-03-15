@@ -2,7 +2,7 @@
 import { getGroup, getGroups, getProblems } from "@/api";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 import ProblemList from "@/app/components/ProblemList";
-import Search from "@/app/components/Search";
+import Search from "@/app/components/StatusSearch";
 import { Group, Problem } from "@/types/types";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
