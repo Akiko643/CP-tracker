@@ -5,19 +5,10 @@ import { Problem } from "@/types/types";
 import { faCheck, faForward, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useProblems } from "../provider/ProblemProvider";
 
-const Bar = ({
-  _id,
-  title,
-  tags,
-  status,
-}: {
-  _id: string;
-  title: string;
-  tags: string[];
-  status: string;
-}) => {
-  const [currentStatus, setCurrentStatus] = useState(status);
+const Bar = ({ problem }: { problem: Problem }) => {
+  const [currentStatus, setCurrentStatus] = useState(problem.status);
   const getColor = (status: string) => {
     if (status === "Solved") return "green";
     if (status === "Skipped") return "yellow";
@@ -44,7 +35,8 @@ const Bar = ({
               onClick={() => {
                 setVisible(false);
                 setCurrentStatus(status);
-                updateProblem({ _id, status } as Problem);
+                problem.status = status;
+                updateProblem(problem);
               }}
               className="bg-background-100 text-text-100 hover:bg-background-900"
             >
@@ -58,7 +50,7 @@ const Bar = ({
           ))}
         </div>
       )}
-      <h2 className="text-center">{title}</h2>
+      <h2 className="text-center">{problem.title}</h2>
       {/* <div className="tags flex">
         {tags.map((tag: string) => {
           return (
@@ -150,16 +142,16 @@ const Notes = ({ problem }: { problem: Problem }) => {
   );
 };
 
-const ProblemPage = (problem: Problem) => {
+const ProblemPage = ({ id }: { id: string }) => {
+  const { problems } = useProblems();
+  const problem = problems.find((el: Problem) => el._id === id);
+  if (!problem) {
+    return <div>loading...</div>;
+  }
   return (
     <div className="h-screen w-screen flex px-40 justify-around text-text-50">
       <div className="flex flex-col justify-center items-center space-y-16">
-        <Bar
-          _id={problem._id}
-          status={problem.status}
-          title={problem.title}
-          tags={problem.tags}
-        />
+        <Bar problem={problem} />
         <Clock problem={problem} />
       </div>
       <div className="flex flex-col justify-center items-center">

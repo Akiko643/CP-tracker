@@ -5,6 +5,7 @@ import Link from "next/link";
 import { updateProblem } from "@/api";
 import { useState } from "react";
 import { Problem } from "@/types/types";
+import { useProblems } from "../provider/ProblemProvider";
 
 function SortButton(props: {
   name: string;
@@ -42,37 +43,38 @@ function SortButton(props: {
 }
 
 function StatusIndicator({ status }: { status: string }) {
-  if (status == "solved")
+  if (status == "Solved")
     return <div className="w-2 bg-green-500 h-full"></div>;
-  if (status == "skipped")
+  if (status == "Skipped")
     return <div className="w-2 bg-yellow-500 h-full"></div>;
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default function ProblemList({ data }: { data: Problem[] }) {
+export default function ProblemList() {
   const [diffSort, setDiffSort] = useState(0);
   const [srcSort, setSrcSort] = useState(0);
-  const [problems, setProblems] = useState(data);
-  function nextStatus(status: string) {
-    if (status == "solved") return "skipped";
-    if (status == "skipped") return "solving";
-    return "solved";
-  }
+  const { problems } = useProblems();
+  // const [problems, setProblems] = useState(data);
+  // function nextStatus(status: string) {
+  //   if (status == "solved") return "skipped";
+  //   if (status == "skipped") return "solving";
+  //   return "solved";
+  // }
 
-  const updateStatus = (i: number) => {
-    setProblems([
-      ...problems.slice(0, i),
-      {
-        ...problems[i],
-        status: nextStatus(problems[i].status),
-      },
-      ...problems.slice(i + 1),
-    ]);
-    updateProblem({
-      ...problems[i],
-      status: nextStatus(problems[i].status),
-    });
-  };
+  // const updateStatus = (i: number) => {
+  //   setProblems([
+  //     ...problems.slice(0, i),
+  //     {
+  //       ...problems[i],
+  //       status: nextStatus(problems[i].status),
+  //     },
+  //     ...problems.slice(i + 1),
+  //   ]);
+  //   updateProblem({
+  //     ...problems[i],
+  //     status: nextStatus(problems[i].status),
+  //   });
+  // };
 
   return (
     <section className="px-4 flex-1">
@@ -101,7 +103,7 @@ export default function ProblemList({ data }: { data: Problem[] }) {
             >
               <div
                 className="w-8 flex justify-center h-full"
-                onClick={() => updateStatus(i)}
+                // onClick={() => updateStatus(i)}
               >
                 <StatusIndicator status={problem.status} />
               </div>

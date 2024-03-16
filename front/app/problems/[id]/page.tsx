@@ -5,12 +5,12 @@ import { Problem } from "@/types/types";
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const data: { status: number } | Problem = await getProblem(id);
-  if (data.status === 401) {
-    return <ReturnPage />;
-  }
+  // const data: { status: number } | Problem = await getProblem(id);
+  // if (data.status === 401) {
+  //   return <ReturnPage />;
+  // }
 
-  return <ProblemPage {...(data as Problem)} />;
+  return <ProblemPage id={id} />;
 };
 
 export default Page;
