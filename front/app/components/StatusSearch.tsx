@@ -29,6 +29,7 @@ export default function StatusSearch() {
       const statusString = decodeURIComponent(params.get("status")!);
       statusArray = statusString.split(",");
     }
+    //
     for (let i = 0; i < 4; i++) {
       if (status[i] && !statusArray.includes(statusAll[i])) {
         // adding new status to params
@@ -38,18 +39,15 @@ export default function StatusSearch() {
         statusArray = statusArray.filter((status) => status !== statusAll[i]);
       }
     }
+
     const statusString = statusArray.join(",");
-    const statusEncoded = encodeURIComponent(statusString);
-    if (statusEncoded.length > 0) {
-      let newPathname = `${pathname}?status=${statusEncoded}`;
-      if (params.get("difficulty"))
-        newPathname += "&difficulty=" + params.get("difficulty");
-      replace(newPathname);
+    // updating params
+    if (statusString.length > 0) {
+      params.set("status", statusString);
+      replace(pathname + "?" + params.toString());
     } else {
-      let newPathname = `${pathname}`;
-      if (params.get("difficulty"))
-        newPathname += "?difficulty=" + params.get("difficulty");
-      replace(newPathname);
+      params.delete("status");
+      replace(pathname + "?" + params.toString());
     }
   }, [status]);
 
@@ -59,12 +57,12 @@ export default function StatusSearch() {
     if (params.get("status")) {
       const statusString = decodeURIComponent(params.get("status")!);
       const statusArray = statusString.split(",");
-      const initialStatus: boolean[] = [];
+      const statusInitial: boolean[] = [];
       for (let i = 0; i < 4; i++) {
-        if (statusArray.includes(statusAll[i])) initialStatus.push(true);
-        else initialStatus.push(false);
+        if (statusArray.includes(statusAll[i])) statusInitial.push(true);
+        else statusInitial.push(false);
       }
-      setStatus(initialStatus);
+      setStatus(statusInitial);
     }
   }, []);
 

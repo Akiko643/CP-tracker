@@ -3,6 +3,7 @@
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CheckBox } from "./StatusSearch";
+import RangeSearch from "./RangeSearch";
 
 export default function DifficultySearch() {
   const difficultyAll = ["Easy", "Medium", "Hard"];
@@ -12,12 +13,13 @@ export default function DifficultySearch() {
   const { replace } = useRouter();
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams);
+    let params = new URLSearchParams(searchParams);
     let difficultyArray: string[] = [];
     if (params.get("difficulty")) {
       const difficultyString = decodeURIComponent(params.get("difficulty")!);
       difficultyArray = difficultyString.split(",");
     }
+    //
     for (let i = 0; i < 3; i++) {
       if (difficulty[i] && !difficultyArray.includes(difficultyAll[i])) {
         difficultyArray.push(difficultyAll[i]);
@@ -27,23 +29,19 @@ export default function DifficultySearch() {
         );
       }
     }
+    //
     const difficultyString = difficultyArray.join(",");
-    const difficultyEncoded = encodeURIComponent(difficultyString);
-    if (difficultyEncoded.length > 0) {
-      let newPathname: string = `${pathname}?difficulty=${difficultyEncoded}`;
-      if (params.get("status"))
-        newPathname += "&status=" + params.get("status");
-      replace(newPathname);
+    if (difficultyString.length > 0) {
+      params.set("difficulty", difficultyString);
+      replace(pathname + "?" + params.toString());
     } else {
-      let newPathname: string = `${pathname}`;
-      if (params.get("status"))
-        newPathname += "?status=" + params.get("status");
-      replace(newPathname);
+      params.delete("difficulty");
+      replace(pathname + "?" + params.toString());
     }
   }, [difficulty]);
 
+  // initial loading -> setting initial values of Difficulty filter
   useEffect(() => {
-    // initial loading -> setting initial values of Difficulty filter
     const params = new URLSearchParams(searchParams);
     if (params.get("difficulty")) {
       const difficultyString = decodeURIComponent(params.get("difficulty")!);
@@ -54,6 +52,7 @@ export default function DifficultySearch() {
           difficultyInitial.push(true);
         else difficultyInitial.push(false);
       }
+      setDifficulty(difficultyInitial);
     }
   }, []);
 
@@ -80,6 +79,7 @@ export default function DifficultySearch() {
           </div>
         ))}
       </div>
+      <RangeSearch />
     </div>
   );
 }
