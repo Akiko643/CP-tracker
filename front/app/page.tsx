@@ -6,6 +6,8 @@ import DifficultySearch from "./components/Filter/DifficultySearch";
 import { getProblems } from "@/api";
 import ReturnPage from "./components/ReturnPage";
 import ProblemAdd from "./components/ProblemAdd";
+import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 export default async function Page({
   searchParams,

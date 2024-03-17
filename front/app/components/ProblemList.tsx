@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Problem } from "@/types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faTags } from "@fortawesome/free-solid-svg-icons";
+import { useProblems } from "../provider/ProblemProvider";
 
 function SortButton({
   name,

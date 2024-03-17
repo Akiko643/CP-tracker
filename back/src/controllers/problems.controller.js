@@ -97,8 +97,6 @@ export const updateProblem = async (req, res) => {
       tags,
     };
 
-    // TODO: fix problem status changes and put some restrictions
-
     const response = await ProblemService.updateProblem({
       userId: user._id,
       problemId: id,

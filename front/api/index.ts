@@ -10,6 +10,17 @@ const instance = axios.create({
   timeout: 5000,
 });
 
+const getToken = async () => {
+  const session = await getServerSession(OPTIONS);
+  const { accessToken } = session as any;
+
+  // return error
+  if (!accessToken) return [];
+
+  const token = "Bearer " + accessToken;
+  return token;
+};
+
 export const login = async ({
   username,
   password,
@@ -42,11 +53,7 @@ export const getProblems = async ({
   upper: string | undefined;
 }) => {
   try {
-    const session: Session | null = await getServerSession(OPTIONS);
-    const { accessToken } = session as any;
-    if (!accessToken) return []; // TODO: redirect to signin page
-    const token = "Bearer " + accessToken;
-
+    const token = await getToken();
     const { data } = await instance.get(
       `/problems?status=${status}&lower=${lower}&upper=${upper}`,
       {
@@ -70,12 +77,7 @@ export const getProblems = async ({
 
 export const getProblem = async (_id: string) => {
   try {
-    const session = await getServerSession(OPTIONS);
-    const { accessToken } = session as any;
-
-    if (!accessToken) return [];
-
-    const token = "Bearer " + accessToken;
+    const token = await getToken();
     const { data } = await instance.get(`/problems/${_id}`, {
       headers: {
         Authorization: token,
@@ -96,12 +98,7 @@ export const getProblem = async (_id: string) => {
 
 export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
   try {
-    const session = await getServerSession(OPTIONS);
-    const { accessToken } = session as any;
-
-    if (!accessToken) return [];
-
-    const token = "Bearer " + accessToken;
+    const token = await getToken();
     const { data } = await instance.post(
       `/problems/add`,
       {
@@ -127,12 +124,8 @@ export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
 
 export const deleteProblem = async ({ problemId }: { problemId: string }) => {
   try {
-    const session = await getServerSession(OPTIONS);
-    const { accessToken } = session as any;
-
-    if (!accessToken) return []; // TODO: signout user
-    const token = "Bearer " + accessToken;
-    const { data } = await instance.delete(`/problems/${problemId}`, {
+    const token = await getToken();
+    const { data } = await instance.patch(`/problems/${problem._id}`, problem, {
       headers: {
         Authorization: token,
       },

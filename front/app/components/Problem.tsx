@@ -2,13 +2,57 @@
 
 import { updateProblem } from "@/api";
 import { Problem } from "@/types/types";
+import { faCheck, faForward, faX } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useProblems } from "../provider/ProblemProvider";
 
-const Bar = ({ title, tags }: { title: string; tags: string[] }) => {
+const Bar = ({ problem }: { problem: Problem }) => {
+  const [currentStatus, setCurrentStatus] = useState(problem.status);
+  const getColor = (status: string) => {
+    if (status === "Solved") return "green";
+    if (status === "Skipped") return "yellow";
+    return "red";
+  };
+  const getIcon = (status: string) => {
+    if (status === "Solved") return faCheck;
+    if (status === "Skipped") return faForward;
+    return faX;
+  };
+  const [visible, setVisible] = useState(false);
+  const statuses = ["Solved", "Skipped", "Todo"];
   return (
-    <div>
-      <h2 className="text-center">{title}</h2>
-      <div className="tags flex">
+    <div className="flex items-center relative">
+      <div
+        onClick={() => setVisible((prev) => !prev)}
+        className={`mr-2 w-6 h-6 bg-${getColor(currentStatus)}-500 rounded-2xl`}
+      ></div>
+      {visible && (
+        <div className="absolute top-7 border-solid border-2 bg-white">
+          {statuses.map((status) => (
+            <div
+              key={status}
+              onClick={() => {
+                setVisible(false);
+                setCurrentStatus(status);
+                problem.status = status;
+                // maybe need to update on provider too.
+                updateProblem({ ...problem, status: status });
+              }}
+              className="bg-background-100 text-text-100 hover:bg-background-900"
+            >
+              <FontAwesomeIcon
+                color={getColor(status)}
+                icon={getIcon(status)}
+                className="w-4"
+              />
+              {status}
+            </div>
+          ))}
+        </div>
+      )}
+      <h2 className="text-center">{problem.title}</h2>
+      {/* <div className="tags flex">
         {tags.map((tag: string) => {
           return (
             <div key={tag} className="tag mx-5">
@@ -16,7 +60,7 @@ const Bar = ({ title, tags }: { title: string; tags: string[] }) => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -81,7 +125,7 @@ const Notes = ({ problem }: { problem: Problem }) => {
     { title: "Analysis", field: "analysis" },
   ];
   return (
-    <div>
+    <div className="overflow-y-auto max-h-[600px]">
       {noteTitles.map(({ title, field }: { title: string; field: string }) => (
         <div key={title} className="">
           <h3>{title}</h3>
@@ -99,11 +143,16 @@ const Notes = ({ problem }: { problem: Problem }) => {
   );
 };
 
-const ProblemPage = (problem: Problem) => {
+const ProblemPage = ({ id }: { id: string }) => {
+  const { problems } = useProblems();
+  const problem = problems.find((el: Problem) => el._id === id);
+  if (!problem) {
+    return <div>loading...</div>;
+  }
   return (
-    <div className="h-screen w-screen flex px-40 justify-between text-text-50">
+    <div className="h-screen w-screen flex px-40 justify-around text-text-50">
       <div className="flex flex-col justify-center items-center space-y-16">
-        <Bar title={problem.title} tags={problem.tags} />
+        <Bar problem={problem} />
         <Clock problem={problem} />
       </div>
       <div className="flex flex-col justify-center items-center">
