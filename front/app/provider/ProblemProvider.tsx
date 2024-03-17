@@ -43,7 +43,7 @@ export const ProblemProvider = ({
     };
 
     fetchData();
-  }, [filter, problems]);
+  }, [filter]);
 
   const updateProblem = (i: number, problem: Problem) => {
     setProblems([
