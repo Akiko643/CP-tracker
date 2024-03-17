@@ -7,6 +7,7 @@ export const UserSchema = new mongoose.Schema(
       required: true,
     },
     passwordHash: String,
+    lastRecommendIndex: Number,
   },
   { timestamps: true }
 );
