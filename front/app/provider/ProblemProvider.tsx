@@ -18,28 +18,32 @@ export const ProblemProvider = ({
   const searchParams = useSearchParams();
 
   const [problems, setProblems] = useState<Problem[]>([]);
+  const [filter, setFilter] = useState(new URLSearchParams(searchParams));
+
   const session = useSession();
   if (!session) {
     return <ReturnPage />;
   }
+
   useEffect(() => {
     const fetchData = async () => {
-      const params = new URLSearchParams(searchParams);
       const fullParams = {
         status: "",
         lower: "0",
         upper: "5000",
       };
-      if (params.get("lower")) fullParams.lower = params.get("lower")!;
-      if (params.get("upper")) fullParams.upper = params.get("upper")!;
-      if (params.get("status"))
-        fullParams.status = decodeURIComponent(params.get("status")!);
+
+      if (filter.get("lower")) fullParams.lower = filter.get("lower")!;
+      if (filter.get("upper")) fullParams.upper = filter.get("upper")!;
+      if (filter.get("status"))
+        fullParams.status = decodeURIComponent(filter.get("status")!);
+      //
       const data = await getProblems(fullParams);
       if (data.status !== 401) setProblems(data);
     };
 
     fetchData();
-  }, []);
+  }, [filter]);
 
   const updateProblem = (i: number, problem: Problem) => {
     setProblems([
@@ -53,7 +57,7 @@ export const ProblemProvider = ({
   };
 
   return (
-    <ProblemsContext.Provider value={{ problems, updateProblem }}>
+    <ProblemsContext.Provider value={{ problems, updateProblem, setFilter }}>
       {children}
     </ProblemsContext.Provider>
   );

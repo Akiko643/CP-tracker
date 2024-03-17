@@ -3,6 +3,7 @@
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { useProblems } from "@/app/provider/ProblemProvider";
 
 export default function RangeSearch() {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ export default function RangeSearch() {
 
   const [lower, setLower] = useState<string>("");
   const [upper, setUpper] = useState<string>("");
+  const { setFilter } = useProblems();
 
   useEffect(
     useDebouncedCallback(() => {
@@ -28,6 +30,8 @@ export default function RangeSearch() {
         params.set("upper", upper);
       }
       replace(pathname + "?" + params.toString());
+      //
+      setFilter(params);
     }, 300),
     [lower, upper]
   );

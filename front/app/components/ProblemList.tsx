@@ -53,9 +53,9 @@ function StatusIndicator({ status }: { status: string }) {
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default function ProblemList({ data }: { data: Problem[] }) {
-  const [problems, setProblems] = useState(data);
-
+export default function ProblemList() {
+  // const [problems, setProblems] = useState(data);
+  const { problems } = useProblems();
   return (
     <section className="px-4 flex-1">
       <h1 className="text-2xl mb-6 text-gray-300">Recents</h1>
@@ -69,7 +69,7 @@ export default function ProblemList({ data }: { data: Problem[] }) {
       <div className="h-0.5 w-full bg-gray-500"></div>
       <div>
         {problems.map((problem: Problem, i: number) => {
-          const [showDelete, setShowDelete] = useState(false);
+          // const [showDelete, setShowDelete] = useState(false);
           return (
             <div
               key={`problem-${i}`}
@@ -93,22 +93,22 @@ export default function ProblemList({ data }: { data: Problem[] }) {
               {/* Remove button */}
               <button
                 className="px-3"
-                onClick={() => setShowDelete(true)}
-                onBlur={() => setShowDelete(false)}
+                // onClick={() => setShowDelete(true)}
+                // onBlur={() => setShowDelete(false)}
               >
                 <FontAwesomeIcon
                   className="h-5"
                   color="white"
                   icon={faEllipsisVertical}
                 />
-                {showDelete && (
+                {/* {showDelete && (
                   <div
                     className="hover:cursor-pointer hover:bg-gray-300 px-2 text-red-500 bg-gray-100 z-30 absolute -bottom-5 right-0 overflow-visible"
                     onClick={() => deleteProblem({ problemId: problem._id })}
                   >
                     Remove
                   </div>
-                )}
+                )} */}
               </button>
             </div>
           );

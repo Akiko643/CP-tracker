@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useProblems } from "@/app/provider/ProblemProvider";
 
 export function CheckBox({ state, size }: { state: boolean; size: number }) {
   if (state) {
@@ -21,6 +22,7 @@ export default function StatusSearch() {
   const { replace } = useRouter();
   const [status, setStatus] = useState([false, false, false, false]);
   const statusAll = ["Todo", "Solving", "Solved", "Skipped"];
+  const { setFilter } = useProblems();
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
@@ -44,11 +46,13 @@ export default function StatusSearch() {
     // updating params
     if (statusString.length > 0) {
       params.set("status", statusString);
-      replace(pathname + "?" + params.toString());
     } else {
       params.delete("status");
-      replace(pathname + "?" + params.toString());
     }
+    // updating URL
+    replace(pathname + "?" + params.toString());
+    //
+    setFilter(params);
   }, [status]);
 
   useEffect(() => {
