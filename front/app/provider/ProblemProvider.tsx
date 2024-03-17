@@ -43,7 +43,7 @@ export const ProblemProvider = ({
     };
 
     fetchData();
-  }, [filter]);
+  }, [filter, problems]);
 
   const updateProblem = (i: number, problem: Problem) => {
     setProblems([
@@ -56,8 +56,14 @@ export const ProblemProvider = ({
     ]);
   };
 
+  const deleteProblemProvider = (i: number) => {
+    setProblems([...problems.slice(0, i), ...problems.slice(i + 1)]);
+  };
+
   return (
-    <ProblemsContext.Provider value={{ problems, updateProblem, setFilter }}>
+    <ProblemsContext.Provider
+      value={{ problems, updateProblem, setFilter, deleteProblemProvider }}
+    >
       {children}
     </ProblemsContext.Provider>
   );
