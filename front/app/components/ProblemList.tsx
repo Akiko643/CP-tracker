@@ -1,4 +1,3 @@
-// import { useState } from "react";
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,27 +53,6 @@ export default function ProblemList() {
   const [diffSort, setDiffSort] = useState(0);
   const [srcSort, setSrcSort] = useState(0);
   const { problems } = useProblems();
-  // const [problems, setProblems] = useState(data);
-  // function nextStatus(status: string) {
-  //   if (status == "solved") return "skipped";
-  //   if (status == "skipped") return "solving";
-  //   return "solved";
-  // }
-
-  // const updateStatus = (i: number) => {
-  //   setProblems([
-  //     ...problems.slice(0, i),
-  //     {
-  //       ...problems[i],
-  //       status: nextStatus(problems[i].status),
-  //     },
-  //     ...problems.slice(i + 1),
-  //   ]);
-  //   updateProblem({
-  //     ...problems[i],
-  //     status: nextStatus(problems[i].status),
-  //   });
-  // };
 
   return (
     <section className="px-4 flex-1">
@@ -101,10 +79,7 @@ export default function ProblemList() {
               className="w-full flex my-2 h-10 items-center bg-primary-900 rounded-md text-gray-300"
               key={`problem-${i}`}
             >
-              <div
-                className="w-8 flex justify-center h-full"
-                // onClick={() => updateStatus(i)}
-              >
+              <div className="w-8 flex justify-center h-full">
                 <StatusIndicator status={problem.status} />
               </div>
               <div className="flex-1">

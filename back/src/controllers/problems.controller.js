@@ -81,20 +81,6 @@ export const updateProblem = async (req, res) => {
       tags,
     };
 
-    // if (status === "Solved") {
-    //   if (!solvedDate)
-    //     throw new Error(`solvedDate is null while status is "Solved"`);
-
-    //   updateBody.solvedDate = solvedDate;
-    // }
-
-    // if (status === "Solving") {
-    //   if (!startDate)
-    //     throw new Error(`startDate is null while status is "Solving"`);
-
-    //   updateBody.startDate = startDate;
-    // }
-
     const response = await ProblemService.updateProblem({
       userId: user._id,
       problemId: id,

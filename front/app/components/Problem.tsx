@@ -36,7 +36,8 @@ const Bar = ({ problem }: { problem: Problem }) => {
                 setVisible(false);
                 setCurrentStatus(status);
                 problem.status = status;
-                updateProblem(problem);
+                // maybe need to update on provider too.
+                updateProblem({ ...problem, status: status });
               }}
               className="bg-background-100 text-text-100 hover:bg-background-900"
             >

@@ -10,12 +10,6 @@ import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 
 export default async function Home() {
-  // const session = await getServerSession();
-  // console.log(session);
-  // const data: any = await getProblems();
-  // if (data.status === 401) {
-  //   return <ReturnPage />;
-  // }
   return (
     <div className="flex bg-background-900 w-full h-full">
       <Auth>
