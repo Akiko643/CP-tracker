@@ -10,9 +10,6 @@ const ProblemSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    groupIds: {
-      type: [mongoose.Schema.Types.ObjectId]
-    },
     title: {
       type: String,
       required: true,
@@ -23,7 +20,7 @@ const ProblemSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "Not Attempted",
+      default: "Todo", // "Solving", "Skipped", "Solved"
     },
     difficulty: {
       type: String,

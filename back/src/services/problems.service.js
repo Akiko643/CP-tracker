@@ -1,9 +1,21 @@
 import { Problem } from "../schemas/problem.schema.js";
 import { getData } from "../utils/problemData.js";
 
-const findProblems = async ({ userId }) => {
-  const res = await Problem.find({ userId });
-  return res;
+const findProblems = async ({ userId, statusArray, lower, upper }) => {
+  // search query
+  const problems = await Problem.find({ userId, status: { $in: statusArray } });
+  // lower / upper -> codeforces problems
+  lower = parseInt(lower);
+  upper = parseInt(upper);
+  // filter by difficulty if the problem is from codeforces
+  return problems.filter((problem) => {
+    if (problem.source !== "codeforces.com" || problem.difficulty === "N/A")
+      return false;
+    // example problem.difficulty *800
+    // removing the '*' and converting into an integer
+    const difficulty = parseInt(problem.difficulty.substring(1));
+    return lower <= difficulty && difficulty <= upper;
+  });
 };
 
 const findProblem = async ({ userId, problemId }) => {

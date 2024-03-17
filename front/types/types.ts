@@ -15,15 +15,3 @@ export interface Problem {
   analysis?: string;
   [index: string]: string | number | Date | number | string[] | undefined;
 }
-
-export interface Group {
-  _id: string;
-  name: string;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  solvedProblems: string[];
-  skippedProblems: string[];
-  solvingProblems: string[];
-  todoProblems: string[];
-}
