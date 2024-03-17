@@ -2,7 +2,6 @@
 
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CheckBox } from "./StatusSearch";
 import { useDebouncedCallback } from "use-debounce";
 
 export default function RangeSearch() {

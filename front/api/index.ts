@@ -48,9 +48,9 @@ export const getProblems = async ({
   lower,
   upper,
 }: {
-  status: string | undefined;
-  lower: string | undefined;
-  upper: string | undefined;
+  status: string;
+  lower: string;
+  upper: string;
 }) => {
   try {
     const token = await getToken();
@@ -125,7 +125,7 @@ export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
 export const deleteProblem = async ({ problemId }: { problemId: string }) => {
   try {
     const token = await getToken();
-    const { data } = await instance.patch(`/problems/${problem._id}`, problem, {
+    const { data } = await instance.delete(`/problems/${problemId}`, {
       headers: {
         Authorization: token,
       },

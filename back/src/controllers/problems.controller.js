@@ -5,7 +5,7 @@ export const findProblems = async (req, res) => {
     const { user } = req;
     // status
     let statusArray = [];
-    if (req.query.status !== "undefined") {
+    if (req.query.status.length !== 0) {
       const statusString = req.query.status;
       statusArray = statusString.split(",");
     } else {

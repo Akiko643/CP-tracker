@@ -6,8 +6,6 @@ import DifficultySearch from "./components/Filter/DifficultySearch";
 import { getProblems } from "@/api";
 import ReturnPage from "./components/ReturnPage";
 import ProblemAdd from "./components/ProblemAdd";
-import { useSession } from "next-auth/react";
-import { getServerSession } from "next-auth/next";
 
 export default async function Page({
   searchParams,
@@ -18,15 +16,19 @@ export default async function Page({
     upper: string | undefined;
   };
 }) {
-  const problems = await getProblems({ ...searchParams });
+  const fullParams = {
+    status: searchParams.status || "",
+    lower: searchParams.lower || "0",
+    upper: searchParams.upper || "5000",
+  };
+  const problems = await getProblems({ ...fullParams });
   if (problems.status === 401) {
     return <ReturnPage />;
   }
   let key = "";
-  if (searchParams.status) key += searchParams.status;
-  if (searchParams.lower) key += searchParams.lower;
-  if (searchParams.upper) key += searchParams.upper;
-
+  key += "status:" + fullParams.status;
+  key += "lower:" + fullParams.lower;
+  key += "upper" + fullParams.upper;
   return (
     <div className="flex bg-background-900 overflow-y-auto">
       <Auth>

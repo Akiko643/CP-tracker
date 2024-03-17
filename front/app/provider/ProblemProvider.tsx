@@ -4,6 +4,7 @@ import { Problem } from "@/types/types";
 import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
 import ReturnPage from "../components/ReturnPage";
+import { useSearchParams } from "next/navigation";
 
 const ProblemsContext = createContext<any>(null);
 
@@ -14,6 +15,8 @@ export const ProblemProvider = ({
 }: {
   children: React.JSX.Element;
 }) => {
+  const searchParams = useSearchParams();
+
   const [problems, setProblems] = useState<Problem[]>([]);
   const session = useSession();
   if (!session) {
@@ -21,7 +24,17 @@ export const ProblemProvider = ({
   }
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getProblems();
+      const params = new URLSearchParams(searchParams);
+      const fullParams = {
+        status: "",
+        lower: "0",
+        upper: "5000",
+      };
+      if (params.get("lower")) fullParams.lower = params.get("lower")!;
+      if (params.get("upper")) fullParams.upper = params.get("upper")!;
+      if (params.get("status"))
+        fullParams.status = decodeURIComponent(params.get("status")!);
+      const data = await getProblems(fullParams);
       if (data.status !== 401) setProblems(data);
     };
 
