@@ -62,6 +62,9 @@ export default function ProblemList({ data }: { data: Problem[] }) {
       <div className="w-full flex mb-2">
         <div className="w-8"></div>
         <div className="flex-1 text-gray-500">Title</div>
+        <div className="text-gray-500 w-32 pl-2">Difficulty</div>
+        <div className="text-gray-500 w-40 pl-2">Resource</div>
+        <div className="px-5"></div>
       </div>
       <div className="h-0.5 w-full bg-gray-500"></div>
       <div>
