@@ -9,13 +9,12 @@ const findProblems = async ({ userId, statusArray, lower, upper }) => {
   upper = parseInt(upper);
   // filter by difficulty if the problem is from codeforces
   return problems.filter((problem) => {
-    if (problem.source === "codeforces.com" && problem.difficulty !== "N/A") {
-      // example problem.difficulty *800
-      // removing the '*' and converting into an integer
-      const difficulty = parseInt(problem.difficulty.substring(1));
-      return lower <= difficulty && difficulty <= upper;
-    }
-    return true;
+    if (problem.source !== "codeforces.com" || problem.difficulty === "N/A")
+      return false;
+    // example problem.difficulty *800
+    // removing the '*' and converting into an integer
+    const difficulty = parseInt(problem.difficulty.substring(1));
+    return lower <= difficulty && difficulty <= upper;
   });
 };
 
