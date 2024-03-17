@@ -30,7 +30,6 @@ export const createProblem = async (req, res) => {
   // attach user id to it
   try {
     const { user } = req;
-    console.log("user", user);
     const { url } = req.body;
     const response = await ProblemService.createProblem({
       userId: user._id,
@@ -68,11 +67,13 @@ export const updateProblem = async (req, res) => {
       takeaways,
       analysis,
       tags,
+      spentTime,
       startDate,
       solvedDate,
     } = body;
 
     const updateBody = {
+      spentTime,
       status,
       metaCognition,
       takeaways,

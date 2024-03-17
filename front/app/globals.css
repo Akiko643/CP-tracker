@@ -2,29 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-form {
-  @apply flex flex-col justify-center items-center
+.navbarLink {
+  @apply py-1 px-4 mx-1;
+  @apply hover:bg-text-50 hover:rounded-2xl hover:text-background-900;
 }
 
-input[type="text"],
-input[type="password"] {
-  @apply w-3/12 bg-gray-100;
-  @apply mb-5
+.navbarLinkAt {
+  @apply py-1 px-4 mx-1;
+  @apply bg-text-50 rounded-2xl text-background-900;
 }
 
-.button-auth {
-  @apply font-bold py-2 px-4 rounded;
-  @apply bg-blue-500 text-white;
-}
-
-.button-auth:hover {
-  @apply bg-blue-700;
-}
-
-.button-google {
-  @apply flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
-}
-
-.button-google:hover {
-
+.authButton {
+  @apply border self-center rounded-md py-1 px-4 mx-1;
+  @apply hover:bg-text-50 hover:text-background-900;
 }

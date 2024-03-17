@@ -1,50 +1,43 @@
 "use client";
-
-import { FormEvent, useState } from "react";
-import { redirect } from "next/navigation";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import AuthForm from "../components/AuthForm";
+import { redirect } from "next/navigation";
 
-export default function signin() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
-    setLoading(true);
-    event.preventDefault();
-    const response = await fetch('http://localhost:4000/api/signin', {
-      body: JSON.stringify({username, password}),
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST'
-    });
-    if (response.status === 200) {
-      // succesffully logged in
+export default function Signin() {
+  const { data, status } = useSession();
+  async function handleLogin(formData: FormData) {
+    const data = {
+      username: formData.get("username") as string,
+      password: formData.get("password") as string,
+    };
+    try {
+      const response = await signIn("credentials", data);
       redirect('/');
-    } else {
-      console.log(response);
+    } catch (error) {
+      // TODO: display error message to the client
+      console.log(error);
     }
-    setLoading(false);
-  };
-  
+  }
+
+  if (status === 'authenticated') {
+    return redirect('/');
+  }
   return (
-    <div>
-      <form onSubmit={handleLogin}>
-        Username
-        <input type="text" value={username} disabled={loading}
-          onChange={e => setUsername(e.target.value)} 
-        />
-        Password
-        <input type="password" value={password} disabled={loading}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <button className="button-auth">Signin</button>
-      </form>
-      <button type="button" onClick={() => signIn('google', {callbackUrl: '/'})}
-              className="button-google">
-        <Image src={'/google.png'} alt={''} width={24} height={24} />
-        Login with google
-      </button>
+    <div className="flex items-center justify-center h-full">
+      <div className="flex flex-col text-text-50">
+        <p className="text-2xl mb-6">Sign in</p>
+        <AuthForm handleAuth={handleLogin} buttonText={"Sign in"}/>
+        <div className="my-5 h-px w-full bg-gray-500"></div>
+        <button
+          type="button"
+          onClick={() => signIn("google", { callbackUrl: "/" })}
+          className="text-text-50 hover:text-background-900 flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+        >
+          <Image src={"/google.png"} alt={""} width={24} height={24} className="mr-3"/>
+          Login with google
+        </button>
+      </div>
     </div>
-  )
+  );
 }
