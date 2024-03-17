@@ -17,7 +17,7 @@ export function CheckBox({ state, size }: { state: boolean; size: number }) {
 
 export default function StatusSearch() {
   const searchParams = useSearchParams();
-  const pathname = usePathname(); // current pathname /groups/GROUPID
+  const pathname = usePathname();
   const { replace } = useRouter();
   const [status, setStatus] = useState([false, false, false, false]);
   const statusAll = ["Todo", "Solving", "Solved", "Skipped"];

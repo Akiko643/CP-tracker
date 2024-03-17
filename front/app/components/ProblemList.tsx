@@ -1,12 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { updateProblem, deleteProblem, deleteProblemFromGroup } from "@/api";
+import { updateProblem, deleteProblem } from "@/api";
 import { useState } from "react";
-import { Problem, Group } from "@/types/types";
+import { Problem } from "@/types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faTags } from "@fortawesome/free-solid-svg-icons";
-import Search from "./StatusSearch";
 
 function SortButton({
   name,
@@ -71,7 +70,6 @@ export default function ProblemList({
       <div>
         {problems.map((problem: Problem, i: number) => {
           const [showDelete, setShowDelete] = useState(false);
-          const [showGroups, setShowGroups] = useState(false);
           return (
             <div
               key={`problem-${i}`}

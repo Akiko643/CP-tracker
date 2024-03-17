@@ -3,6 +3,7 @@
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CheckBox } from "./StatusSearch";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function RangeSearch() {
   const searchParams = useSearchParams();
@@ -12,22 +13,25 @@ export default function RangeSearch() {
   const [lower, setLower] = useState<string>("");
   const [upper, setUpper] = useState<string>("");
 
-  useEffect(() => {
-    let params = new URLSearchParams(searchParams);
-    // lower
-    if (params.get("lower") && lower === "") {
-      params.delete("lower");
-    } else if (lower.length > 0) {
-      params.set("lower", lower);
-    }
-    // upper
-    if (params.get("upper") && upper === "") {
-      params.delete("upper");
-    } else if (upper.length > 0) {
-      params.set("upper", upper);
-    }
-    replace(pathname + "?" + params.toString());
-  }, [lower, upper]);
+  useEffect(
+    useDebouncedCallback(() => {
+      let params = new URLSearchParams(searchParams);
+      // lower
+      if (params.get("lower") && lower === "") {
+        params.delete("lower");
+      } else if (lower.length > 0) {
+        params.set("lower", lower);
+      }
+      // upper
+      if (params.get("upper") && upper === "") {
+        params.delete("upper");
+      } else if (upper.length > 0) {
+        params.set("upper", upper);
+      }
+      replace(pathname + "?" + params.toString());
+    }, 300),
+    [lower, upper]
+  );
 
   // initial loading -> setting initial values of Range filter
   useEffect(() => {

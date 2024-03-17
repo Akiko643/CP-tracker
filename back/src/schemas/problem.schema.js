@@ -10,9 +10,6 @@ const ProblemSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    groupIds: {
-      type: [mongoose.Schema.Types.ObjectId],
-    },
     title: {
       type: String,
       required: true,

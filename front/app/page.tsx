@@ -1,8 +1,8 @@
 "use server";
 import Auth from "./components/Auth";
 import ProblemList from "./components/ProblemList";
-import StatusSearch from "./components/StatusSearch";
-import DifficultySearch from "./components/DifficultySearch";
+import StatusSearch from "./components/Filter/StatusSearch";
+import DifficultySearch from "./components/Filter/DifficultySearch";
 import { getProblems } from "@/api";
 import ReturnPage from "./components/ReturnPage";
 import ProblemAdd from "./components/ProblemAdd";
@@ -12,15 +12,16 @@ export default async function Page({
 }: {
   searchParams: {
     status: string | undefined;
+    lower: string | undefined;
+    upper: string | undefined;
   };
 }) {
-
   let status: string = "";
   if (searchParams.status) status = searchParams.status;
 
   const problems = await getProblems({ status });
   if (problems.status === 401) {
-    return <ReturnPage />
+    return <ReturnPage />;
   }
 
   return (
