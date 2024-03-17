@@ -9,6 +9,17 @@ const instance = axios.create({
   timeout: 5000,
 });
 
+const getToken = async () => {
+  const session = await getServerSession(OPTIONS);
+  const { accessToken } = session as any;
+
+  // return error
+  if (!accessToken) return [];
+
+  const token = "Bearer " + accessToken;
+  return token;
+};
+
 export const login = async ({
   username,
   password,
@@ -33,12 +44,7 @@ export const signUp = async ({
 
 export const getProblems = async () => {
   try {
-    const session = await getServerSession(OPTIONS);
-    const { accessToken } = session as any;
-
-    if (!accessToken) return [];
-
-    const token = "Bearer " + accessToken;
+    const token = await getToken();
     const { data } = await instance.get("/problems", {
       headers: {
         Authorization: token,
@@ -59,12 +65,7 @@ export const getProblems = async () => {
 
 export const getProblem = async (_id: string) => {
   try {
-    const session = await getServerSession(OPTIONS);
-    const { accessToken } = session as any;
-
-    if (!accessToken) return [];
-
-    const token = "Bearer " + accessToken;
+    const token = await getToken();
     const { data } = await instance.get(`/problems/${_id}`, {
       headers: {
         Authorization: token,
@@ -85,12 +86,7 @@ export const getProblem = async (_id: string) => {
 
 export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
   try {
-    const session = await getServerSession(OPTIONS);
-    const { accessToken } = session as any;
-
-    if (!accessToken) return [];
-
-    const token = "Bearer " + accessToken;
+    const token = await getToken();
     const { data } = await instance.post(
       `/problems/add`,
       {
@@ -118,12 +114,7 @@ export const deleteProblem = async () => {};
 
 export const updateProblem = async (problem: Problem) => {
   try {
-    const session = await getServerSession(OPTIONS);
-    const { accessToken } = session as any;
-
-    if (!accessToken) return [];
-
-    const token = "Bearer " + accessToken;
+    const token = await getToken();
     const { data } = await instance.patch(`/problems/${problem._id}`, problem, {
       headers: {
         Authorization: token,
