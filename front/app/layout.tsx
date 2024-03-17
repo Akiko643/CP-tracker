@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "./components/SessionProvider";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar";
 import { getSession } from "next-auth/react";
 
 const font = Source_Code_Pro({ subsets: ["latin"] });

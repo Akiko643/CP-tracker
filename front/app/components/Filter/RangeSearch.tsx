@@ -42,20 +42,20 @@ export default function RangeSearch() {
 
   return (
     <div>
-      <h3 className="text-gray-300">Range</h3>
+      <h3 className="text-gray-300 mb-1">Range</h3>
       <div className="flex pl-4">
         <input
           type="number"
           value={lower}
           onChange={(e) => setLower(e.target.value)}
-          className="w-16 bg-transparent border border-gray-500 rounded-sm h-6"
+          className="pl-1 text-gray-300 w-16 bg-transparent border border-gray-500 rounded-sm h-6"
         ></input>
         <p className="text-gray-500">-</p>
         <input
           type="number"
           value={upper}
           onChange={(e) => setUpper(e.target.value)}
-          className="w-16 bg-transparent border border-gray-500 rounded-sm h-6"
+          className="pl-1 text-gray-300 w-16 bg-transparent border border-gray-500 rounded-sm h-6"
         ></input>
       </div>
     </div>

@@ -29,10 +29,12 @@ export default async function Page({
     <div className="flex bg-background-900 overflow-y-auto">
       <Auth>
         <ProblemAdd />
-        <ProblemList data={problems} key={key} />
-        <div className="flex flex-col">
-          <StatusSearch />
-          <DifficultySearch />
+        <div className="flex flex-row w-full">
+          <ProblemList data={problems} key={key} />
+          <div className="flex flex-col">
+            <StatusSearch />
+            <DifficultySearch />
+          </div>
         </div>
       </Auth>
     </div>
