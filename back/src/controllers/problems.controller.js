@@ -1,19 +1,25 @@
 import ProblemService from "../services/problems.service.js";
 
 export const findProblems = async (req, res) => {
-  // return my problems
   try {
     const { user } = req;
-    // problem statuses
-    const statusString = req.query.status;
-    let statusArray = statusString.split(",");
-    if (statusString.length === 0) {
+    // status
+    let statusArray = [];
+    if (req.query.status !== "undefined") {
+      const statusString = req.query.status;
+      statusArray = statusString.split(",");
+    } else {
       statusArray = ["Todo", "Solving", "Skipped", "Solved"];
     }
+    // lower & upper
+    const upper = req.query.upper;
+    const lower = req.query.lower;
     //
     const response = await ProblemService.findProblems({
       userId: user._id,
       statusArray,
+      lower,
+      upper,
     });
     return res.send(response);
   } catch (err) {

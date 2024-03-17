@@ -16,19 +16,20 @@ export default async function Page({
     upper: string | undefined;
   };
 }) {
-  let status: string = "";
-  if (searchParams.status) status = searchParams.status;
-
-  const problems = await getProblems({ status });
+  const problems = await getProblems({ ...searchParams });
   if (problems.status === 401) {
     return <ReturnPage />;
   }
+  let key = "";
+  if (searchParams.status) key += searchParams.status;
+  if (searchParams.lower) key += searchParams.lower;
+  if (searchParams.upper) key += searchParams.upper;
 
   return (
     <div className="flex bg-background-900 overflow-y-auto">
       <Auth>
         <ProblemAdd />
-        <ProblemList data={problems} key={searchParams.status} />
+        <ProblemList data={problems} key={key} />
         <div className="flex flex-col">
           <StatusSearch />
           <DifficultySearch />

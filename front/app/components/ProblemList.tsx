@@ -52,11 +52,7 @@ function StatusIndicator({ status }: { status: string }) {
   return <div className="w-2 bg-red-500 h-full"></div>;
 }
 
-export default function ProblemList({
-  data,
-}: {
-  data: Problem[];
-}) {
+export default function ProblemList({ data }: { data: Problem[] }) {
   const [problems, setProblems] = useState(data);
 
   return (
@@ -75,9 +71,7 @@ export default function ProblemList({
               key={`problem-${i}`}
               className="relative w-full flex my-2 h-10 items-center bg-primary-900 rounded-md text-gray-300"
             >
-              <div
-                className="w-8 flex justify-center h-full"
-              >
+              <div className="w-8 flex justify-center h-full">
                 <StatusIndicator status={problem.status} />
               </div>
               {/* Problem title */}

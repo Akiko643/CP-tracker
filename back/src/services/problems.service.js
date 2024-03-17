@@ -1,9 +1,26 @@
 import { Problem } from "../schemas/problem.schema.js";
 import { getData } from "../utils/problemData.js";
 
-const findProblems = async ({ userId, statusArray }) => {
-  const res = await Problem.find({ userId, status: { $in: statusArray } });
-  return res;
+const findProblems = async ({ userId, statusArray, lower, upper }) => {
+  // lower / upper -> codeforces problems
+  // lower = undefined 0
+  // upper = undefined 5000
+  if (lower === "undefined") lower = 0;
+  else lower = parseInt(lower);
+  if (upper === "undefined") upper = 5000;
+  else upper = parseInt(upper);
+  // search query
+  const problems = await Problem.find({ userId, status: { $in: statusArray } });
+  // if the problem is from codeforces, filter by difficulty
+  return problems.filter((problem) => {
+    if (problem.source === "codeforces.com" && problem.difficulty !== "N/A") {
+      // example problem.difficulty *800
+      // removing the '*' and converting into an integer
+      const difficulty = parseInt(problem.difficulty.substring(1));
+      return lower <= difficulty && difficulty <= upper;
+    }
+    return true;
+  });
 };
 
 const findProblem = async ({ userId, problemId }) => {
