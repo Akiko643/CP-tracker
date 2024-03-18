@@ -11,15 +11,15 @@ export const findProblems = async (req, res) => {
     } else {
       statusArray = ["Todo", "Solving", "Skipped", "Solved"];
     }
-    // lower & upper
-    const upper = req.query.upper;
-    const lower = req.query.lower;
+    // minRating & maxRating
+    const maxRating = req.query.maxRating;
+    const minRating = req.query.minRating;
     //
     const response = await ProblemService.findProblems({
       userId: user._id,
       statusArray,
-      lower,
-      upper,
+      minRating,
+      maxRating,
     });
     return res.send(response);
   } catch (err) {

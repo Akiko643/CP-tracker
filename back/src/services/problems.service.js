@@ -1,12 +1,12 @@
 import { Problem } from "../schemas/problem.schema.js";
 import { getData } from "../utils/problemData.js";
 
-const findProblems = async ({ userId, statusArray, lower, upper }) => {
+const findProblems = async ({ userId, statusArray, minRating, maxRating }) => {
   // search query
   const problems = await Problem.find({ userId, status: { $in: statusArray } });
-  // lower / upper -> codeforces problems
-  lower = parseInt(lower);
-  upper = parseInt(upper);
+  // minRating / maxRating -> codeforces problems
+  minRating = parseInt(minRating);
+  maxRating = parseInt(maxRating);
   // filter by difficulty if the problem is from codeforces
   return problems.filter((problem) => {
     if (problem.source !== "codeforces.com" || problem.difficulty === "N/A")
@@ -14,7 +14,7 @@ const findProblems = async ({ userId, statusArray, lower, upper }) => {
     // example problem.difficulty *800
     // removing the '*' and converting into an integer
     const difficulty = parseInt(problem.difficulty.substring(1));
-    return lower <= difficulty && difficulty <= upper;
+    return minRating <= difficulty && difficulty <= maxRating;
   });
 };
 

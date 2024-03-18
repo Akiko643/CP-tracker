@@ -45,17 +45,17 @@ export const signUp = async ({
 
 export const getProblems = async ({
   status,
-  lower,
-  upper,
+  minRating,
+  maxRating,
 }: {
   status: string;
-  lower: string;
-  upper: string;
+  minRating: string;
+  maxRating: string;
 }) => {
   try {
     const token = await getToken();
     const { data } = await instance.get(
-      `/problems?status=${status}&lower=${lower}&upper=${upper}`,
+      `/problems?status=${status}&minRating=${minRating}&maxRating=${maxRating}`,
       {
         headers: {
           Authorization: token,
