@@ -106,10 +106,18 @@ function ListLine({ problem, index }: { problem: Problem; index: number }) {
 }
 
 export default function ProblemList() {
-  const { problems } = useProblems();
+  const { problems, showProblemAdd, setProblemAdd } = useProblems();
   return (
     <section className="px-4 flex-1">
-      <h1 className="text-2xl mb-6 text-gray-300">Recents</h1>
+      <div className="flex justify-between">
+        <div className="text-2xl text-gray-300">Recents</div>
+        <button
+          onClick={() => setProblemAdd(true)}
+          className="pt-6 text-blue-300 text-sm decoration-transparent transition duration-200 underline underline-offset-4 hover:decoration-blue-300"
+        >
+          +Add Problem
+        </button>
+      </div>
       <div className="w-full flex mb-2">
         <div className="w-8"></div>
         <div className="flex-1 text-gray-500">Title</div>
