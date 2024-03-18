@@ -19,6 +19,7 @@ export const ProblemProvider = ({
 
   const [problems, setProblems] = useState<Problem[]>([]);
   const [filter, setFilter] = useState(new URLSearchParams(searchParams));
+  const [showProblemAdd, setProblemAdd] = useState(false);
 
   const session = useSession();
   if (!session) {
@@ -62,7 +63,14 @@ export const ProblemProvider = ({
 
   return (
     <ProblemsContext.Provider
-      value={{ problems, updateProblem, setFilter, deleteProblemProvider }}
+      value={{
+        problems,
+        updateProblem,
+        setFilter,
+        deleteProblemProvider,
+        showProblemAdd,
+        setProblemAdd,
+      }}
     >
       {children}
     </ProblemsContext.Provider>

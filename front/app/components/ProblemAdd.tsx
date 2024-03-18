@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { postProblem } from "@/api/index";
+import { useProblems } from "@/app/provider/ProblemProvider";
 
 type Key = "ctrl" | "shift" | "alt" | string;
 
@@ -39,33 +40,34 @@ async function handleAddProblem(formData: FormData) {
 }
 
 export default function ProblemAdd() {
-  const [show, setShow] = useState(false);
+  const { showProblemAdd, setProblemAdd } = useProblems();
+  // const [show, setShow] = useState(false);
   const inputRef = useRef<any>(null);
 
   useKeyboardShortcut(["ctrl", "q"], () => {
-    setShow(true);
+    setProblemAdd(true);
     setTimeout(() => {
       inputRef.current.focus();
     }, 1); //TODO: solution without timeout (problem: probably running before ref is set)
   });
 
   useKeyboardShortcut(["escape"], () => {
-    setShow(false);
+    setProblemAdd(false);
   });
 
   return (
     <>
       <div
         className={`absolute left-0 top-0 h-full w-full backdrop-blur select-none z-10 ${
-          show ? "" : "hidden"
+          showProblemAdd ? "" : "hidden"
         }`}
         onClick={() => {
-          setShow(false);
+          setProblemAdd(false);
         }}
       ></div>
       <div
         className={`absolute left-0 top-0 h-full w-full flex justify-center items-center select-none ${
-          show ? "" : "hidden"
+          showProblemAdd ? "" : "hidden"
         }`}
       >
         <div className="bg-primary-900 rounded-md w-1/2 h-12 flex items-center z-20">
