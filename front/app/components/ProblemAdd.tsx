@@ -41,7 +41,6 @@ async function handleAddProblem(formData: FormData) {
 
 export default function ProblemAdd() {
   const { showProblemAdd, setProblemAdd } = useProblems();
-  // const [show, setShow] = useState(false);
   const inputRef = useRef<any>(null);
 
   useKeyboardShortcut(["ctrl", "q"], () => {
