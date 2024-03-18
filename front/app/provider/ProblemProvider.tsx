@@ -19,6 +19,7 @@ export const ProblemProvider = ({
 
   const [problems, setProblems] = useState<Problem[]>([]);
   const [filter, setFilter] = useState(new URLSearchParams(searchParams));
+  const [showProblemAdd, setProblemAdd] = useState(false);
 
   const session = useSession();
   if (!session) {
@@ -29,12 +30,14 @@ export const ProblemProvider = ({
     const fetchData = async () => {
       const fullParams = {
         status: "",
-        lower: "0",
-        upper: "5000",
+        minRating: "0",
+        maxRating: "5000",
       };
 
-      if (filter.get("lower")) fullParams.lower = filter.get("lower")!;
-      if (filter.get("upper")) fullParams.upper = filter.get("upper")!;
+      if (filter.get("minRating"))
+        fullParams.minRating = filter.get("minRating")!;
+      if (filter.get("maxRating"))
+        fullParams.maxRating = filter.get("maxRating")!;
       if (filter.get("status"))
         fullParams.status = decodeURIComponent(filter.get("status")!);
       //
@@ -62,7 +65,14 @@ export const ProblemProvider = ({
 
   return (
     <ProblemsContext.Provider
-      value={{ problems, updateProblem, setFilter, deleteProblemProvider }}
+      value={{
+        problems,
+        updateProblem,
+        setFilter,
+        deleteProblemProvider,
+        showProblemAdd,
+        setProblemAdd,
+      }}
     >
       {children}
     </ProblemsContext.Provider>
