@@ -3,20 +3,26 @@ import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import AuthForm from "../components/AuthForm";
 import { redirect } from "next/navigation";
+import { useState } from "react";
 
 export default function Signin() {
   const { data, status } = useSession();
+  const [error, setError] = useState<any>(null);
   async function handleLogin(formData: FormData) {
     const data = {
       username: formData.get("username") as string,
       password: formData.get("password") as string,
     };
     try {
-      const response = await signIn("credentials", data);
+      const response = await signIn("credentials", {
+        ...data,
+        redirect: false,
+      });
       redirect("/");
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       // TODO: display error message to the client
-      console.log(error);
+      setError(err);
     }
   }
 
@@ -28,6 +34,9 @@ export default function Signin() {
       <div className="flex flex-col text-text-50">
         <p className="text-2xl mb-6">Sign in</p>
         <AuthForm handleAuth={handleLogin} buttonText={"Sign in"} />
+        {error && (
+          <div className="text-red">Username and/or password is wrong.</div>
+        )}
         <div className="my-5 h-px w-full bg-gray-500"></div>
         <button
           type="button"
