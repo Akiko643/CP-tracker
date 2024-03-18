@@ -48,12 +48,15 @@ export const OPTIONS: NextAuthOptions = {
           token.name = user.username;
         } else {
           // used google provider to login
-          let responseUser = await login({
-            username: user.email as string,
-            password: user.id,
-          });
-          if (responseUser.status !== 200) {
-            // first time signin using google
+          let responseUser;
+          try {
+            // try login to backend
+            responseUser = await login({
+              username: user.email as string,
+              password: user.id,
+            });
+          } catch (err) {
+            // signing up the user
             responseUser = await signUp({
               username: user.email as string,
               password: user.id,
