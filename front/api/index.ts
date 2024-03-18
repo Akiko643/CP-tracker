@@ -39,8 +39,15 @@ export const signUp = async ({
   username: string;
   password: string;
 }) => {
-  const response = await instance.post("/signup", { username, password });
-  return response;
+  try {
+    const response = await instance.post("/signup", { username, password });
+    return response;
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      return err.response?.data;
+    }
+    return null;
+  }
 };
 
 export const getProblems = async ({

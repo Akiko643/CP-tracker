@@ -18,11 +18,12 @@ export default function Signin() {
         ...data,
         redirect: false,
       });
+      console.log(response);
       redirect("/");
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       // TODO: display error message to the client
-      setError(err);
+      setError("Username and/or password are incorrect.");
     }
   }
 
@@ -33,15 +34,16 @@ export default function Signin() {
     <div className="flex items-center justify-center h-full">
       <div className="flex flex-col text-text-50">
         <p className="text-2xl mb-6">Sign in</p>
-        <AuthForm handleAuth={handleLogin} buttonText={"Sign in"} />
-        {error && (
-          <div className="text-red">Username and/or password is wrong.</div>
-        )}
+        <AuthForm
+          handleAuth={handleLogin}
+          buttonText={"Sign in"}
+          errorMessage={error}
+        />
         <div className="my-5 h-px w-full bg-gray-500"></div>
         <button
           type="button"
           onClick={() => signIn("google", { callbackUrl: "/" })}
-          className="text-text-50 hover:text-background-900 flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          className="flex items-center justify-center text-text-50 hover:text-background-900 flex items-center bg-white border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
           <Image
             src={"/google.png"}
