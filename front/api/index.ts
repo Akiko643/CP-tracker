@@ -167,4 +167,25 @@ export const updateProblem = async (problem: Problem) => {
   }
 };
 
+export const getAnalyticsTimeBar = async (type: string) => {
+  try {
+    const token = await getToken();
+    const { data } = await instance.get(`/analytics/timebar?timespan=${type}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 401) {
+      return {
+        status: 401,
+      };
+    }
+
+    // write other error specific code.
+    return [];
+  }
+};
+
 // CRUD -> CREATE / READ / UPDATE / DELETE
