@@ -15,3 +15,9 @@ export interface Problem {
   analysis?: string;
   [index: string]: string | number | Date | number | string[] | undefined;
 }
+
+export interface BarDayElement {
+  numOfProblems: number;
+  totalDuration: number;
+  date: Date;
+}

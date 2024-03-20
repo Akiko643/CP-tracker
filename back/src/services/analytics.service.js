@@ -40,7 +40,7 @@ const findAnalyticsTimeBar = async ({ userId, timespan }) => {
         0
       );
       const day = thatDay.getDay();
-      res.push({ numOfProblems, totalDuration, thatDay });
+      res.push({ numOfProblems, totalDuration, date: thatDay });
     }
   }
   return res;

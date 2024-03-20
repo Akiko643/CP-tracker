@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { getAnalyticsTimeBar } from "@/api";
+import { BarDayElement } from "@/types/types";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -10,9 +14,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { getAnalyticsTimeBar } from "@/api";
 
 ChartJS.register(
   CategoryScale,
@@ -24,8 +25,14 @@ ChartJS.register(
 );
 
 export default function Page() {
-  const labels = ["M", "T", "W", "Th", "F", "Sa", "Su"];
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
+  const timespans = ["week", "month", "year", "all"];
+  const [indexTimeBar, setIndexTimeBar] = useState<number>(0);
+  // Bar data
+  let labels: String[] = [];
   const data = {
     labels: labels,
     datasets: [
@@ -51,14 +58,11 @@ export default function Page() {
     },
   };
 
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
-  const timespans = ["week", "month", "year", "all"];
-  const [indexTimeBar, setIndexTimeBar] = useState<number>(0);
 
   // update bar data
-  useEffect(() => {}, [indexTimeBar]);
+  // useEffect((
+  //   fetchData();
+  // ) => {}, [indexTimeBar]);
 
   // initial loading
   useEffect(() => {
@@ -70,7 +74,17 @@ export default function Page() {
     }
 
     async function fetchData() {
-      await getAnalyticsTimeBar(timespans[indexTimeBar]);
+      try {
+        const res: BarDayElement[] = await getAnalyticsTimeBar(timespans[indexTimeBar]);
+        if (indexTimeBar === 0) { // week
+          const durations = res.map((element) => element.totalDuration);
+          console.log(durations);
+          // Total duration
+          data.datasets[0].data = durations;
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     fetchData();
