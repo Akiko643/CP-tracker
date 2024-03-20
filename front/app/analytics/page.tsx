@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getAnalyticsTimeBar } from "@/api";
 import { BarDayElement } from "@/types/types";
 import { Bar } from "react-chartjs-2";
+import type { ChartData, ChartOptions } from "chart.js";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,17 +25,25 @@ ChartJS.register(
   Legend
 );
 
+function dateToString(date: Date): string {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  return day + "/" + month + "/" + year;
+}
+
 export default function Page() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const daysOfTheWeek = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
 
   const timespans = ["week", "month", "year", "all"];
   const [indexTimeBar, setIndexTimeBar] = useState<number>(0);
+  // TODO: useState for data & options to re-render the bar chart
   // Bar data
-  let labels: String[] = [];
-  const data = {
-    labels: labels,
+  const [barData, setBarData] = useState<ChartData<"bar">>({
+    labels: [],
     datasets: [
       {
         data: [10, 15, 20, 1],
@@ -42,9 +51,9 @@ export default function Page() {
         backgroundColor: "#9BD0F5",
       },
     ],
-  };
+  });
 
-  const options = {
+  const [barOptions, setBarOptions] = useState<ChartOptions<"bar">>({
     responsive: false,
     plugins: {
       tooltip: {
@@ -56,8 +65,7 @@ export default function Page() {
         },
       },
     },
-  };
-
+  });
 
   // update bar data
   // useEffect((
@@ -75,12 +83,28 @@ export default function Page() {
 
     async function fetchData() {
       try {
-        const res: BarDayElement[] = await getAnalyticsTimeBar(timespans[indexTimeBar]);
-        if (indexTimeBar === 0) { // week
-          const durations = res.map((element) => element.totalDuration);
-          console.log(durations);
-          // Total duration
-          data.datasets[0].data = durations;
+        const res: BarDayElement[] = await getAnalyticsTimeBar(
+          timespans[indexTimeBar]
+        );
+        if (indexTimeBar === 0) {
+          // week
+          // converting ms to minute
+          const durations = res.map((element) => element.totalDuration / 60000);
+          const labels = res.map(
+            (element) => daysOfTheWeek[element.date.dayOfTheWeek]
+          );
+          setBarData({
+            ...barData,
+            labels: labels,
+            datasets: [
+              {
+                label: "Total try duration",
+                data: durations,
+                borderColor: "#36A2EB",
+                backgroundColor: "#9BD0F5",
+              },
+            ],
+          });
         }
       } catch (err) {
         console.log(err);
@@ -141,7 +165,7 @@ export default function Page() {
             all
           </button>
         </div>
-        <Bar height={300} options={options} data={data} />
+        <Bar height={300} options={barOptions} data={barData} />
       </div>
     </div>
   );

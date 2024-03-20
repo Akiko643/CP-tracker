@@ -39,8 +39,16 @@ const findAnalyticsTimeBar = async ({ userId, timespan }) => {
         (acc, curr) => acc + curr.spentTime,
         0
       );
-      const day = thatDay.getDay();
-      res.push({ numOfProblems, totalDuration, date: thatDay });
+      res.push({
+        numOfProblems,
+        totalDuration,
+        date: {
+          year: thatDay.getFullYear(),
+          month: thatDay.getMonth(),
+          day: thatDay.getDate(),
+          dayOfTheWeek: thatDay.getDay(),
+        },
+      });
     }
   }
   return res;

@@ -19,5 +19,10 @@ export interface Problem {
 export interface BarDayElement {
   numOfProblems: number;
   totalDuration: number;
-  date: Date;
+  date: {
+    year: number;
+    month: number;
+    day: number;
+    dayOfTheWeek: number;
+  };
 }
