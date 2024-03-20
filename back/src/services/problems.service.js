@@ -38,6 +38,16 @@ const deleteProblem = async ({ userId, problemId }) => {
 };
 
 const updateProblem = async ({ userId, problemId, body }) => {
+  const problem = Problem.findOne({ _id: problemId, userId });
+  if (!problem) {
+    throw new Error("Problem does not exist");
+  }
+  // NOT_SOLVED_STATE -> SOLVED_STATE
+  // adding solvedDate field
+  if (problem.status !== body.status && body.status === "Solved") {
+    body.solvedDate = new Date();
+  }
+  // Updating the problem in the database
   const res = await Problem.findOneAndUpdate({ _id: problemId, userId }, body, {
     new: true,
   });

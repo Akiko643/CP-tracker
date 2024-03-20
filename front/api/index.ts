@@ -169,12 +169,14 @@ export const updateProblem = async (problem: Problem) => {
 
 export const getAnalyticsTimeBar = async (type: string) => {
   try {
+    console.log("sending analytics request");
     const token = await getToken();
     const { data } = await instance.get(`/analytics/timebar?timespan=${type}`, {
       headers: {
         Authorization: token,
       },
     });
+    console.log(data);
     return data;
   } catch (err) {
     if (axios.isAxiosError(err) && err.response?.status === 401) {
@@ -182,7 +184,6 @@ export const getAnalyticsTimeBar = async (type: string) => {
         status: 401,
       };
     }
-
     // write other error specific code.
     return [];
   }
