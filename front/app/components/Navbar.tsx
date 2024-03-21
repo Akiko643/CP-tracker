@@ -25,7 +25,6 @@ export default function Navbar() {
           >
             Analytics
           </Link>
-<<<<<<< HEAD:front/app/components/Navbar.tsx
           <Link
             href="/recommender"
             className={`${
@@ -34,8 +33,6 @@ export default function Navbar() {
           >
             Recommender
           </Link>
-=======
->>>>>>> dev:front/app/components/navbar.tsx
         </div>
         <div className="flex justify-end mr-2">
           <Link
