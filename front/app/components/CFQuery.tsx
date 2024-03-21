@@ -71,8 +71,6 @@ const CFQuery = () => {
     return tagsSearch.slice(0, minlen) === text.slice(0, minlen);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
-
   const queryProblem = async () => {
     setIsLoading(true);
     const queryRating =
@@ -85,8 +83,8 @@ const CFQuery = () => {
     });
     setIsLoading(false);
 
-    console.log(result);
     if (result.error) {
+      alert(result.error)
       return "error";
     }
     setProblem(result);
@@ -153,17 +151,17 @@ const CFQuery = () => {
               setTagsPopup(tagsPopup - 1);
             }}
           >
+            <input
+              onChange={(e) => {
+                setTagsSearch(e.target.value);
+              }}
+              className="mb-2 w-8/12 px-2 bg-transparent border border-gray-500 rounded-sm h-6"
+            />
             <div className="flex flex-wrap gap-1 text-xs">
               {tags.map((tag, index) => (
                 <XPill tag={tag} index={index} key={index} />
               ))}
             </div>
-            <input
-              onChange={(e) => {
-                setTagsSearch(e.target.value);
-              }}
-              className="w-8/12 px-2 bg-transparent border border-gray-500 rounded-sm h-6"
-            />
             <div
               className={`max-w-[650px] min-w-[400px] translate-y-2 rounded-md gap-1 text-xs absolute left-0 top-full flex flex-wrap bg-primary-100 ${
                 tagsPopup > 0 ? "p-2" : ""
@@ -256,11 +254,23 @@ const CFQuery = () => {
                     onClick={() => {
                       setTagsHidden(false);
                     }}
+                    className="underline cursor-pointer hover:text-text-100"
                   >
-                    hidden
+                    show
                   </p>
                 ) : (
+                  <div className="flex">
+
                   <p>{problem.tags.join(", ")}</p>
+                  <span
+                    onClick={() => {
+                      setTagsHidden(true);
+                    }}
+                    className="ml-2 underline cursor-pointer hover:text-text-100"
+                  >
+                    hide
+                  </span>
+                  </div>
                 )}
               </div>
             </div>
