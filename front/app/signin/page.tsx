@@ -18,7 +18,6 @@ export default function Signin() {
         ...data,
         redirect: false,
       });
-      console.log(response);
       redirect("/");
     } catch (err: any) {
       console.log(err);

@@ -5,10 +5,16 @@ import AuthForm from "../components/AuthForm";
 import { RedirectType, redirect } from "next/navigation";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import axios from "axios";
+import { useAction } from "next-safe-action/hook";
 
 export default function Signup() {
   const [error, setError] = useState<string>("");
+  const { execute, status, result } = useAction(signUp, {
+    onError(err) {
+      // setError(err);
+      console.log("on server?", err);
+    },
+  });
 
   async function handleSignUp(formData: FormData) {
     const data = {
@@ -16,12 +22,13 @@ export default function Signup() {
       password: formData.get("password") as string,
     };
 
-    const response = await signUp(data);
-    if (response.message) {
-      setError(response.message);
-    } else {
-      redirect("/signin", RedirectType.replace);
-    }
+    execute(data);
+    // const response = e);
+    // if (response.message) {
+    //   setError(response.message);
+    // } else {
+    //   redirect("/signin", RedirectType.replace);
+    // }
   }
 
   return (
