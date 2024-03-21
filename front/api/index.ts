@@ -241,7 +241,7 @@ export const recommendProblem = async ({
       // TODO: redirect to signin page with error message
       return [];
     }
-
+    
     const token = "Bearer " + accessToken;
     const { data } = await instance.get(
       `/recommender?tags=${tags}&rating=${rating}`,
@@ -250,7 +250,7 @@ export const recommendProblem = async ({
           Authorization: token,
         },
       }
-    );
+      );
     return data;
   } catch (err) {
     if (axios.isAxiosError(err) && err.response?.status === 400) {

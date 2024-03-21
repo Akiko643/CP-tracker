@@ -3,9 +3,9 @@ import { User } from "../schemas/user.schema.js";
 export const getLastIndex = async (req, res, next) => {
   try {
     const { user } = req;
-    const { username } = user;
+    const { _id } = user;
 
-    const userdb = await User.findOne({ username });
+    const userdb = await User.findOne({ _id });
     req.lastRecommendIndex = userdb.lastRecommendIndex;
     next();
   } catch (err) {
