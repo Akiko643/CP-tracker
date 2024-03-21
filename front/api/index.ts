@@ -202,6 +202,45 @@ export const getGroups = async () => {
   }
 };
 
+export const recommendProblem = async ({
+  tags,
+  rating,
+}: {
+  tags: string;
+  rating: string;
+}) => {
+  try {
+    const session = await getServerSession(OPTIONS);
+    const { accessToken } = session as any;
+    if (!accessToken) {
+      // TODO: redirect to signin page with error message
+      return [];
+    }
+
+    const token = "Bearer " + accessToken;
+    const { data } = await instance.get(
+      `/recommender?tags=${tags}&rating=${rating}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 400) {
+      return {
+        error: err.response?.data.message
+      };
+    }
+
+    // write other error specific code.
+    return {
+      error: err
+    }
+  }
+};
+
 export const updateGroup = async () => {};
 export const deleteGroup = async () => {};
 

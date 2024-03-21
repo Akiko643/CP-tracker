@@ -37,6 +37,8 @@ const config: Config = {
       },
       primary: {
         100: "#2C3333",
+        400: "#424d4d",
+        500: "#4d5959",
         900: "#2C3333",
       },
       text: {
@@ -56,6 +58,8 @@ const config: Config = {
       sky: colors.sky,
       pink: colors.pink,
       indigo: colors.indigo,
+      teal: colors.teal,
+      zinc: colors.zinc,
     },
   },
   plugins: [],

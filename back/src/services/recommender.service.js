@@ -17,17 +17,15 @@ const recommendProblem = async ({
   tags,
   rating,
 }) => {
+  console.log(rating);
   if (!rating) {
     throw new Error("Rating range undefined");
   }
 
-  if (!tags) {
-    tags = "";
-  }
-
   const ratingArray = rating.split(";").map((el) => parseInt(el));
 
-  if (ratingArray.length !== 2 || ratingArray[0] >= ratingArray[1]) {
+  console.log(ratingArray);
+  if (ratingArray.length !== 2 || ratingArray[0] > ratingArray[1]) {
     throw new Error("Rating range invalid");
   }
 

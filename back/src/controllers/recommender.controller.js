@@ -8,10 +8,10 @@ export const recommendProblem = async (req, res) => {
     const problems = await RecommendService.recommendProblem({
       userId: user._id,
       lastRecommendIndex: lastRecommendIndex,
-      tags: tags,
-      rating: rating,
+      tags: tags || "",
+      rating: rating || "0;3500",
     });
-    res.send(problems);
+    return res.send(problems);
   } catch (err) {
     return res.status(400).json({ message: err.message });
   }
