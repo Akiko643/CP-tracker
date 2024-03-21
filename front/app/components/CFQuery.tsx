@@ -236,9 +236,14 @@ const CFQuery = () => {
         <section className="w-full flex justify-center text-lg my-8">
           <div className="p-4 bg-primary-400 rounded-md w-1/2 border">
             <p className="text-xs">Title:</p>
-            <p className="mb-4 underline cursor-pointer hover:text-blue-400">
-              {problem.contestId + problem.index + " " + problem.name}
-            </p>
+            <a
+              href={`https://codeforces.com/contest/${problem.contestId}/problem/${problem.index}`}
+              target="_blank"
+            >
+              <p className="mb-4 underline cursor-pointer hover:text-blue-400">
+                {problem.contestId + problem.index + " " + problem.name}
+              </p>
+            </a>
             <div className="flex gap-4">
               <div>
                 <p className="text-xs">Rating:</p>
@@ -246,7 +251,17 @@ const CFQuery = () => {
               </div>
               <div>
                 <p className="text-xs">Tags:</p>
-                {tagsHidden ? <p onClick={()=>{setTagsHidden(false)}}>hidden</p> : <p>{...problem.tags}</p>}
+                {tagsHidden ? (
+                  <p
+                    onClick={() => {
+                      setTagsHidden(false);
+                    }}
+                  >
+                    hidden
+                  </p>
+                ) : (
+                  <p>{problem.tags.join(", ")}</p>
+                )}
               </div>
             </div>
           </div>
