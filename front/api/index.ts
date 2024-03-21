@@ -41,7 +41,7 @@ export const login = async ({
     const response = await instance.post("/login", { username, password });
     return response;
   } catch (err) {
-    handleAxiosError(err);
+    return handleAxiosError(err);
   }
 };
 
@@ -55,7 +55,7 @@ export const signUp = action(schema, async ({ username, password }) => {
     const response = await instance.post("/signup", { username, password });
     return response;
   } catch (err) {
-    handleAxiosError(err);
+    return handleAxiosError(err);
   }
 });
 
@@ -68,6 +68,7 @@ export const getProblems = async ({
   minRating: string;
   maxRating: string;
 }) => {
+  // return Error("Gg");
   try {
     const token = await getToken();
     const { data } = await instance.get(
@@ -80,7 +81,7 @@ export const getProblems = async ({
     );
     return data;
   } catch (err) {
-    handleAxiosError(err);
+    return handleAxiosError(err);
   }
 };
 
@@ -94,7 +95,7 @@ export const getProblem = async (_id: string) => {
     });
     return data;
   } catch (err) {
-    handleAxiosError(err);
+    return handleAxiosError(err);
   }
 };
 
@@ -114,7 +115,7 @@ export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
     );
     return data;
   } catch (err) {
-    handleAxiosError(err);
+    return handleAxiosError(err);
   }
 };
 
@@ -128,7 +129,7 @@ export const deleteProblem = async ({ problemId }: { problemId: string }) => {
     });
     return data;
   } catch (err) {
-    handleAxiosError(err);
+    return handleAxiosError(err);
   }
 };
 
@@ -146,7 +147,7 @@ export const updateProblem = async (problem: Problem) => {
     });
     return data;
   } catch (err) {
-    handleAxiosError(err);
+    return handleAxiosError(err);
   }
 };
 
