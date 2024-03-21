@@ -7,7 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { useProblems } from "../provider/ProblemProvider";
 
-const Bar = ({ problem }: { problem: Problem }) => {
+let problem: Problem;
+
+const Bar = () => {
   const [currentStatus, setCurrentStatus] = useState(problem.status);
   const getColor = (status: string) => {
     if (status === "Solved") return "green";
@@ -65,7 +67,7 @@ const Bar = ({ problem }: { problem: Problem }) => {
   );
 };
 
-const Clock = ({ problem }: { problem: Problem }) => {
+const Clock = () => {
   const [play, setPlay] = useState(false);
   const [time, setTime] = useState(problem.spentTime);
 
@@ -118,7 +120,7 @@ const Clock = ({ problem }: { problem: Problem }) => {
   );
 };
 
-const Notes = ({ problem }: { problem: Problem }) => {
+const Notes = () => {
   const noteTitles = [
     { title: "Take aways", field: "takeaways" },
     { title: "Meta cognition", field: "metaCognition" },
@@ -134,6 +136,7 @@ const Notes = ({ problem }: { problem: Problem }) => {
             placeholder="take your note here..."
             onChange={(e) => {
               problem[field] = e.target.value;
+              console.log(problem);
             }}
             defaultValue={problem[field] as string | ""}
           />
@@ -145,19 +148,28 @@ const Notes = ({ problem }: { problem: Problem }) => {
 
 const ProblemPage = ({ id }: { id: string }) => {
   const { problems } = useProblems();
-  const problem = problems.find((el: Problem) => el._id === id);
+  problem = { ...problems.find((el: Problem) => el._id === id) };
   if (!problem) {
     return <div>loading...</div>;
   }
+  useEffect(() => {
+    window.addEventListener("beforeunload", (ev) => {
+      ev.preventDefault();
+      console.log("user logging out");
+      // update the problem in database
+      console.log(problem);
+      updateProblem(problem);
+    });
+  }, []);
   return (
     <div className="h-screen w-screen flex px-40 justify-around text-text-50">
       <div className="flex flex-col justify-center items-center space-y-16">
-        <Bar problem={problem} />
-        <Clock problem={problem} />
+        <Bar />
+        <Clock />
       </div>
       <div className="flex flex-col justify-center items-center">
-        <Notes problem={problem} />
-        <button
+        <Notes />
+        {/* <button
           className="mt-6 authButton"
           onClick={() => {
             updateProblem(problem);
@@ -165,7 +177,7 @@ const ProblemPage = ({ id }: { id: string }) => {
         >
           {" "}
           save{" "}
-        </button>
+        </button> */}
       </div>
     </div>
   );

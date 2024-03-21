@@ -18,7 +18,7 @@ export interface Problem {
 
 export interface BarDayElement {
   numOfProblems: number;
-  totalDuration: number;
+  totalDurationMins: number;
   date: {
     year: number;
     month: number;

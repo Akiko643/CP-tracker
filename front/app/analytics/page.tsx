@@ -40,7 +40,7 @@ export default function Page() {
 
   const timespans = ["week", "month", "year", "all"];
   const [indexTimeBar, setIndexTimeBar] = useState<number>(0);
-  // TODO: useState for data & options to re-render the bar chart
+
   // Bar data
   const [barData, setBarData] = useState<ChartData<"bar">>({
     labels: [],
@@ -60,17 +60,87 @@ export default function Page() {
         enabled: true,
         callbacks: {
           label: function (context) {
-            return ["test", context.dataIndex.toString(), "amaraa"];
+            return [""];
           },
         },
       },
     },
   });
 
+  let durations: number[] = [];
+  let numOfProblems: number[] = [];
+  let labels: string[] = [];
+  let dates: string[] = [];
+
+  function updateBarChart() {
+    // setting bar data
+    setBarData({
+      ...barData,
+      labels: labels,
+      datasets: [
+        {
+          label: "Total solving duration",
+          data: durations,
+          borderColor: "#36A2EB",
+          backgroundColor: "#9BD0F5",
+        },
+      ],
+    });
+    // setting bar options
+    setBarOptions({
+      ...barOptions,
+      plugins: {
+        tooltip: {
+          enabled: true,
+          callbacks: {
+            label: function (context) {
+              return [
+                durations[context.dataIndex].toString(),
+                "Solved Problems: " + numOfProblems[context.dataIndex],
+                "Date: " + dates[context.dataIndex].toString(),
+              ];
+            },
+          },
+        },
+      },
+    });
+  }
+
   // update bar data
-  // useEffect((
-  //   fetchData();
-  // ) => {}, [indexTimeBar]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res: BarDayElement[] = await getAnalyticsTimeBar(
+          timespans[indexTimeBar]
+        );
+        if (indexTimeBar === 0 || indexTimeBar === 1) {
+          // week / month
+          durations = res.map((element) => element.totalDurationMins);
+          numOfProblems = res.map((element) => element.numOfProblems);
+          if (indexTimeBar === 1) labels = [];
+          else
+            labels = res.map(
+              (element) => daysOfTheWeek[element.date.dayOfTheWeek]
+            );
+          dates = res.map(
+            (element) =>
+              element.date.year +
+              "/" +
+              element.date.month +
+              "/" +
+              element.date.day
+          );
+          updateBarChart();
+        } else if (indexTimeBar === 2) {
+          // year
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchData();
+  }, [indexTimeBar]);
 
   // initial loading
   useEffect(() => {
@@ -80,38 +150,6 @@ export default function Page() {
       const index = timespans.indexOf(timespan);
       setIndexTimeBar(index);
     }
-
-    async function fetchData() {
-      try {
-        const res: BarDayElement[] = await getAnalyticsTimeBar(
-          timespans[indexTimeBar]
-        );
-        if (indexTimeBar === 0) {
-          // week
-          // converting ms to minute
-          const durations = res.map((element) => element.totalDuration / 60000);
-          const labels = res.map(
-            (element) => daysOfTheWeek[element.date.dayOfTheWeek]
-          );
-          setBarData({
-            ...barData,
-            labels: labels,
-            datasets: [
-              {
-                label: "Total try duration",
-                data: durations,
-                borderColor: "#36A2EB",
-                backgroundColor: "#9BD0F5",
-              },
-            ],
-          });
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    fetchData();
   }, []);
 
   function setParam({ field, value }: { field: string; value: string }) {
@@ -127,13 +165,17 @@ export default function Page() {
   return (
     <div>
       <div className="flex flex-col">
-        <div className="">
+        <div className="border rounded-full w-60">
           <button
             onClick={() => {
               setIndexTimeBar(0);
               setParam({ field: "timespan", value: "" });
             }}
-            className="py-1 border-y border-l rounded-l-full w-20 hover:bg-blue-300 hover:border-x hover:rounded-r-full"
+            className={`${
+              indexTimeBar === 0
+                ? "ring-1 rounded-full ring-inset bg-blue-300"
+                : "text-text-50"
+            } py-1 w-1/3`}
           >
             week
           </button>
@@ -142,7 +184,11 @@ export default function Page() {
               setIndexTimeBar(1);
               setParam({ field: "timespan", value: "month" });
             }}
-            className="py-1 border-y w-20"
+            className={`${
+              indexTimeBar === 1
+                ? "ring-1 rounded-full ring-inset bg-blue-300"
+                : "text-text-50"
+            } py-1 w-1/3`}
           >
             month
           </button>
@@ -151,18 +197,13 @@ export default function Page() {
               setIndexTimeBar(2);
               setParam({ field: "timespan", value: "year" });
             }}
-            className="py-1 border-y w-20"
+            className={`${
+              indexTimeBar === 2
+                ? "ring-1 rounded-full ring-inset bg-blue-300"
+                : "text-text-50"
+            } py-1 w-1/3`}
           >
             year
-          </button>
-          <button
-            onClick={() => {
-              setIndexTimeBar(1);
-              setParam({ field: "timespan", value: "all" });
-            }}
-            className="py-1 border-y border-r rounded-r-full w-20"
-          >
-            all
           </button>
         </div>
         <Bar height={300} options={barOptions} data={barData} />

@@ -144,6 +144,7 @@ export const deleteProblem = async ({ problemId }: { problemId: string }) => {
 
 export const updateProblem = async (problem: Problem) => {
   try {
+    console.log(problem);
     const session = await getServerSession(OPTIONS);
     const { accessToken } = session as any;
 

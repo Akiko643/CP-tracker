@@ -26,10 +26,12 @@ const ProblemSchema = new mongoose.Schema(
       type: String,
       default: "N/A",
     },
-    spentTime: {
-      type: Number,
-      default: 0,
-    },
+    spentTime: [
+      {
+        date: Date,
+        duration: Number,
+      },
+    ],
     startDate: Date,
     solvedDate: Date,
     metaCognition: String,
