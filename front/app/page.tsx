@@ -1,24 +1,24 @@
-import Image from "next/image";
+"use server";
 import Auth from "./components/Auth";
 import ProblemList from "./components/ProblemList";
-import Groups from "./components/Groups";
-import Sort from "./components/Sort";
+import StatusSearch from "./components/Filter/StatusSearch";
+import DifficultySearch from "./components/Filter/DifficultySearch";
 import { getProblems } from "@/api";
 import ReturnPage from "./components/ReturnPage";
 import ProblemAdd from "./components/ProblemAdd";
 
-export default async function Home() {
-  const data: any = await getProblems();
-  if (data.status === 401) {
-    return <ReturnPage />;
-  }
+export default async function Page() {
   return (
     <div className="flex bg-background-900 overflow-y-auto">
       <Auth>
         <ProblemAdd />
-        <Groups />
-        <ProblemList data={data} />
-        <Sort />
+        <div className="flex flex-row w-full">
+          <ProblemList />
+          <div className="flex flex-col">
+            <StatusSearch />
+            <DifficultySearch />
+          </div>
+        </div>
       </Auth>
     </div>
   );

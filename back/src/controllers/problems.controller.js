@@ -1,10 +1,26 @@
 import ProblemService from "../services/problems.service.js";
 
 export const findProblems = async (req, res) => {
-  // return my problems
   try {
     const { user } = req;
-    const response = await ProblemService.findProblems({ userId: user._id });
+    // status
+    let statusArray = [];
+    if (req.query.status.length !== 0) {
+      const statusString = req.query.status;
+      statusArray = statusString.split(",");
+    } else {
+      statusArray = ["Todo", "Solving", "Skipped", "Solved"];
+    }
+    // minRating & maxRating
+    const maxRating = req.query.maxRating;
+    const minRating = req.query.minRating;
+    //
+    const response = await ProblemService.findProblems({
+      userId: user._id,
+      statusArray,
+      minRating,
+      maxRating,
+    });
     return res.send(response);
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -80,20 +96,6 @@ export const updateProblem = async (req, res) => {
       analysis,
       tags,
     };
-
-    if (status === "Solved") {
-      if (!solvedDate)
-        throw new Error(`solvedDate is null while status is "Solved"`);
-
-      updateBody.solvedDate = solvedDate;
-    }
-
-    if (status === "Solving") {
-      if (!startDate)
-        throw new Error(`startDate is null while status is "Solving"`);
-
-      updateBody.startDate = startDate;
-    }
 
     const response = await ProblemService.updateProblem({
       userId: user._id,
