@@ -38,12 +38,30 @@ const deleteProblem = async ({ userId, problemId }) => {
 };
 
 const updateProblem = async ({ userId, problemId, body }) => {
-  const problem = Problem.findOne({ _id: problemId, userId });
+  const problem = await Problem.findOne({ _id: problemId, userId });
   if (!problem) {
     throw new Error("Problem does not exist");
   }
-  // NOT_SOLVED_STATE -> SOLVED_STATE
-  // adding solvedDate field
+  //
+  if (body.timeTotal !== problem.timeTotal) {
+    const lenTimeEachDay = problem.timeEachDay.length;
+    if (
+      problem.timeEachDay.length === 0 ||
+      !isEqualDates(problem.timeEachDay[lenTimeEachDay - 1].date, new Date())
+    ) {
+      // add a new date
+      const todayDate = new Date();
+      const timeDifference = body.timeTotal - problem.timeTotal;
+      body.timeEachDay.push({ date: todayDate, time: timeDifference });
+    } else if (
+      isEqualDates(problem.timeEachDay[lenTimeEachDay - 1].date, new Date())
+    ) {
+      // update a last date
+      const timeDifference = body.timeTotal - problem.timeTotal;
+      body.timeEachDay[lenTimeEachDay - 1].time += timeDifference;
+    }
+  }
+  // NOT_SOLVED_STATE -> SOLVED_STATE (addine solvedDate field)
   if (problem.status !== body.status && body.status === "Solved") {
     body.solvedDate = new Date();
   }
@@ -55,6 +73,14 @@ const updateProblem = async ({ userId, problemId, body }) => {
     throw new Error("User don't have the problem");
   }
   return res;
+};
+
+const isEqualDates = (date1, date2) => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
 };
 
 export default {

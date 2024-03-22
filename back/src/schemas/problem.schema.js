@@ -26,13 +26,16 @@ const ProblemSchema = new mongoose.Schema(
       type: String,
       default: "N/A",
     },
-    spentTime: [
+    timeTotal: {
+      type: Number,
+      default: 0,
+    },
+    timeEachDay: [
       {
         date: Date,
-        duration: Number,
+        time: Number,
       },
     ],
-    startDate: Date,
     solvedDate: Date,
     metaCognition: String,
     takeaways: String,

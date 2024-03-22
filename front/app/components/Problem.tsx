@@ -7,9 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { useProblems } from "../provider/ProblemProvider";
 
-let problem: Problem;
-
-const Bar = () => {
+const Bar = ({ problem }: { problem: Problem }) => {
   const [currentStatus, setCurrentStatus] = useState(problem.status);
   const getColor = (status: string) => {
     if (status === "Solved") return "green";
@@ -67,16 +65,16 @@ const Bar = () => {
   );
 };
 
-const Clock = () => {
+const Clock = ({ problem }: { problem: Problem }) => {
   const [play, setPlay] = useState(false);
-  const [time, setTime] = useState(problem.spentTime);
+  const [time, setTime] = useState<number>(problem.timeTotal as number);
 
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval>;
     if (play) {
       intervalId = setInterval(() => {
         setTime(time + 1);
-        problem.spentTime++;
+        problem.timeTotal++;
       }, 10);
     }
     return () => {
@@ -120,7 +118,7 @@ const Clock = () => {
   );
 };
 
-const Notes = () => {
+const Notes = ({ problem }: { problem: Problem }) => {
   const noteTitles = [
     { title: "Take aways", field: "takeaways" },
     { title: "Meta cognition", field: "metaCognition" },
@@ -136,7 +134,6 @@ const Notes = () => {
             placeholder="take your note here..."
             onChange={(e) => {
               problem[field] = e.target.value;
-              console.log(problem);
             }}
             defaultValue={problem[field] as string | ""}
           />
@@ -148,28 +145,19 @@ const Notes = () => {
 
 const ProblemPage = ({ id }: { id: string }) => {
   const { problems } = useProblems();
-  problem = { ...problems.find((el: Problem) => el._id === id) };
+  const problem = problems.find((el: Problem) => el._id === id);
   if (!problem) {
     return <div>loading...</div>;
   }
-  useEffect(() => {
-    window.addEventListener("beforeunload", (ev) => {
-      ev.preventDefault();
-      console.log("user logging out");
-      // update the problem in database
-      console.log(problem);
-      updateProblem(problem);
-    });
-  }, []);
   return (
     <div className="h-screen w-screen flex px-40 justify-around text-text-50">
       <div className="flex flex-col justify-center items-center space-y-16">
-        <Bar />
-        <Clock />
+        <Bar problem={problem} />
+        <Clock problem={problem} />
       </div>
       <div className="flex flex-col justify-center items-center">
-        <Notes />
-        {/* <button
+        <Notes problem={problem} />
+        <button
           className="mt-6 authButton"
           onClick={() => {
             updateProblem(problem);
@@ -177,7 +165,7 @@ const ProblemPage = ({ id }: { id: string }) => {
         >
           {" "}
           save{" "}
-        </button> */}
+        </button>
       </div>
     </div>
   );

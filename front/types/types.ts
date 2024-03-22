@@ -7,8 +7,7 @@ export interface Problem {
   source: string;
   status: string;
   tags: string[];
-  spentTime: number;
-  startDate?: Date;
+  timeTotal: number;
   solvedDate?: Date;
   metaCognition?: string;
   takeaways?: string;

@@ -1,7 +1,6 @@
 import { Problem } from "../schemas/problem.schema.js";
 
 async function lastDays(userId, cnt) {
-  console.log(userId, cnt);
   const ret = [];
   const allProblems = await Problem.find({
     userId,
@@ -27,9 +26,7 @@ async function lastDays(userId, cnt) {
       59
     );
     //
-    for (let j = 0; j < allProblems.length; j++) {
-
-    }
+    for (let j = 0; j < allProblems.length; j++) {}
   }
 
   for (let i = cnt - 1; i >= 0; i--) {
@@ -45,7 +42,7 @@ async function lastDays(userId, cnt) {
     });
     const numOfProblems = problems.length;
     const totalDurationMins = (
-      problems.reduce((acc, curr) => acc + curr.spentTime, 0) / 60000
+      problems.reduce((acc, curr) => acc + curr.timeTotal, 0) / 60000
     ).toFixed(2);
     ret.push({
       numOfProblems,
@@ -67,11 +64,9 @@ const findAnalyticsTimeBar = async ({ userId, timespan }) => {
   // week -> (last 7 days) each day
   // month -> (last 30 days) each day
   // year -> (last 12 months) each month
-  console.log(timespan);
   if (timespan === "week") {
     return await lastDays(userId, 7);
   } else if (timespan === "month") {
-    console.log("requested month");
     return await lastDays(userId, 30);
   } else if (timespan === "year") {
   }

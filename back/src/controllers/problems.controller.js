@@ -82,18 +82,19 @@ export const updateProblem = async (req, res) => {
       metaCognition,
       takeaways,
       analysis,
+      timeTotal,
+      timeEachDay,
       tags,
-      spentTime,
-      startDate,
       solvedDate,
     } = body;
 
     const updateBody = {
-      spentTime,
       status,
       metaCognition,
       takeaways,
       analysis,
+      timeTotal,
+      timeEachDay,
       tags,
     };
 
