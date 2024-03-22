@@ -7,10 +7,14 @@ export const UserSchema = new mongoose.Schema(
       required: true,
     },
     passwordHash: String,
-    timeEachDay: [
+    eachDay: [
       {
         date: Date,
         time: Number,
+        numOfProblems: {
+          type: Number,
+          default: 0,
+        },
       },
     ],
   },

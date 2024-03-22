@@ -47,24 +47,32 @@ const updateProblem = async ({ userId, problemId, body }) => {
   const duration = body.timeTotal - problem.timeTotal;
   if (duration > 0) {
     const user = await User.findOne({ _id: userId });
-    const lenUserTime = user.timeEachDay.length;
+    const lenUserTime = user.eachDay.length;
+
+    let addProblems = 0;
+    // NOT_SOLVED_STATE -> SOLVED_STATE (addine solvedDate field)
+    if (problem.status !== body.status && body.status === "Solved") {
+      body.solvedDate = new Date();
+      addProblems = 1;
+    }
     if (
       lenUserTime === 0 ||
-      !isEqualDates(user.timeEachDay[lenUserTime - 1].date, new Date())
+      !isEqualDates(user.eachDay[lenUserTime - 1].date, new Date())
     ) {
-      // add new date
-      user.timeEachDay.push({ date: new Date(), time: duration });
+      // adding new date
+      user.eachDay.push({
+        date: new Date(),
+        time: duration,
+        numOfProblems: addProblems,
+      });
     } else {
-      // update the last date
-      user.timeEachDay[lenUserTime - 1].time += duration;
+      // updating last date
+      user.eachDay[lenUserTime - 1].time += duration;
+      user.eachDay[lenUserTime - 1].numOfProblems += addProblems;
     }
-    await User.findOneAndUpdate({ _id: userId }, user);
+    const tmp = await User.findOneAndUpdate({ _id: userId }, user);
   }
 
-  // NOT_SOLVED_STATE -> SOLVED_STATE (addine solvedDate field)
-  if (problem.status !== body.status && body.status === "Solved") {
-    body.solvedDate = new Date();
-  }
   // Updating the problem in the database
   const res = await Problem.findOneAndUpdate({ _id: problemId, userId }, body, {
     new: true,
@@ -75,7 +83,7 @@ const updateProblem = async ({ userId, problemId, body }) => {
   return res;
 };
 
-const isEqualDates = (date1, date2) => {
+export const isEqualDates = (date1, date2) => {
   return (
     date1.getFullYear() === date2.getFullYear() &&
     date1.getMonth() === date2.getMonth() &&

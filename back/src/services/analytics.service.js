@@ -1,60 +1,41 @@
 import { Problem } from "../schemas/problem.schema.js";
+import { User } from "../schemas/user.schema.js";
+import { isEqualDates } from "./problems.service.js";
 
 async function lastDays(userId, cnt) {
   const ret = [];
-  const allProblems = await Problem.find({
-    userId,
-  });
-
+  const user = await User.find({ _id: userId });
+  if (!user) {
+    throw new Error("User doesn't exist");
+  }
+  const index = user.eachDay.length - 1;
   for (let i = cnt - 1; i >= 0; i--) {
     const thatDay = new Date();
     thatDay.setDate(thatDay.getDate() - i);
-    const startOfDay = new Date(
-      thatDay.getFullYear(),
-      thatDay.getMonth(),
-      thatDay.getDate(),
-      0,
-      0,
-      0
-    );
-    const endOfDay = new Date(
-      thatDay.getFullYear(),
-      thatDay.getMonth(),
-      thatDay.getDate(),
-      23,
-      59,
-      59
-    );
+    const date = {
+      year: thatDay.getFullYear(),
+      month: thatDay.getMonth(),
+      day: thatDay.getDate(),
+      dayOfTheWeek: thatDay.getDate(),
+    };
     //
-    for (let j = 0; j < allProblems.length; j++) {}
+    if (index >= 0 && isEqualDates(thatDay, user.eachDay[index].date)) {
+      // user has data on that day
+      ret.push({
+        numOfProblems: user.eachDay[index].numOfProblems,
+        totalDurationMins: (user.eachDay[index].time / 60000).toFixed(2),
+        date,
+      });
+      index--;
+    } else {
+      ret.push({
+        numOfProblems: 0,
+        totalDurationMins: 0,
+        date,
+      });
+    }
   }
 
-  for (let i = cnt - 1; i >= 0; i--) {
-    let thatDay = new Date();
-    thatDay.setDate(thatDay.getDate() - i);
-    //
-    const problems = await Problem.find({
-      userId,
-      solvedDate: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
-    });
-    const numOfProblems = problems.length;
-    const totalDurationMins = (
-      problems.reduce((acc, curr) => acc + curr.timeTotal, 0) / 60000
-    ).toFixed(2);
-    ret.push({
-      numOfProblems,
-      totalDurationMins,
-      date: {
-        year: thatDay.getFullYear(),
-        month: thatDay.getMonth(),
-        day: thatDay.getDate(),
-        dayOfTheWeek: thatDay.getDay(),
-      },
-    });
-  }
   return ret;
 }
 
