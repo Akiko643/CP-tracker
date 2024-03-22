@@ -1,4 +1,5 @@
 import { Problem } from "../schemas/problem.schema.js";
+import { User } from "../schemas/user.schema.js";
 import { getData } from "../utils/problemData.js";
 
 const findProblems = async ({ userId, statusArray, minRating, maxRating }) => {
@@ -43,24 +44,23 @@ const updateProblem = async ({ userId, problemId, body }) => {
     throw new Error("Problem does not exist");
   }
   //
-  if (body.timeTotal !== problem.timeTotal) {
-    const lenTimeEachDay = problem.timeEachDay.length;
+  const duration = body.timeTotal - problem.timeTotal;
+  if (duration > 0) {
+    const user = await User.findOne({ _id: userId });
+    const lenUserTime = user.timeEachDay.length;
     if (
-      problem.timeEachDay.length === 0 ||
-      !isEqualDates(problem.timeEachDay[lenTimeEachDay - 1].date, new Date())
+      lenUserTime === 0 ||
+      !isEqualDates(user.timeEachDay[lenUserTime - 1].date, new Date())
     ) {
-      // add a new date
-      const todayDate = new Date();
-      const timeDifference = body.timeTotal - problem.timeTotal;
-      body.timeEachDay.push({ date: todayDate, time: timeDifference });
-    } else if (
-      isEqualDates(problem.timeEachDay[lenTimeEachDay - 1].date, new Date())
-    ) {
-      // update a last date
-      const timeDifference = body.timeTotal - problem.timeTotal;
-      body.timeEachDay[lenTimeEachDay - 1].time += timeDifference;
+      // add new date
+      user.timeEachDay.push({ date: new Date(), time: duration });
+    } else {
+      // update the last date
+      user.timeEachDay[lenUserTime - 1].time += duration;
     }
+    await User.findOneAndUpdate({ _id: userId }, user);
   }
+
   // NOT_SOLVED_STATE -> SOLVED_STATE (addine solvedDate field)
   if (problem.status !== body.status && body.status === "Solved") {
     body.solvedDate = new Date();

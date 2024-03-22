@@ -83,7 +83,6 @@ export const updateProblem = async (req, res) => {
       takeaways,
       analysis,
       timeTotal,
-      timeEachDay,
       tags,
       solvedDate,
     } = body;
@@ -94,7 +93,6 @@ export const updateProblem = async (req, res) => {
       takeaways,
       analysis,
       timeTotal,
-      timeEachDay,
       tags,
     };
 

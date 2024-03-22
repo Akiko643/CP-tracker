@@ -7,6 +7,12 @@ export const UserSchema = new mongoose.Schema(
       required: true,
     },
     passwordHash: String,
+    timeEachDay: [
+      {
+        date: Date,
+        time: Number,
+      },
+    ],
   },
   { timestamps: true }
 );

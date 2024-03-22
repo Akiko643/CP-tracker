@@ -30,12 +30,6 @@ const ProblemSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    timeEachDay: [
-      {
-        date: Date,
-        time: Number,
-      },
-    ],
     solvedDate: Date,
     metaCognition: String,
     takeaways: String,
