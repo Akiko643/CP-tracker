@@ -17,6 +17,17 @@ export const UserSchema = new mongoose.Schema(
         },
       },
     ],
+    eachMonth: [
+      {
+        year: Number,
+        month: Number,
+        time: Number,
+        numOfProblems: {
+          type: Number,
+          default: 0,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

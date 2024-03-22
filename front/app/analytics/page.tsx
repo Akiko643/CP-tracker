@@ -25,46 +25,58 @@ ChartJS.register(
   Legend
 );
 
-function dateToString(date: Date): string {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
-  return day + "/" + month + "/" + year;
-}
-
 export default function Page() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const daysOfTheWeek = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
-
+  const months = [
+    "NOT",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const fullMonths = [
+    "NOT",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   const timespans = ["week", "month", "year", "all"];
   const [indexTimeBar, setIndexTimeBar] = useState<number>(0);
+  // is initial fetch for the bar data returned
+  const [barFetced, setBarFetched] = useState<boolean>(false);
 
-  // Bar data
   const [barData, setBarData] = useState<ChartData<"bar">>({
     labels: [],
     datasets: [
       {
-        data: [10, 15, 20, 1],
+        data: [],
         borderColor: "#36A2EB",
         backgroundColor: "#9BD0F5",
       },
     ],
   });
-
   const [barOptions, setBarOptions] = useState<ChartOptions<"bar">>({
     responsive: false,
-    plugins: {
-      tooltip: {
-        enabled: true,
-        callbacks: {
-          label: function (context) {
-            return [""];
-          },
-        },
-      },
-    },
   });
 
   let durations: number[] = [];
@@ -72,7 +84,7 @@ export default function Page() {
   let labels: string[] = [];
   let dates: string[] = [];
 
-  function updateBarChart() {
+  function updateBarChart(isX: boolean) {
     // setting bar data
     setBarData({
       ...barData,
@@ -89,6 +101,11 @@ export default function Page() {
     // setting bar options
     setBarOptions({
       ...barOptions,
+      scales: {
+        x: {
+          display: isX,
+        },
+      },
       plugins: {
         tooltip: {
           enabled: true,
@@ -113,15 +130,13 @@ export default function Page() {
         const res: BarDayElement[] = await getAnalyticsTimeBar(
           timespans[indexTimeBar]
         );
-        if (indexTimeBar === 0 || indexTimeBar === 1) {
-          // week / month
-          durations = res.map((element) => element.totalDurationMins);
-          numOfProblems = res.map((element) => element.numOfProblems);
-          if (indexTimeBar === 1) labels = [];
-          else
-            labels = res.map(
-              (element) => daysOfTheWeek[element.date.dayOfTheWeek]
-            );
+        durations = res.map((element) => element.totalDurationMins);
+        numOfProblems = res.map((element) => element.numOfProblems);
+        // setting labels (x-axis) & dates
+        if (indexTimeBar <= 1) {
+          if (indexTimeBar === 0)
+            labels = res.map((el) => daysOfTheWeek[el.date.dayOfTheWeek]);
+          else labels = res.map((el) => el.date.day.toString());
           dates = res.map(
             (element) =>
               element.date.year +
@@ -130,13 +145,20 @@ export default function Page() {
               "/" +
               element.date.day
           );
-          updateBarChart();
         } else if (indexTimeBar === 2) {
-          // year
+          // month
+          labels = res.map((element) => months[element.date.month]);
+          dates = res.map(
+            (element) => element.date.year + fullMonths[element.date.month]
+          );
         }
+
+        if (indexTimeBar === 0 || indexTimeBar === 2) updateBarChart(true);
+        else updateBarChart(true);
       } catch (err) {
         console.log(err);
       }
+      setBarFetched(true);
     }
 
     fetchData();
@@ -206,7 +228,15 @@ export default function Page() {
             year
           </button>
         </div>
-        <Bar height={300} options={barOptions} data={barData} />
+        {barFetced && (
+          <Bar
+            height={400}
+            width={500}
+            options={barOptions}
+            data={barData}
+            key={indexTimeBar}
+          />
+        )}
       </div>
     </div>
   );
