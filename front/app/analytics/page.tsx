@@ -81,6 +81,10 @@ export default function Page() {
   let numOfProblems: number[] = [];
   let labels: string[] = [];
   let dates: string[] = [];
+  const ctx = document.createElement("canvas").getContext("2d");
+  const gradient = ctx!.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, "#3277e6");
+  gradient.addColorStop(1, "#28b8d5");
 
   function updateBarChart(isX: boolean) {
     // setting bar data
@@ -90,8 +94,8 @@ export default function Page() {
         {
           label: "Total solving duration (minutes)",
           data: durations,
-          borderColor: "sky-300",
-          backgroundColor: "#9BD0F5",
+          borderColor: "#000000",
+          backgroundColor: gradient,
         },
       ],
     });
