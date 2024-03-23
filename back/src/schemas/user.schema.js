@@ -28,6 +28,7 @@ export const UserSchema = new mongoose.Schema(
         },
       },
     ],
+    lastRecommendIndex: Number,
   },
   { timestamps: true }
 );

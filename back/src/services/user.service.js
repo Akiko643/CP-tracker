@@ -26,7 +26,11 @@ const createUser = async ({ username, password }) => {
   if (isExist !== null) {
     throw new Error("Username already exists");
   }
-  const user = await User.create({ username, passwordHash });
+  const user = await User.create({
+    username,
+    passwordHash,
+    lastRecommendIndex: 0,
+  });
   return user;
 };
 
