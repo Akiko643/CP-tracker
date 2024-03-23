@@ -185,8 +185,8 @@ export default function Page() {
 
   return (
     <div>
-      <div className="flex flex-col">
-        <div className="border rounded-full w-60">
+      <div className="flex flex-col w-full items-center">
+        <div className="border rounded-full w-60 mb-4">
           <button
             onClick={() => {
               setIndexTimeBar(0);
