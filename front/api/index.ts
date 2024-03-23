@@ -167,6 +167,26 @@ export const updateProblem = async (problem: Problem) => {
   }
 };
 
+export const getAnalyticsTimeBar = async (type: string) => {
+  try {
+    const token = await getToken();
+    const { data } = await instance.get(`/analytics/timebar?timespan=${type}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 401) {
+      return {
+        status: 401,
+      };
+    }
+    // write other error specific code.
+    return [];
+  }
+};
+
 export const recommendProblem = async ({
   tags,
   rating,
@@ -196,13 +216,13 @@ export const recommendProblem = async ({
   } catch (err) {
     if (axios.isAxiosError(err) && err.response?.status === 400) {
       return {
-        error: err.response?.data.message
+        error: err.response?.data.message,
       };
     }
 
     // write other error specific code.
     return {
-      error: err
-    }
+      error: err,
+    };
   }
 };
