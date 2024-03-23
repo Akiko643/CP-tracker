@@ -82,19 +82,19 @@ export const updateProblem = async (req, res) => {
       metaCognition,
       takeaways,
       analysis,
+      timeTotal,
       tags,
-      spentTime,
-      startDate,
       solvedDate,
     } = body;
 
     const updateBody = {
-      spentTime,
       status,
       metaCognition,
       takeaways,
       analysis,
+      timeTotal,
       tags,
+      solvedDate,
     };
 
     const response = await ProblemService.updateProblem({

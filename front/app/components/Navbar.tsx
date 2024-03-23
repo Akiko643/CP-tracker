@@ -25,6 +25,14 @@ export default function Navbar() {
           >
             Analytics
           </Link>
+          <Link
+            href="/recommender"
+            className={`${
+              pathname === "/recommender" ? "navbarLinkAt" : "navbarLink"
+            }`}
+          >
+            Recommender
+          </Link>
         </div>
         <div className="flex justify-end mr-2">
           <Link

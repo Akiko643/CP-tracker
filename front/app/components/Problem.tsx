@@ -67,14 +67,14 @@ const Bar = ({ problem }: { problem: Problem }) => {
 
 const Clock = ({ problem }: { problem: Problem }) => {
   const [play, setPlay] = useState(false);
-  const [time, setTime] = useState(problem.spentTime);
+  const [time, setTime] = useState<number>(problem.timeTotal as number);
 
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval>;
     if (play) {
       intervalId = setInterval(() => {
         setTime(time + 1);
-        problem.spentTime++;
+        problem.timeTotal++;
       }, 10);
     }
     return () => {

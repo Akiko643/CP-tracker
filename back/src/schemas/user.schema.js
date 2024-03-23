@@ -7,6 +7,28 @@ export const UserSchema = new mongoose.Schema(
       required: true,
     },
     passwordHash: String,
+    eachDay: [
+      {
+        date: Date,
+        time: Number,
+        numOfProblems: {
+          type: Number,
+          default: 0,
+        },
+      },
+    ],
+    eachMonth: [
+      {
+        year: Number,
+        month: Number,
+        time: Number,
+        numOfProblems: {
+          type: Number,
+          default: 0,
+        },
+      },
+    ],
+    lastRecommendIndex: Number,
   },
   { timestamps: true }
 );
