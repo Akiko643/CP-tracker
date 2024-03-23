@@ -19,7 +19,7 @@ async function lastDays(user, numOfDays) {
       ret.push({
         numOfProblems: user.eachDay[index].numOfProblems,
         totalDurationMins: parseFloat(
-          (user.eachDay[index].time / 60000).toFixed(2)
+          (user.eachDay[index].time / 6000).toFixed(1)
         ),
         date,
       });
@@ -62,7 +62,7 @@ async function lastMonths(user, numOfMonths) {
     //
     ret.push({
       numOfProblems,
-      totalDurationMins: parseFloat(totalDurationMins / 60000).toFixed(2),
+      totalDurationMins: parseFloat(totalDurationMins / 6000).toFixed(1),
       date: {
         year,
         month,

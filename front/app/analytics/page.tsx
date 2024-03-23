@@ -70,7 +70,7 @@ export default function Page() {
     datasets: [
       {
         data: [],
-        borderColor: "#36A2EB",
+        borderColor: "sky-300",
         backgroundColor: "#9BD0F5",
       },
     ],
@@ -87,20 +87,19 @@ export default function Page() {
   function updateBarChart(isX: boolean) {
     // setting bar data
     setBarData({
-      ...barData,
       labels: labels,
       datasets: [
         {
-          label: "Total solving duration",
+          label: "Total solving duration (minutes)",
           data: durations,
-          borderColor: "#36A2EB",
+          borderColor: "sky-300",
           backgroundColor: "#9BD0F5",
         },
       ],
     });
     // setting bar options
     setBarOptions({
-      ...barOptions,
+      responsive: false,
       scales: {
         x: {
           display: isX,

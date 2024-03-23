@@ -94,6 +94,7 @@ export const updateProblem = async (req, res) => {
       analysis,
       timeTotal,
       tags,
+      solvedDate,
     };
 
     const response = await ProblemService.updateProblem({
