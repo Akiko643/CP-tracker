@@ -1,6 +1,6 @@
 "use client";
 import { postProblem, recommendProblem } from "@/api";
-import { FunctionComponent, PropsWithChildren, useRef, useState } from "react";
+import { useState } from "react";
 import { navigateToProblem } from "../recommender/actions";
 
 interface CFProblem {
