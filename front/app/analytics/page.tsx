@@ -94,7 +94,8 @@ export default function Page() {
         {
           label: "Total solving duration (minutes)",
           data: durations,
-          borderColor: "#000000",
+          borderColor: "rgba(0,0,0,1)",
+          borderWidth: 2,
           backgroundColor: gradient,
         },
       ],
