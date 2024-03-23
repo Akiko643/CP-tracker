@@ -31,7 +31,6 @@ export default function Page() {
   const { replace } = useRouter();
   const daysOfTheWeek = ["Su", "M", "Tu", "W", "Th", "F", "Sa"];
   const months = [
-    "NOT",
     "Jan",
     "Feb",
     "Mar",
@@ -46,7 +45,6 @@ export default function Page() {
     "Dec",
   ];
   const fullMonths = [
-    "NOT",
     "January",
     "February",
     "March",

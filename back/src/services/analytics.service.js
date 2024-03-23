@@ -53,7 +53,7 @@ async function lastMonths(user, numOfMonths) {
       const userMonth = user.eachMonth[index].month;
       if (userYear === year && userMonth === month) {
         totalDurationMins += user.eachMonth[index].time;
-        numOfProblems += user.eachDay[index].numOfProblems;
+        numOfProblems += user.eachMonth[index].numOfProblems;
         index--;
       } else {
         break;
@@ -71,7 +71,7 @@ async function lastMonths(user, numOfMonths) {
       },
     });
     if (month === 0) {
-      month = 12;
+      month = 11;
       year--;
     } else {
       month--;
