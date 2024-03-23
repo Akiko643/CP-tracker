@@ -7,7 +7,7 @@ import { signOut } from "next-auth/react";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
-  timeout: 5000,
+  timeout: 10000,
 });
 
 const getToken = async () => {
@@ -167,4 +167,42 @@ export const updateProblem = async (problem: Problem) => {
   }
 };
 
-// CRUD -> CREATE / READ / UPDATE / DELETE
+export const recommendProblem = async ({
+  tags,
+  rating,
+}: {
+  tags: string;
+  rating: string;
+}) => {
+  try {
+    const session = await getServerSession(OPTIONS);
+    const { accessToken } = session as any;
+    if (!accessToken) {
+      // TODO: redirect to signin page with error message
+      return [];
+    }
+
+    const token = "Bearer " + accessToken;
+    const { data } = await instance.get(
+      `/recommender?tags=${tags}&rating=${rating}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+
+    return data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 400) {
+      return {
+        error: err.response?.data.message
+      };
+    }
+
+    // write other error specific code.
+    return {
+      error: err
+    }
+  }
+};
