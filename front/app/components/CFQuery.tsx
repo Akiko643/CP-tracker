@@ -292,7 +292,6 @@ const CFQuery = () => {
     const url = `https://codeforces.com/contest/${problem?.contestId}/problem/${problem?.index}`;
     try {
       const result = await postProblem({ problemUrl: url });
-      console.log(result);
       await navigateToProblem({ problemId: result._id });
     } catch (e) {
       alert(e);
