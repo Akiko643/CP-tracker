@@ -7,7 +7,7 @@ import { signOut } from "next-auth/react";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
-  timeout: 5000,
+  timeout: 10000, 
 });
 
 const getToken = async () => {
@@ -250,7 +250,8 @@ export const recommendProblem = async ({
           Authorization: token,
         },
       }
-      );
+    );
+
     return data;
   } catch (err) {
     if (axios.isAxiosError(err) && err.response?.status === 400) {

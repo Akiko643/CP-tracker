@@ -25,19 +25,20 @@ const recommendProblem = async ({
   if (!rating) {
     throw new Error("Rating range undefined");
   }
-
+  
   const ratingArray = rating.split(";").map((el) => parseInt(el));
-
+  
   if (ratingArray.length !== 2 || ratingArray[0] > ratingArray[1]) {
     throw new Error("Rating range invalid");
   }
-
+  
+  
   const problems = await codeforcesApi(tags, ratingArray);
+  const userProblems = await Problem.find({ userId });
   let selectedProblem;
   for (const problem of problems) {
     const url = problemURLGen(problem);
-    const res = await Problem.findOne({ url, userId });
-    if (res) {
+    if (userProblems.findIndex((userProblem)=>(userProblem.url === url)) !== -1) {
       continue;
     }
     
