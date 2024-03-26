@@ -40,9 +40,12 @@ export const ProblemProvider = ({
         fullParams.maxRating = filter.get("maxRating")!;
       if (filter.get("status"))
         fullParams.status = decodeURIComponent(filter.get("status")!);
-      //
+
       const data = await getProblems(fullParams);
-      if (data.status !== 401) setProblems(data);
+      if (!data.error) {
+        console.log("no error");
+        setProblems(data);
+      }
     };
 
     fetchData();

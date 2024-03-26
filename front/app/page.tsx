@@ -3,8 +3,6 @@ import Auth from "./components/Auth";
 import ProblemList from "./components/ProblemList";
 import StatusSearch from "./components/Filter/StatusSearch";
 import DifficultySearch from "./components/Filter/DifficultySearch";
-import { getProblems } from "@/api";
-import ReturnPage from "./components/ReturnPage";
 import ProblemAdd from "./components/ProblemAdd";
 
 export default async function Page() {

@@ -52,13 +52,13 @@ export const OPTIONS: NextAuthOptions = {
           try {
             // try login to backend
             responseUser = await login({
-              username: user.email as string,
+              username: user.id,
               password: user.id,
             });
           } catch (err) {
             // signing up the user
             responseUser = await signUp({
-              username: user.email as string,
+              username: user.id,
               password: user.id,
             });
           }

@@ -128,7 +128,7 @@ export default function ProblemList() {
       <div className="h-0.5 w-full bg-gray-500"></div>
       <div>
         {problems.map((problem: Problem, index: number) => {
-          return <ListLine problem={problem} index={index} />;
+          return <ListLine problem={problem} index={index} key={index} />;
         })}
       </div>
     </section>
