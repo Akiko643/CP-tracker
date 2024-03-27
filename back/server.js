@@ -8,6 +8,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.CP_PORT;
+const heroku_port = process.env.PORT;
 
 // Use middleware that allows for access from other domains
 app.use(
@@ -32,4 +33,8 @@ app.listen(port, async () => {
   } catch (err) {
     console.log("Error:", err.message);
   }
+});
+
+app.listen(heroku_port, () => {
+  console.log("App listening");
 });
