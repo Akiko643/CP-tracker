@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir> <env-dir>
+# bin/compile ./back ./back ./back
 
 # used for inline heroku buildpack
 
