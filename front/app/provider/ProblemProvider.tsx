@@ -22,9 +22,6 @@ export const ProblemProvider = ({
   const [showProblemAdd, setProblemAdd] = useState(false);
 
   const session = useSession();
-  if (!session) {
-    return <ReturnPage />;
-  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +59,10 @@ export const ProblemProvider = ({
   const deleteProblemProvider = (i: number) => {
     setProblems([...problems.slice(0, i), ...problems.slice(i + 1)]);
   };
+
+  if (!session) {
+    return <ReturnPage />;
+  }
 
   return (
     <ProblemsContext.Provider
