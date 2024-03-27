@@ -4,6 +4,8 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { login, signUp } from "@/api";
 
+let tmpUser;
+
 export const OPTIONS: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -19,10 +21,12 @@ export const OPTIONS: NextAuthOptions = {
           credentials as { username: string; password: string }
         );
         const user = await res.data;
+        tmpUser = user;
         // If no error and we have user data, return it
         if (res.status === 200 && user) {
           return user;
         }
+
         return null;
       },
     }),
@@ -44,8 +48,8 @@ export const OPTIONS: NextAuthOptions = {
       if (user) {
         if (!profile) {
           // used credentials to login
-          token.accessToken = user.accessToken;
-          token.name = user.username;
+          token.accessToken = tmpUser!.accessToken;
+          token.name = tmpUser!.username;
         } else {
           // used google provider to login
           let responseUser;
