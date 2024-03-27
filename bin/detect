@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/detect <build-dir>
+# bin/detect back
 
 # used for inline heroku buildpack
 

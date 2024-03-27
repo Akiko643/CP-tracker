@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/compile ./back ./back ./back
+# bin/compile back back back
 
 # used for inline heroku buildpack
 
@@ -7,7 +7,7 @@ BUILD_DIR=${1:-}
 CACHE_DIR=${2:-}
 ENV_DIR=${3:-}
 
-PROJECT_PATH=./back
+PROJECT_PATH=back
 
 echo "-----> My Subdir buildpack: path is $PROJECT_PATH"
 echo "       creating cache: $CACHE_DIR"
