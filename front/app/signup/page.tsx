@@ -4,7 +4,7 @@ import { RedirectType, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { OPTIONS } from "../api/auth/[...nextauth]/route";
 
-export default async function Signup() {
+export default async function Page() {
   async function handleSignUp(formData: FormData) {
     "use server";
     const data = {

@@ -4,7 +4,7 @@ import { signIn, useSession } from "next-auth/react";
 import AuthForm from "../components/AuthForm";
 import { redirect } from "next/navigation";
 
-export default function Signin() {
+export default function Page() {
   const { data, status } = useSession();
   async function handleLogin(formData: FormData) {
     const data = {
