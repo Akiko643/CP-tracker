@@ -5,15 +5,15 @@ export const findProblems = async (req, res) => {
     const { user } = req;
     // status
     let statusArray = [];
-    if (req.query.status.length !== 0) {
+    if (req.query.status !== undefined && req.query.status.length !== 0) {
       const statusString = req.query.status;
       statusArray = statusString.split(",");
     } else {
       statusArray = ["Todo", "Solving", "Skipped", "Solved"];
     }
     // minRating & maxRating
-    const maxRating = req.query.maxRating;
-    const minRating = req.query.minRating;
+    const maxRating = req.query.maxRating || "9999";
+    const minRating = req.query.minRating || "0";
     //
     const response = await ProblemService.findProblems({
       userId: user._id,
