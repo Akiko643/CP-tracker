@@ -14,7 +14,7 @@ const heroku_port = process.env.PORT;
 app.use(
   cors({
     credentials: true,
-    origin: "https://cp-tracker-alpha.vercel.app",
+    origin: "https://cp-tracker-bebe0323s-projects.vercel.app",
   })
 );
 // Use middleware that allows us to access the JSON body of requests
