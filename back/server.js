@@ -9,12 +9,13 @@ dotenv.config();
 const app = express();
 const port = process.env.CP_PORT;
 const heroku_port = process.env.PORT;
+const frontend_url = process.env.FRONTEND_URL;
 
 // Use middleware that allows for access from other domains
 app.use(
   cors({
     credentials: true,
-    origin: "https://cp-tracker-bebe0323s-projects.vercel.app",
+    origin: frontend_url,
   })
 );
 // Use middleware that allows us to access the JSON body of requests
