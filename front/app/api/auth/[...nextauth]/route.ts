@@ -16,6 +16,8 @@ export const OPTIONS: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
+        console.log("username: " + credentials?.username);
+        console.log("password: " + credentials?.password);
         // type Record<"username" | "password", string> but has {username, password}
         const res = await login(
           credentials as { username: string; password: string }
