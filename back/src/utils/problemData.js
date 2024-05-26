@@ -10,7 +10,10 @@ const problemSources = {
 
 const codeforces = (url, dom) => {
   const document = dom.window.document;
-  const title = document.getElementsByClassName("title")[0].innerHTML;
+  const params = url.split("/");
+  const contestName = params[params.length - 2];
+  const title =
+    contestName + document.getElementsByClassName("title")[0].innerHTML;
   const htmlCollection = document.getElementsByClassName("tag-box");
   const difficulty = [...htmlCollection]
     .find((el) => el.title === "Difficulty")
@@ -33,7 +36,6 @@ const codeforces = (url, dom) => {
 const cses = (url, dom) => {
   const document = dom.window.document;
   const title = document.getElementsByTagName("h1")[0].innerHTML;
-  console.log(title);
 
   const problem = {
     url,

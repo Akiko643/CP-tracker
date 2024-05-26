@@ -1,16 +1,25 @@
-"use client";
-
-import { signOut } from "next-auth/react";
-import Image from "next/image";
+"use server";
 import Auth from "./components/Auth";
+import ProblemList from "./components/ProblemList";
+import StatusSearch from "./components/Filter/StatusSearch";
+import DifficultySearch from "./components/Filter/DifficultySearch";
+import { getProblems } from "@/api";
+import ReturnPage from "./components/ReturnPage";
+import ProblemAdd from "./components/ProblemAdd";
 
-export default function Home() {
+export default async function Page() {
   return (
-    <main className="">
+    <div className="flex bg-background-900 overflow-y-auto">
       <Auth>
-        <div>hello world</div>
-        <button onClick={() => signOut()}>signOut</button>
+        <ProblemAdd />
+        <div className="flex flex-row w-full">
+          <ProblemList />
+          <div className="flex flex-col">
+            <StatusSearch />
+            <DifficultySearch />
+          </div>
+        </div>
       </Auth>
-    </main>
+    </div>
   );
 }

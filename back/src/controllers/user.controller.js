@@ -1,39 +1,35 @@
 import UserService from "../services/user.service.js";
 import jwt from "jsonwebtoken";
 
-export const createToken = (payload) => {
+export const generateToken = (payload) => {
   const token = jwt.sign({ ...payload._doc }, process.env.JWT_PRIVATE_KEY, {
-    expiresIn: "1h",
+    expiresIn: "24h",
   });
   return token;
 };
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await UserService.findUser(email, password);
-    if (!user) {
-      throw new Error("User not found");
-    }
-    const token = createToken(user);
-    return res.send({ user, token });
+    const { username, password } = req.body;
+    const user = await UserService.findUser({ username, password });
+    const token = generateToken(user);
+    console.log(`User successfully logged in: ${username}`);
+    return res.status(200).send({ ...user._doc, accessToken: token });
   } catch (err) {
+    console.log(`Error in signing in: ${err.message}`);
     return res.status(400).json({ message: err.message });
   }
 };
 
 export const signUp = async (req, res) => {
   try {
-    const { email, password, passwordRepeat } = req.body;
-    if (password !== passwordRepeat) {
-      throw new Error("Password is not match with passwordRepeat.");
-    }
-
-    const user = await UserService.createUser(email, password);
-    const token = createToken(user);
-    return res.send({ user, token });
+    const { username, password } = req.body;
+    let user = await UserService.createUser({ username, password });
+    const token = generateToken(user);
+    console.log(`Account successfully created: ${username}`);
+    return res.status(200).send({ ...user._doc, accessToken: token });
   } catch (err) {
-    console.log(err);
+    console.log(`Error in signing up: ${err.message}`);
     return res.status(400).json({ message: err.message });
   }
 };

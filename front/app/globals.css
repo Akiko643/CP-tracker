@@ -2,26 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.navbarLink {
+  @apply py-1 px-4 mx-1;
+  @apply hover:bg-text-50 hover:rounded-2xl hover:text-background-900;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.navbarLinkAt {
+  @apply py-1 px-4 mx-1;
+  @apply bg-text-50 rounded-2xl text-background-900;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.authButton {
+  @apply border self-center rounded-md py-1 px-4 mx-1;
+  @apply hover:bg-text-50 hover:text-background-900;
 }

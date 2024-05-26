@@ -20,17 +20,16 @@ const ProblemSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "Not Attempted",
+      default: "Todo", // "Solving", "Skipped", "Solved"
     },
     difficulty: {
       type: String,
       default: "N/A",
     },
-    spentTime: {
+    timeTotal: {
       type: Number,
       default: 0,
     },
-    startDate: Date,
     solvedDate: Date,
     metaCognition: String,
     takeaways: String,
