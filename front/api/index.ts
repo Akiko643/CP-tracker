@@ -1,9 +1,12 @@
 "use server";
 import { Session, getServerSession } from "next-auth";
 import axios, { AxiosError } from "axios";
+import { z } from "zod";
 import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 import { Problem } from "@/types/types";
-import { signOut } from "next-auth/react";
+import { createSafeActionClient } from "next-safe-action";
+
+export const action = createSafeActionClient();
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
@@ -14,11 +17,17 @@ const getToken = async () => {
   const session = await getServerSession(OPTIONS);
   const { accessToken } = session as any;
 
-  // return error
   if (!accessToken) return [];
 
   const token = "Bearer " + accessToken;
   return token;
+};
+
+const handleAxiosError = (err: any) => {
+  if (axios.isAxiosError(err)) {
+    return { error: err.response?.data.message };
+  }
+  return { error: "Something went wrong :(" };
 };
 
 export const login = async ({
@@ -28,20 +37,27 @@ export const login = async ({
   username: string;
   password: string;
 }) => {
-  const response = await instance.post("/login", { username, password });
-  return response;
+  try {
+    const response = await instance.post("/login", { username, password });
+    return response;
+  } catch (err) {
+    return handleAxiosError(err);
+  }
 };
 
-export const signUp = async ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) => {
-  const response = await instance.post("/signup", { username, password });
-  return response;
-};
+const schema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
+
+export const signUp = action(schema, async ({ username, password }) => {
+  try {
+    const response = await instance.post("/signup", { username, password });
+    return response;
+  } catch (err) {
+    return handleAxiosError(err);
+  }
+});
 
 export const getProblems = async ({
   status,
@@ -52,6 +68,7 @@ export const getProblems = async ({
   minRating: string;
   maxRating: string;
 }) => {
+  // return Error("Gg");
   try {
     const token = await getToken();
     const { data } = await instance.get(
@@ -64,14 +81,7 @@ export const getProblems = async ({
     );
     return data;
   } catch (err) {
-    if (axios.isAxiosError(err) && err.response?.status === 401) {
-      return {
-        status: 401,
-      };
-    }
-
-    // write other error specific code.
-    return [];
+    return handleAxiosError(err);
   }
 };
 
@@ -85,14 +95,7 @@ export const getProblem = async (_id: string) => {
     });
     return data;
   } catch (err) {
-    if (axios.isAxiosError(err) && err.response?.status === 401) {
-      return {
-        status: 401,
-      };
-    }
-
-    // write other error specific code.
-    return [];
+    return handleAxiosError(err);
   }
 };
 
@@ -112,13 +115,7 @@ export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
     );
     return data;
   } catch (err) {
-    // TODO: maybe return err??
-    if (axios.isAxiosError(err) && err.response?.status === 401) {
-      return {
-        status: 401,
-      };
-    }
-    return [];
+    return handleAxiosError(err);
   }
 };
 
@@ -132,13 +129,7 @@ export const deleteProblem = async ({ problemId }: { problemId: string }) => {
     });
     return data;
   } catch (err) {
-    // TODO: maybe return err??
-    if (axios.isAxiosError(err) && err.response?.status === 401) {
-      return {
-        status: 401,
-      };
-    }
-    return [];
+    return handleAxiosError(err);
   }
 };
 
@@ -156,14 +147,7 @@ export const updateProblem = async (problem: Problem) => {
     });
     return data;
   } catch (err) {
-    if (axios.isAxiosError(err) && err.response?.status === 401) {
-      return {
-        status: 401,
-      };
-    }
-
-    // write other error specific code.
-    return [];
+    return handleAxiosError(err);
   }
 };
 
