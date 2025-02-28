@@ -1,5 +1,5 @@
 import jsdom from "jsdom";
-import axios from "axios";
+import fs from "fs";
 
 const { JSDOM } = jsdom;
 
@@ -47,17 +47,33 @@ const cses = (url, dom) => {
 };
 
 export const getData = async (url) => {
-  const source = url.split("/")[2];
-  const { data } = await axios.get(url);
-  const dom = new JSDOM(data);
-
-  switch (source) {
-    case problemSources.codeforces:
-      return codeforces(url, dom);
-
-    case problemSources.cses:
-      return cses(url, dom);
-    default:
-      break;
+  try {
+    // retrieving contestId and problemIndex from URL
+    const source = url.split("/");
+    const contestId = parseInt(source[source.length - 2]);
+    const problemIndex = await source[source.length - 1];
+    // get all problems from data.json
+    const allProblems = await JSON.parse(
+      fs.readFileSync("./data.json", "utf8")
+    );
+    // find problem
+    const problem = await allProblems.find(
+      (p) => p.contestId === contestId && p.index === problemIndex
+    );
+    if (!problem) {
+      throw new Error("Proglem not found");
+    }
+    // format the response
+    const res = {
+      url: url,
+      title: problem.name,
+      source: problemSources.codeforces,
+      tags: problem.tags,
+      difficulty: problem.rating,
+    };
+    return res;
+  } catch (err) {
+    console.log(err);
+    return err;
   }
 };

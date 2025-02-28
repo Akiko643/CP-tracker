@@ -28,9 +28,18 @@ const findProblem = async ({ userId, problemId }) => {
 };
 
 const createProblem = async ({ userId, url }) => {
-  const problem = await getData(url);
-  const res = await Problem.create({ ...problem, userId });
-  return res;
+  try {
+    const problem = await getData(url);
+    const res = await Problem.create({ ...problem, userId });
+    console.log(`createProblem: ${url}`);
+    return res;
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log("ERROR createProblem: " + err.message);
+    } else {
+      console.log("ERROR createProblem: " + err);
+    }
+  }
 };
 
 const deleteProblem = async ({ userId, problemId }) => {
