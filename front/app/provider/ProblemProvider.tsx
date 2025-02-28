@@ -18,6 +18,7 @@ export const ProblemProvider = ({
   const searchParams = useSearchParams();
 
   const [problems, setProblems] = useState<Problem[]>([]);
+  // @ts-ignore
   const [filter, setFilter] = useState(new URLSearchParams(searchParams));
   const [showProblemAdd, setProblemAdd] = useState(false);
 

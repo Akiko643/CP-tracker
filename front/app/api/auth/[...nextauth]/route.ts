@@ -44,7 +44,9 @@ export const OPTIONS: NextAuthOptions = {
       if (user) {
         if (!profile) {
           // used credentials to login
+          // @ts-ignore
           token.accessToken = user.accessToken;
+          // @ts-ignore
           token.name = user.username;
         } else {
           // used google provider to login
