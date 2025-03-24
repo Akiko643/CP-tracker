@@ -243,3 +243,7 @@
 //     </div>
 //   );
 // }
+
+export default function Page() {
+  return <div>TODO</div>;
+}
