@@ -1,11 +1,15 @@
-"use client";
+import { SignOut } from "@/components/signout-button";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-import { signOut } from "next-auth/react";
-
-export default function Page() {
+export default async function Page() {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/");
+  }
   return (
     <div>
-      <button onClick={() => signOut()}>Signout</button>
+      <SignOut />
     </div>
   );
 }

@@ -1,9 +1,7 @@
 "use server";
-import { Session, getServerSession } from "next-auth";
 import axios, { AxiosError } from "axios";
-import { OPTIONS } from "@/app/api/auth/[...nextauth]/route";
 import { Problem } from "@/types/types";
-import { signOut } from "next-auth/react";
+import { auth } from "@/auth";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
@@ -11,7 +9,7 @@ const instance = axios.create({
 });
 
 const getToken = async () => {
-  const session = await getServerSession(OPTIONS);
+  const session = await auth();
   const { accessToken } = session as any;
 
   // return error
@@ -144,7 +142,7 @@ export const deleteProblem = async ({ problemId }: { problemId: string }) => {
 
 export const updateProblem = async (problem: Problem) => {
   try {
-    const session = await getServerSession(OPTIONS);
+    const session = await getToken();
     const { accessToken } = session as any;
 
     if (!accessToken) return [];
@@ -195,7 +193,7 @@ export const recommendProblem = async ({
   rating: string;
 }) => {
   try {
-    const session = await getServerSession(OPTIONS);
+    const session = await getToken();
     const { accessToken } = session as any;
     if (!accessToken) {
       // TODO: redirect to signin page with error message

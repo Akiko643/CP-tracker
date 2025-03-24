@@ -1,8 +1,6 @@
 import { signUp } from "@/api/index";
 import AuthForm from "../components/AuthForm";
 import { RedirectType, redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { OPTIONS } from "../api/auth/[...nextauth]/route";
 
 export default async function Page() {
   async function handleSignUp(formData: FormData) {
@@ -28,10 +26,6 @@ export default async function Page() {
     }
   }
 
-  const session = await getServerSession(OPTIONS);
-  if (session) {
-    redirect("/");
-  }
   return (
     <div className="flex items-center justify-center h-full text-text-50">
       <div className="flex flex-col ">

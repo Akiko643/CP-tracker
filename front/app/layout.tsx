@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Source_Code_Pro } from "next/font/google";
 import "./globals.css";
-import SessionProvider from "./provider/SessionProvider";
 import Navbar from "./components/Navbar";
-import { getSession } from "next-auth/react";
 import ProblemProvider from "./provider/ProblemProvider";
+import { SessionProvider } from "next-auth/react";
 
 const font = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -18,10 +17,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession();
   return (
     <html lang="en">
-      <SessionProvider session={session}>
+      <SessionProvider>
         <ProblemProvider>
           <body className={font.className}>
             <div className="flex flex-col bg-background-900 w-screen h-screen">
