@@ -97,6 +97,7 @@ export const getProblem = async (_id: string) => {
 export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
   try {
     const token = await getToken();
+    const session = await auth();
     const { data } = await instance.post(
       `/problems/add`,
       {
