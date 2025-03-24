@@ -20,7 +20,7 @@ export default function Page() {
   return (
     <div className="flex items-center justify-center h-full">
       <div className="flex flex-col text-text-50">
-        <p className="text-2xl mb-6">Sign in</p>
+        <p className="text-2xl mb-1">Sign in to CP-tracker</p>
         <div className="my-5 h-px w-full bg-gray-500"></div>
         <SignIn />
       </div>

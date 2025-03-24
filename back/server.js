@@ -7,8 +7,7 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-const port = process.env.CP_PORT;
-const heroku_port = process.env.PORT;
+const port = process.env.PORT;
 const frontend_url = process.env.FRONTEND_URL;
 
 // Use middleware that allows for access from other domains
@@ -24,7 +23,6 @@ app.use(express.json());
 app.use("/", route);
 
 app.listen(port, async () => {
-  console.log("env var:", process.env);
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
@@ -34,8 +32,4 @@ app.listen(port, async () => {
   } catch (err) {
     console.log("Error:", err.message);
   }
-});
-
-app.listen(heroku_port, () => {
-  console.log("App listening");
 });
