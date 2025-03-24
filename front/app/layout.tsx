@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import ProblemProvider from "./provider/ProblemProvider";
 import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 const font = Source_Code_Pro({ subsets: ["latin"] });
 
@@ -17,13 +18,14 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
     <html lang="en">
       <SessionProvider>
         <ProblemProvider>
           <body className={font.className}>
             <div className="flex flex-col bg-background-900 w-screen h-screen">
-              <Navbar />
+              <Navbar session={session} />
               {children}
             </div>
           </body>

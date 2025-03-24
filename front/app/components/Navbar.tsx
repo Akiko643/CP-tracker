@@ -1,13 +1,12 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Navbar() {
-  const { data: session, status } = useSession();
+export default function Navbar({ session }: { session: Session | null }) {
   const pathname = usePathname();
-  if (status === "authenticated") {
+  if (session) {
     return (
       <nav className="w-screen flex justify-between text-text-50 mt-3 mb-2">
         <div className="flex ml-4">
@@ -55,12 +54,12 @@ export default function Navbar() {
       >
         Sign in
       </Link>
-      <Link
+      {/* <Link
         href="/signup"
         className={`${pathname === "/signup" ? "navbarLinkAt" : "navbarLink"}`}
       >
         Sign up
-      </Link>
+      </Link> */}
     </div>
   );
 }
