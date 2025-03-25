@@ -1,42 +1,33 @@
 import { User } from "../schemas/user.schema.js";
-import bcrypt from "bcrypt";
 
-const hash = (password) => {
-  const saltRounds = 10;
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const passwordHash = bcrypt.hashSync(password, salt);
-  return passwordHash;
-};
+/* no longer storing user password in the db */
+// const hash = (password) => {
+//   const saltRounds = 10;
+//   const salt = bcrypt.genSaltSync(saltRounds);
+//   const passwordHash = bcrypt.hashSync(password, salt);
+//   return passwordHash;
+// };
 
-const findUser = async ({ username, password }) => {
-  const user = await User.findOne({ username });
+const findUser = async ({ email }) => {
+  const user = await User.findOne({ email });
   if (!user) {
-    throw new Error("Username does not exist");
-  }
-  const isPassTrue = bcrypt.compareSync(password, user.passwordHash);
-  if (!isPassTrue) {
-    throw new Error("Wrong password");
+    return undefined;
   }
   return user;
 };
 
-const createUser = async ({ username, password }) => {
-  const passwordHash = hash(password);
-  const isExist = await User.findOne({ username }).exec();
-  if (isExist !== null) {
+const createUser = async ({ email }) => {
+  const isExist = await User.findOne({ email }).exec();
+  if (isExist) {
     throw new Error("Username already exists");
   }
+  console.log("createUser: ", email);
   const user = await User.create({
-    username,
-    passwordHash,
+    email,
     lastRecommendIndex: 0,
   });
   return user;
 };
-
-// const deleteAll = async () => {
-//   await User.deleteMany({});
-// };
 
 export default {
   findUser,

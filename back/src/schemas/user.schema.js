@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 
 export const UserSchema = new mongoose.Schema(
   {
-    username: {
+    email: {
       type: String,
       required: true,
     },
+    username: String,
     passwordHash: String,
     eachDay: [
       {

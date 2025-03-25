@@ -1,7 +1,8 @@
 "use server";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { Problem } from "@/types/types";
 import { auth } from "@/auth";
+import { SignJWT } from "jose";
 
 const instance = axios.create({
   baseURL: process.env.API_URL,
@@ -10,23 +11,25 @@ const instance = axios.create({
 
 const getToken = async () => {
   const session = await auth();
-  const { accessToken } = session as any;
+  const email = session?.user.email;
+  if (!email) {
+    throw new Error("Unauthorized user");
+  }
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+  const alg = "HS256";
+  const newToken = await new SignJWT({
+    email,
+  })
+    .setProtectedHeader({ alg })
+    .setIssuedAt()
+    .setExpirationTime("10mins")
+    .sign(secret);
 
-  // return error
-  if (!accessToken) return [];
-
-  const token = "Bearer " + accessToken;
-  return token;
+  return newToken;
 };
 
-export const login = async ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) => {
-  const response = await instance.post("/login", { username, password });
+export const login = async ({ email }: { email: string }) => {
+  const response = await instance.post("/login", { email });
   return response;
 };
 
@@ -51,7 +54,8 @@ export const getProblems = async ({
   maxRating: string;
 }) => {
   try {
-    const token = await getToken();
+    const accessToken = await getToken();
+    const token = "Bearer " + accessToken;
     const { data } = await instance.get(
       `/problems?status=${status}&minRating=${minRating}&maxRating=${maxRating}`,
       {
@@ -75,7 +79,8 @@ export const getProblems = async ({
 
 export const getProblem = async (_id: string) => {
   try {
-    const token = await getToken();
+    const accessToken = await getToken();
+    const token = "Bearer " + accessToken;
     const { data } = await instance.get(`/problems/${_id}`, {
       headers: {
         Authorization: token,
@@ -96,8 +101,8 @@ export const getProblem = async (_id: string) => {
 
 export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
   try {
-    const token = await getToken();
-    const session = await auth();
+    const accessToken = await getToken();
+    const token = "Bearer " + accessToken;
     const { data } = await instance.post(
       `/problems/add`,
       {
@@ -123,7 +128,8 @@ export const postProblem = async ({ problemUrl }: { problemUrl: string }) => {
 
 export const deleteProblem = async ({ problemId }: { problemId: string }) => {
   try {
-    const token = await getToken();
+    const accessToken = await getToken();
+    const token = "Bearer " + accessToken;
     const { data } = await instance.delete(`/problems/${problemId}`, {
       headers: {
         Authorization: token,
@@ -143,10 +149,7 @@ export const deleteProblem = async ({ problemId }: { problemId: string }) => {
 
 export const updateProblem = async (problem: Problem) => {
   try {
-    const session = await getToken();
-    const { accessToken } = session as any;
-
-    if (!accessToken) return [];
+    const accessToken = await getToken();
     const token = "Bearer " + accessToken;
     const { data } = await instance.patch(`/problems/${problem._id}`, problem, {
       headers: {
@@ -168,7 +171,8 @@ export const updateProblem = async (problem: Problem) => {
 
 export const getAnalyticsTimeBar = async (type: string) => {
   try {
-    const token = await getToken();
+    const accessToken = await getToken();
+    const token = "Bearer " + accessToken;
     const { data } = await instance.get(`/analytics/timebar?timespan=${type}`, {
       headers: {
         Authorization: token,
@@ -194,14 +198,9 @@ export const recommendProblem = async ({
   rating: string;
 }) => {
   try {
-    const session = await getToken();
-    const { accessToken } = session as any;
-    if (!accessToken) {
-      // TODO: redirect to signin page with error message
-      return [];
-    }
-
+    const accessToken = await getToken();
     const token = "Bearer " + accessToken;
+
     const { data } = await instance.get(
       `/recommender?tags=${tags}&rating=${rating}`,
       {
