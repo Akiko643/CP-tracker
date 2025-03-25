@@ -50,7 +50,10 @@ export const getData = async (url) => {
   try {
     // retrieving contestId and problemIndex from URL
     const source = url.split("/");
-    const contestId = parseInt(source[source.length - 2]);
+    let contestId = parseInt(source[source.length - 2]);
+    if (source[3] === "contest") {
+      contestId = parseInt(source[source.length - 3]);
+    }
     const problemIndex = await source[source.length - 1];
     // get all problems from data.json
     const allProblems = await JSON.parse(
@@ -61,7 +64,7 @@ export const getData = async (url) => {
       (p) => p.contestId === contestId && p.index === problemIndex
     );
     if (!problem) {
-      throw new Error("Proglem not found");
+      throw new Error("problem not found");
     }
     // format the response
     const res = {
