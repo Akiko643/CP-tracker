@@ -47,6 +47,8 @@ export const createProblem = async (req, res) => {
   try {
     const { user } = req;
     const { url } = req.body;
+    console.log(user);
+    console.log(url);
     const response = await ProblemService.createProblem({
       userId: user._id,
       url,
