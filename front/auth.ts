@@ -4,6 +4,7 @@ import Google from "next-auth/providers/google";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google],
+  secret: process.env.AUTH_SECRET,
   callbacks: {
     async jwt({ token, account, trigger, profile }) {
       if (trigger === "signIn" || trigger === "signUp") {
@@ -15,4 +16,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
   },
+  trustHost: true,
 });
